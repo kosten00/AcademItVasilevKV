@@ -21,6 +21,7 @@ public class Range {
 
     public void print() {
         System.out.printf("Range named %s created, from %s, to %s ", name, from, to);
+        System.out.println();
     }
 
     public boolean isInside(double x) {

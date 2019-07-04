@@ -53,6 +53,8 @@ public class RangeMain {
             System.out.println("Number is inside range " + range2.showName());
         } else if (range1.isInside(x) && !range2.isInside(x)) {
             System.out.println("Number is inside range " + range1.showName());
+        } else {
+            System.out.println("Number is inside of both ranges");
         }
     }
 }
