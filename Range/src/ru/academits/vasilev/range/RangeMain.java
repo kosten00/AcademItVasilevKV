@@ -43,9 +43,16 @@ public class RangeMain {
         range2.print();
         System.out.println("Range named " + range2.showName() + " has length of " + range2.getLength());
 
-        System.out.println("Input double number to check if it is inside oа ranges: ");
+        System.out.println("Input double number to check if it is inside of ranges: ");
+
         double x = scanner.nextDouble();
-        System.out.println(range1.isInside(x));
-        System.out.println(range2.isInside(x));
+
+        if (!range1.isInside(x) && !range2.isInside(x)) {
+            System.out.println("Number is outside of both ranges");
+        } else if (!range1.isInside(x) && range2.isInside(x)) {
+            System.out.println("Number is inside range " + range2.showName());
+        } else if (range1.isInside(x) && !range2.isInside(x)) {
+            System.out.println("Number is inside range " + range1.showName());
+        }
     }
 }
