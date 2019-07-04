@@ -21,15 +21,15 @@ public class RangeMain {
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("Input new range name: ");
-        String rangeName = scanner.nextLine();
+        String name = scanner.nextLine();
 
         System.out.println("Input begin limit in double number: ");
-        double rangeLimit01 = scanner.nextDouble();
+        double from = scanner.nextDouble();
 
         System.out.println("Input end limit in double number");
-        double rangeLimit02 = scanner.nextDouble();
+        double to = scanner.nextDouble();
 
-        return new Range(rangeName, getMin(rangeLimit01, rangeLimit02), getMax(rangeLimit01, rangeLimit02));
+        return new Range(name, getMin(from, to), getMax(from, to));
     }
 
     public static void main(String[] args) {
