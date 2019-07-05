@@ -1,26 +1,21 @@
 package ru.academits.vasilev.range;
 
 public class Range {
-    private String name;
     private double from;
     private double to;
 
-    public Range(String name, double from, double to) {
-        this.name = name;
+    public Range(double from, double to) {
         this.from = from;
         this.to = to;
     }
 
-    public String showName() {
-        return name;
-    }
 
     public double getLength() {
         return to - from;
     }
 
     public void print() {
-        System.out.printf("Range named %s created, from %s, to %s ", name, from, to);
+        System.out.printf("range from %s, to %s ", from, to);
         System.out.println();
     }
 
@@ -28,13 +23,27 @@ public class Range {
         return from <= x && to >= x;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public Range getRangesIntersection(Range first, Range second) {
+        if (first.to <= second.from) {
+            return null;
+        } else {
+            double IntersectionRangeFrom = first.from > second.from ? first.from : second.from;
+            double IntersectionRangeTo = first.to < second.to ? first.to : second.to;
+            return new Range(IntersectionRangeFrom, IntersectionRangeTo);
+        }
     }
 
-    public String getName() {
-        return name;
+    public Range getRangesSum(Range first, Range second) {
+        if (first.to < second.from) {
+
+        }
+        return new Range(first.from, second.to);
     }
+
+    public void getRangesQuotient(Range first, Range second) {
+
+    }
+
 
     public void setFrom(double from) {
         this.from = from;
