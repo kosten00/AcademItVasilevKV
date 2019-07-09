@@ -10,7 +10,7 @@ public class RangeMain {
         range1.print();
         System.out.println("First range have length of " + range1.getLength());
 
-        Range range2 = new Range(4, 11);
+        Range range2 = new Range(8, 11);
         range2.print();
         System.out.println("Second range have length of " + range2.getLength());
 
@@ -28,8 +28,13 @@ public class RangeMain {
             System.out.println("Number is inside both ranges");
         }
 
-        System.out.print("Ranges intersect in ");
-        range1.getRangesIntersection(range2.getFrom(), range2.getTo()).print();
+
+        if (range1.getRangesIntersection(range2.getFrom(), range2.getTo()) == null) {
+            System.out.println("Ranges don't intersect");
+        } else {
+            System.out.print("Ranges intersect in ");
+            range1.getRangesIntersection(range2.getFrom(), range2.getTo()).print();
+        }
 
         System.out.println("Ranges sum: ");
         for (Range e : range1.getRangesSum(range2.getFrom(), range2.getTo())) {
