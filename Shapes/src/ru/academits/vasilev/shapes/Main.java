@@ -2,6 +2,8 @@ package ru.academits.vasilev.shapes;
 
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Hello world!");
+        Shape s = new Square(5);
+
+        System.out.println(s.getArea());
     }
 }
