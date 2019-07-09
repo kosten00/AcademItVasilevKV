@@ -1,6 +1,6 @@
 package ru.academits.vasilev.shapes;
 
-public class Square extends Shape {
+public class Square implements Shape {
     private double sideLength;
 
     public Square(double sideLength) {
