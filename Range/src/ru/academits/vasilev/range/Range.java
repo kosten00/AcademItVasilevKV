@@ -9,7 +9,6 @@ public class Range {
         this.to = to;
     }
 
-
     public double getLength() {
         return to - from;
     }
@@ -23,27 +22,28 @@ public class Range {
         return from <= x && to >= x;
     }
 
-    public Range getRangesIntersection(Range first, Range second) {
-        if (first.to <= second.from) {
+    public Range getRangesIntersection(double from, double to) { //пересечение
+        if (this.to <= from) {
             return null;
         } else {
-            double IntersectionRangeFrom = first.from > second.from ? first.from : second.from;
-            double IntersectionRangeTo = first.to < second.to ? first.to : second.to;
-            return new Range(IntersectionRangeFrom, IntersectionRangeTo);
+            return new Range(this.from > from ? this.from : from, to < this.to ? to : this.to);
         }
     }
 
-    public Range getRangesSum(Range first, Range second) {
-        if (first.to < second.from) {
-
+    public Range[] getRangesSum(double from, double to) { //сумма
+        if (this.to < from) {
+            return new Range[]{new Range(this.from, this.to), new Range(from, to)};
         }
-        return new Range(first.from, second.to);
+        return new Range[]{new Range(this.from, to)};
     }
 
-    public void getRangesQuotient(Range first, Range second) {
-
+    public Range[] getRangesQuotient(double from, double to) { //разность
+        if (new Range(this.from, this.to).getRangesIntersection(from, to) != null) {
+            return new Range[]{new Range(this.from, from)};
+        } else {
+            return new Range[]{new Range(this.from, this.to), new Range(from, to)};
+        }
     }
-
 
     public void setFrom(double from) {
         this.from = from;
