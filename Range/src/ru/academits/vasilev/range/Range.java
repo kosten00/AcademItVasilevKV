@@ -22,7 +22,7 @@ public class Range {
         return from <= x && to >= x;
     }
 
-    public Range getRangesIntersection(double from, double to) { //пересечение
+    public Range getRangesIntersection(double from, double to) {
         if (this.to <= from) {
             return null;
         } else {
@@ -30,14 +30,14 @@ public class Range {
         }
     }
 
-    public Range[] getRangesSum(double from, double to) { //сумма
+    public Range[] getRangesSum(double from, double to) {
         if (this.to < from) {
             return new Range[]{new Range(this.from, this.to), new Range(from, to)};
         }
         return new Range[]{new Range(this.from, to)};
     }
 
-    public Range[] getRangesQuotient(double from, double to) { //разность
+    public Range[] getRangesQuotient(double from, double to) {
         if (new Range(this.from, this.to).getRangesIntersection(from, to) != null) {
             return new Range[]{new Range(this.from, from)};
         } else {
