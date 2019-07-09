@@ -23,7 +23,7 @@ public class Range {
     }
 
     public Range getRangesIntersection(double from, double to) {
-        if (this.to <= from) {
+        if (this.to < from) {
             return null;
         } else {
             return new Range(this.from > from ? this.from : from, to < this.to ? to : this.to);
