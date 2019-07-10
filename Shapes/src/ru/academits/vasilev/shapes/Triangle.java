@@ -25,7 +25,7 @@ public class Triangle implements Shape {
         this.bc = (Math.sqrt(Math.pow((x3 - x2), 2) + (Math.pow((y3 - y2), 2))));
     }
 
-    public double getMax(double a, double b, double c) {
+    private double getMax(double a, double b, double c) {
         double min = a;
         if (min > b)
             min = b;
@@ -34,12 +34,14 @@ public class Triangle implements Shape {
         return min;
     }
 
-    public double getMin(double a, double b, double c) {
+    private double getMin(double a, double b, double c) {
         double max = a;
-        if (max < b)
+        if (max < b) {
             max = b;
-        if (max < c)
+        }
+        if (max < c) {
             max = c;
+        }
         return max;
     }
 
@@ -65,5 +67,36 @@ public class Triangle implements Shape {
 
     public double getPerimeter() {
         return ab + ac + bc;
+    }
+
+    @Override
+    public String toString() {
+        return "triangle with vertex coordinates: a(" + x1 + ", " + y1 + "); b(" + x2 + ", " + y2 + "); c(" + x3 + ", " + y3 + ")";
+    }
+
+    @Override
+    public boolean equals(Object triangle) {
+        if (triangle == this) {
+            return true;
+        }
+        if (triangle == null || triangle.getClass() != this.getClass()) {
+            return false;
+        }
+        Triangle t = (Triangle) triangle;
+
+        return x1 == t.x1 && y1 == t.y1 && x2 == t.x2 && y2 == t.y2 && x3 == t.x3 && y3 == t.y3;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 37;
+        int hash = 1;
+        hash = prime * hash + Double.hashCode(x1);
+        hash = prime * hash + Double.hashCode(y1);
+        hash = prime * hash + Double.hashCode(x2);
+        hash = prime * hash + Double.hashCode(y2);
+        hash = prime * hash + Double.hashCode(x3);
+        hash = prime * hash + Double.hashCode(y3);
+        return hash;
     }
 }
