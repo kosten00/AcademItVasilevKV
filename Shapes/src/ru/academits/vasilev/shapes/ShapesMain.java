@@ -3,7 +3,7 @@ package ru.academits.vasilev.shapes;
 import java.util.Arrays;
 import java.util.Comparator;
 
-public class Main {
+public class ShapesMain {
     public static Shape getMaxAreaShape(Shape[] array) {
         Comparator<Shape> areaComparator = new Comparator<Shape>() {
             public int compare(Shape e1, Shape e2) {

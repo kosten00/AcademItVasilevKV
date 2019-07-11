@@ -11,27 +11,36 @@ public class Vector {
         if (n <= 0) {
             throw new IllegalArgumentException();
         }
+
         this.n = n;
-        double[] array = new double[n];
+        this.array = new double[n];
     }
 
     public Vector(Vector vector) {
-        n = vector.n;
-        array = vector.array;
+        this.n = vector.n;
+        this.array = vector.array;
     }
 
     public Vector(double[] array) {
+        this.n = array.length;
         this.array = array;
     }
 
     public Vector(int n, double[] array) {
         this.n = n;
-        this.array = array;
 
         if (array.length < n) {
-            for (int i = array.length - 1; i < n; i++) {
-                i = 0;
+            double[] tempArray = new double[n];
+
+            for (int i = 0; i < tempArray.length; i++) {
+                if (i < array.length) {
+                    tempArray[i] = array[i];
+                }
             }
+
+            this.array = tempArray;
+        } else {
+            this.array = array;
         }
     }
 
@@ -39,10 +48,65 @@ public class Vector {
         return n;
     }
 
-    @Override
-    public String toString() {
-        return "Square with side length = " + Arrays.toString(array);
+    public Vector plusVector(Vector vector) {
+        if (this.array.length != vector.array.length) {
+            int tempLength = this.array.length < vector.array.length ? vector.array.length : this.array.length;
+            double[] tempArray = this.array.length < vector.array.length ? this.array : vector.array;
+
+            Vector tempVector = new Vector(tempLength, tempArray);
+            for (int i = 0; i < tempVector.array.length; i++) {
+                tempVector.array[i] += vector.array[i];
+            }
+            return tempVector;
+        }
+        for (int i = 0; i < this.array.length; i++) {
+            this.array[i] += vector.array[i];
+        }
+        return new Vector(this.n, this.array);
+    }
+
+    public Vector minusVector(Vector vector) {
+        if (this.array.length != vector.array.length) {
+            int tempLength = this.array.length < vector.array.length ? vector.array.length : this.array.length;
+            double[] tempArray = this.array.length < vector.array.length ? this.array : vector.array;
+
+            Vector tempVector = new Vector(tempLength, tempArray);
+            for (int i = 0; i < tempVector.array.length; i++) {
+                tempVector.array[i] -= vector.array[i];
+            }
+            return tempVector;
+        }
+        for (int i = 0; i < this.array.length; i++) {
+            this.array[i] -= vector.array[i];
+        }
+        return new Vector(this.n, this.array);
     }
 
 
+    @Override
+    public String toString() {
+        return Arrays.toString(array);
+    }
+
+    @Override
+    public boolean equals(Object vector) {
+        if (vector == this) {
+            return true;
+        }
+        if (vector == null || vector.getClass() != this.getClass()) {
+            return false;
+        }
+        Vector v = (Vector) vector;
+
+        return n == v.n && array == v.array;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 37;
+        int hash = 1;
+        hash = prime * hash + n;
+        hash = prime * hash + Arrays.hashCode(array);
+        return hash;
+    }
 }
