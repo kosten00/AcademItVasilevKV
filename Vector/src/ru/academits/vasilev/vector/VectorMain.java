@@ -33,7 +33,8 @@ public class VectorMain {
         System.out.println("vector3 " + vector3 + " multiply by double 10: " + vector3.multiply(10.0));
 
         //Разворот вектора (умножение всех компонент на -1
-        System.out.println("vector4 " + vector4 + " revert: " + vector4.revert());
+        System.out.print("vector4 " + vector4);
+        System.out.println(" revert: " + vector4.revert());
 
         //Получение длины вектора
         System.out.println("vector3 " + vector3 + " length = " + vector3.getLength());
