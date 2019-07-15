@@ -23,31 +23,47 @@ public class Range {
     }
 
     public Range getRangesIntersection(Range range) {
-        if (range.from < this.from && this.to < range.to) {
+        if (range.from <= this.from && range.to >= this.to) {
             return new Range(this.from, this.to);
         }
 
-        if (this.from < range.from && this.to > range.to) {
+        if (this.from <= range.from && this.to >= range.to) {
             return new Range(range.from, range.to);
-        } else {
-
-            if (this.to >= range.from) {
-                return new Range(range.from, this.to);
-            }
-
-            if (range.to >= this.from) {
-                return new Range(this.from, range.to);
-            }
         }
+
+        if (this.from <= range.from && this.to >= range.from) {
+            return new Range(range.from, this.to);
+        }
+
+        if (range.from <= this.from && range.to >= this.from) {
+            return new Range(this.from, range.to);
+        }
+
         return null;
     }
 
-
     public Range[] uniteRanges(Range range) {
-        if (this.to < from) {
-            return new Range[]{new Range(this.from, this.to), new Range(from, to)};
+        if (this.getRangesIntersection(range) == null) {
+            return new Range[]{new Range(this.from, this.to), new Range(range.from, range.to)};
+        } else {
+
+            if (this.from >= range.from && this.to >= range.to) {
+                return new Range[]{new Range(range.from, this.to)};
+            }
+
+            if (range.from >= this.from && range.to >= this.to) {
+                return new Range[]{new Range(this.from, range.to)};
+            }
+
+            if (this.from >= range.from && this.to <= range.to) {
+                return new Range[]{new Range(range.from, range.to)};
+            }
+
+            if (range.from >= this.from && range.to <= this.to) {
+                return new Range[]{new Range(this.from, this.to)};
+            }
         }
-        return new Range[]{new Range(this.from, to)};
+        return new Range[]{new Range(this.from, range.to)};
     }
 
     public Range[] getRangesDifference(Range range) {
@@ -72,7 +88,6 @@ public class Range {
         }
 
         return new Range[]{this};
-
     }
 
     public void setFrom(double from) {
