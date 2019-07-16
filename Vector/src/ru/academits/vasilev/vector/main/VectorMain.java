@@ -1,4 +1,6 @@
-package ru.academits.vasilev.vector;
+package ru.academits.vasilev.vector.main;
+
+import ru.academits.vasilev.vector.Vector;
 
 import java.util.Arrays;
 
@@ -24,13 +26,19 @@ public class VectorMain {
         System.out.println("vector3 have size of " + vector3.getSize());
 
         //Прибавление к вектору другого вектора
-        System.out.println("vector3 " + vector3 + " + vector4 " + vector4 + " = " + vector3.plusVector(vector4));
+        System.out.print("vector3 " + vector3 + " + vector4 " + vector4 + " = ");
+        vector3.plusVector(vector4);
+        System.out.println(vector3);
 
         //Вычитание из вектора другого вектор
-        System.out.println("vector3 " + vector3 + " - vector4 " + vector4 + " = " + vector3.minusVector(vector4));
+        System.out.println("vector3 " + vector3 + " - vector4 " + vector4 + " = ");
+        vector3.minusVector(vector4);
+        System.out.println(vector3);
 
         //Умножение вектора на скаляр
-        System.out.println("vector3 " + vector3 + " multiply by double 10: " + vector3.multiply(10.0));
+        System.out.print("vector3 " + vector3 + " multiply by double 10: ");
+        vector3.multiply(10.0);
+        System.out.println(vector3);
 
         //Разворот вектора (умножение всех компонент на -1
         System.out.print("vector4 " + vector4);
@@ -40,21 +48,23 @@ public class VectorMain {
         System.out.println("vector3 " + vector3 + " length = " + vector3.getLength());
 
         //Получение и установка компоненты вектора по индексу
-        System.out.println("put element = " + 777.0 + " by index " + 2 + " in vector3 " + vector3 + ". Now vector3 is " + vector3.setElementByIndex(2, 777));
+        System.out.println("put element = " + 777.0 + " by index " + 2 + " in vector3 " + vector3 + ". Now vector3 is ");
+        vector3.setElementByIndex(2, 777);
+        System.out.println(vector3);
+
         System.out.println("element with index " + 4 + " from vector3 is " + vector3.getElementByIndex(4));
 
         System.out.println("static methods: ");
 
         //Сложение двух векторов – должен создаваться новый вектор
-        Vector vector5 = Vector.vectorsSum(vector3, vector4);
+        Vector vector5 = Vector.getVectorsSum(vector3, vector4);
         System.out.println("vector5 " + vector5 + " created from vector3 " + vector3 + " and vector4 " + vector4 + " by sum");
 
         //Вычитание векторов – должен создаваться новый вектор
-        Vector vector6 = Vector.vectorsSubtraction(vector3, vector4);
+        Vector vector6 = Vector.getVectorsSubtraction(vector3, vector4);
         System.out.println("vector6 " + vector6 + " created from vector3 " + vector3 + " and vector4 " + vector4 + " by subtraction");
 
         //Скалярное произведение векторов
-        Vector vector7 = Vector.vectorsMultiply(vector3, vector4);
-        System.out.println("vector7 " + vector7 + " created from vector3 " + vector3 + " and vector4 " + vector4 + " by multiply");
+        System.out.println("scalar product of vector " + vector3 + " and vector4 " + vector4 + " is " + Vector.vectorsMultiply(vector3, vector4));
     }
 }
