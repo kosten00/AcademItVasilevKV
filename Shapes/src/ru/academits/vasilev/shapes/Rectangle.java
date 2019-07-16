@@ -9,18 +9,22 @@ public class Rectangle implements Shape {
         this.height = height;
     }
 
+    @Override
     public double getWidth() {
         return width;
     }
 
+    @Override
     public double getHeight() {
         return height;
     }
 
+    @Override
     public double getArea() {
         return width * height;
     }
 
+    @Override
     public double getPerimeter() {
         return width * 2 + height * 2;
     }
@@ -38,6 +42,7 @@ public class Rectangle implements Shape {
         if (rectangle == null || rectangle.getClass() != this.getClass()) {
             return false;
         }
+
         Rectangle r = (Rectangle) rectangle;
 
         return width == r.width && height == r.height;

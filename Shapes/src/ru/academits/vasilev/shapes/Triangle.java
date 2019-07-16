@@ -20,21 +20,27 @@ public class Triangle implements Shape {
         this.x3 = x3;
         this.y3 = y3;
 
-        this.ab = (Math.sqrt(Math.pow((x2 - x1), 2) + (Math.pow((y2 - y1), 2))));
-        this.ac = (Math.sqrt(Math.pow((x3 - x1), 2) + (Math.pow((y3 - y1), 2))));
-        this.bc = (Math.sqrt(Math.pow((x3 - x2), 2) + (Math.pow((y3 - y2), 2))));
+        this.ab = getSideLength(x2, x1, y2, y1);
+        this.ac = getSideLength(x3, x1, y3, y1);
+        this.bc = getSideLength(x3, x2, y3, y2);
     }
 
-    private double getMax(double a, double b, double c) {
+    private static double getSideLength(double coordinate1, double coordinate2, double coordinate3, double coordinate4) {
+        return (Math.sqrt(Math.pow((coordinate1 - coordinate2), 2) + (Math.pow((coordinate3 - coordinate4), 2))));
+    }
+
+    private static double getMax(double a, double b, double c) {
         double min = a;
-        if (min > b)
+        if (min > b) {
             min = b;
-        if (min > c)
+        }
+        if (min > c) {
             min = c;
+        }
         return min;
     }
 
-    private double getMin(double a, double b, double c) {
+    private static double getMin(double a, double b, double c) {
         double max = a;
         if (max < b) {
             max = b;
@@ -45,14 +51,17 @@ public class Triangle implements Shape {
         return max;
     }
 
+    @Override
     public double getWidth() {
         return getMax(x1, x2, x3) - getMin(x1, x2, x3);
     }
 
+    @Override
     public double getHeight() {
         return getMax(y1, y2, y3) - getMin(y1, y2, y3);
     }
 
+    @Override
     public double getArea() {
         double epsilon = 1.0e-10;
 
@@ -65,6 +74,7 @@ public class Triangle implements Shape {
         }
     }
 
+    @Override
     public double getPerimeter() {
         return ab + ac + bc;
     }
@@ -82,6 +92,7 @@ public class Triangle implements Shape {
         if (triangle == null || triangle.getClass() != this.getClass()) {
             return false;
         }
+
         Triangle t = (Triangle) triangle;
 
         return x1 == t.x1 && y1 == t.y1 && x2 == t.x2 && y2 == t.y2 && x3 == t.x3 && y3 == t.y3;
