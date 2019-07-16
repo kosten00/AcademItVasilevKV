@@ -65,6 +65,6 @@ public class VectorMain {
         System.out.println("vector6 " + vector6 + " created from vector3 " + vector3 + " and vector4 " + vector4 + " by subtraction");
 
         //Скалярное произведение векторов
-        System.out.println("scalar product of vector " + vector3 + " and vector4 " + vector4 + " is " + Vector.vectorsMultiply(vector3, vector4));
+        System.out.println("scalar product of vector " + vector3 + " and vector4 " + vector4 + " is " + Vector.getVectorsMultiply(vector3, vector4));
     }
 }

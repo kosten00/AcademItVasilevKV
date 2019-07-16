@@ -122,7 +122,7 @@ public class Vector {
         return a;
     }
 
-    public static double vectorsMultiply(Vector a, Vector b) {
+    public static double getVectorsMultiply(Vector a, Vector b) {
         if (a.vectorArray.length < b.vectorArray.length) {
             a.vectorArray = Arrays.copyOf(a.vectorArray, b.vectorArray.length);
         }
