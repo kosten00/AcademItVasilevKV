@@ -25,11 +25,11 @@ public class Triangle implements Shape {
         this.bc = getSideLength(x3, x2, y3, y2);
     }
 
-    private static double getSideLength(double coordinate1, double coordinate2, double coordinate3, double coordinate4) {
-        return (Math.sqrt(Math.pow((coordinate1 - coordinate2), 2) + (Math.pow((coordinate3 - coordinate4), 2))));
+    private static double getSideLength(double sideX1, double sideX2, double sideY1, double sideY2) {
+        return Math.sqrt(Math.pow((sideX1 - sideX2), 2) + (Math.pow((sideY1 - sideY2), 2)));
     }
 
-    private static double getMax(double a, double b, double c) {
+    private static double getMinimum(double a, double b, double c) {
         double min = a;
         if (min > b) {
             min = b;
@@ -40,7 +40,7 @@ public class Triangle implements Shape {
         return min;
     }
 
-    private static double getMin(double a, double b, double c) {
+    private static double getMaximum(double a, double b, double c) {
         double max = a;
         if (max < b) {
             max = b;
@@ -53,12 +53,12 @@ public class Triangle implements Shape {
 
     @Override
     public double getWidth() {
-        return getMax(x1, x2, x3) - getMin(x1, x2, x3);
+        return getMinimum(x1, x2, x3) - getMaximum(x1, x2, x3);
     }
 
     @Override
     public double getHeight() {
-        return getMax(y1, y2, y3) - getMin(y1, y2, y3);
+        return getMinimum(y1, y2, y3) - getMaximum(y1, y2, y3);
     }
 
     @Override
