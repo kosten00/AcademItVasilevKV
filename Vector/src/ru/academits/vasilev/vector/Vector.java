@@ -3,87 +3,92 @@ package ru.academits.vasilev.vector;
 import java.util.Arrays;
 
 public class Vector {
-    private double[] vectorArray;
+    private double[] contents;
 
     public Vector(int vectorLength) {
         if (vectorLength <= 0) {
             throw new IllegalArgumentException("Vector length can't be less than or equal to 0");
+        } else {
+            this.contents = new double[vectorLength];
         }
-
-        this.vectorArray = new double[vectorLength];
     }
 
     public Vector(Vector vector) {
-        this.vectorArray = Arrays.copyOf(vector.vectorArray, vector.vectorArray.length);
+        this.contents = Arrays.copyOf(vector.contents, vector.contents.length);
     }
 
     public Vector(double[] array) {
-        this.vectorArray = Arrays.copyOf(array, array.length);
+        this.contents = Arrays.copyOf(array, array.length);
     }
 
     public Vector(int vectorLength, double[] array) {
-        if (array.length < vectorLength) {
-            this.vectorArray = new double[vectorLength];
+        if (vectorLength <= 0) {
+            throw new IllegalArgumentException("Vector length can't be less than or equal to 0");
+        } else {
+            if (vectorLength == array.length) {
+                this.contents = Arrays.copyOf(array, array.length);
+            } else {
+                this.contents = new double[vectorLength];
 
-            for (int i = 0; i < vectorArray.length; i++) {
-                if (i < array.length) {
-                    vectorArray[i] = array[i];
+                for (int i = 0; i < this.contents.length; i++) {
+                    if (i >= array.length) {
+                        this.contents[i] = 0;
+                    } else {
+                        this.contents[i] = array[i];
+                    }
                 }
             }
-        } else {
-            this.vectorArray = Arrays.copyOf(array, array.length);
         }
     }
 
     public int getSize() {
-        return this.vectorArray.length;
+        return this.contents.length;
     }
 
     public void plusVector(Vector vector) {
-        if (this.vectorArray.length < vector.vectorArray.length) {
-            this.vectorArray = Arrays.copyOf(this.vectorArray, vector.vectorArray.length);
+        if (this.contents.length < vector.contents.length) {
+            this.contents = Arrays.copyOf(this.contents, vector.contents.length);
         }
 
-        if (this.vectorArray.length > vector.vectorArray.length) {
-            vectorArray = Arrays.copyOf(vector.vectorArray, this.vectorArray.length);
+        if (this.contents.length > vector.contents.length) {
+            this.contents = Arrays.copyOf(vector.contents, this.contents.length);
         }
 
-        for (int i = 0; i < this.vectorArray.length; i++) {
-            this.vectorArray[i] += vector.vectorArray[i];
+        for (int i = 0; i < this.contents.length; i++) {
+            this.contents[i] += vector.contents[i];
         }
     }
 
     public void minusVector(Vector vector) {
-        if (this.vectorArray.length < vector.vectorArray.length) {
-            this.vectorArray = Arrays.copyOf(this.vectorArray, vector.vectorArray.length);
+        if (this.contents.length < vector.contents.length) {
+            this.contents = Arrays.copyOf(this.contents, vector.contents.length);
         }
 
-        if (this.vectorArray.length > vector.vectorArray.length) {
-            vectorArray = Arrays.copyOf(vector.vectorArray, this.vectorArray.length);
+        if (this.contents.length > vector.contents.length) {
+            this.contents = Arrays.copyOf(vector.contents, this.contents.length);
         }
 
-        for (int i = 0; i < this.vectorArray.length; i++) {
-            this.vectorArray[i] -= vector.vectorArray[i];
+        for (int i = 0; i < this.contents.length; i++) {
+            this.contents[i] -= vector.contents[i];
         }
     }
 
     public void multiply(double number) {
-        for (int i = 0; i < this.vectorArray.length; i++) {
-            this.vectorArray[i] *= number;
+        for (int i = 0; i < this.contents.length; i++) {
+            this.contents[i] *= number;
         }
     }
 
-    public Vector revert() {
-        for (int i = 0; i < this.vectorArray.length; i++) {
-            this.vectorArray[i] *= -1;
+    public void revert() {
+        for (int i = 0; i < this.contents.length; i++) {
+            this.contents[i] *= -1;
         }
-        return new Vector(this.vectorArray);
     }
 
     public double getLength() {
         double sum = 0;
 
-        for (double e : this.vectorArray) {
+        for (double e : this.contents) {
             sum += e * e;
         }
 
@@ -91,57 +96,79 @@ public class Vector {
     }
 
     public void setElementByIndex(int index, double element) {
-        if (index >= this.vectorArray.length) {
-            throw new ArrayIndexOutOfBoundsException("Index is greater than vector array boundaries!");
+        if (index >= this.contents.length) {
+            throw new IndexOutOfBoundsException("Index is greater than contents boundaries!");
         }
         if (index < 0) {
-            throw new ArrayIndexOutOfBoundsException("Index can't be less than 0");
+            throw new IndexOutOfBoundsException("Index can't be less than 0");
         }
 
-        this.vectorArray[index] = element;
+        this.contents[index] = element;
     }
 
     public double getElementByIndex(int index) {
-        if (index >= this.vectorArray.length) {
-            throw new ArrayIndexOutOfBoundsException("Index is greater than vector array boundaries!");
+        if (index >= this.contents.length) {
+            throw new IndexOutOfBoundsException("Index is greater than contents boundaries!");
         }
         if (index < 0) {
-            throw new ArrayIndexOutOfBoundsException("Index can't be less than 0");
+            throw new IndexOutOfBoundsException("Index can't be less than 0");
         }
 
-        return this.vectorArray[index];
+        return this.contents[index];
     }
 
-    public static Vector getVectorsSum(Vector a, Vector b) {
-        a.plusVector(b);
-        return a;
+    private static double[] getMaxContents(Vector a, Vector b) {
+        double[] max = a.contents;
+        if (max.length < b.contents.length) {
+            max = b.contents;
+        }
+        return max;
+    }
+
+    private static double[] getMinContents(Vector a, Vector b) {
+        double[] min = b.contents;
+        if (min.length > a.contents.length) {
+            min = a.contents;
+        }
+        return min;
+    }
+
+    public static Vector getVectorsSum(Vector a, Vector b) { //это готово
+        double[] maxContents = getMaxContents(a, b);
+        double[] minContents = getMinContents(a, b);
+
+        Vector sum = new Vector(maxContents.length, minContents);
+
+        for (int i = 0; i < sum.contents.length; i++) {
+            sum.contents[i] += maxContents[i];
+        }
+        return sum;
     }
 
     public static Vector getVectorsSubtraction(Vector a, Vector b) {
         a.minusVector(b);
         return a;
-    }
+    } //это НЕ готово
 
     public static double getVectorsMultiply(Vector a, Vector b) {
-        if (a.vectorArray.length < b.vectorArray.length) {
-            a.vectorArray = Arrays.copyOf(a.vectorArray, b.vectorArray.length);
+        if (a.contents.length < b.contents.length) {
+            a.contents = Arrays.copyOf(a.contents, b.contents.length);
         }
 
-        if (a.vectorArray.length > b.vectorArray.length) {
-            b.vectorArray = Arrays.copyOf(b.vectorArray, a.vectorArray.length);
+        if (a.contents.length > b.contents.length) {
+            b.contents = Arrays.copyOf(b.contents, a.contents.length);
         }
 
         double sum = 0;
-        for (int i = 0; i < a.vectorArray.length; i++) {
-            sum += a.vectorArray[i] * b.vectorArray[i];
-
+        for (int i = 0; i < a.contents.length; i++) {
+            sum += a.contents[i] * b.contents[i];
         }
         return sum;
-    }
+    } //это НЕ готово
 
     @Override
     public String toString() {
-        return Arrays.toString(vectorArray);
+        return Arrays.toString(contents);
     }
 
     @Override
@@ -155,14 +182,14 @@ public class Vector {
 
         Vector v = (Vector) vector;
 
-        return vector == v.vectorArray && vectorArray == v.vectorArray;
+        return vector == v.contents && this.contents == v.contents;
     }
 
     @Override
     public int hashCode() {
         final int prime = 37;
         int hash = 1;
-        hash = prime * hash + Arrays.hashCode(vectorArray);
+        hash = prime * hash + Arrays.hashCode(contents);
         return hash;
     }
 }

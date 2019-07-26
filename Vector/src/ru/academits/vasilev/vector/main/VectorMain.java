@@ -42,7 +42,8 @@ public class VectorMain {
 
         //Разворот вектора (умножение всех компонент на -1
         System.out.print("vector4 " + vector4);
-        System.out.println(" revert: " + vector4.revert());
+        vector4.revert();
+        System.out.println(" revert: " + vector4);
 
         //Получение длины вектора
         System.out.println("vector3 " + vector3 + " length = " + vector3.getLength());
