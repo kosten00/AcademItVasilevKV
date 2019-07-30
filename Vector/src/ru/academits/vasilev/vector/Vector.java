@@ -131,7 +131,7 @@ public class Vector {
         Vector sum = new Vector(maxVectorLength, a.contents);
 
         for (int i = 0; i < sum.contents.length; i++) {
-            if (i >= b.contents.length){
+            if (i >= b.contents.length) {
                 continue;
             }
             sum.contents[i] += b.contents[i];
@@ -145,7 +145,7 @@ public class Vector {
         Vector subtraction = new Vector(maxVectorLength, a.contents);
 
         for (int i = 0; i < maxVectorLength; i++) {
-            if (i >= b.contents.length){
+            if (i >= b.contents.length) {
                 continue;
             }
             subtraction.contents[i] -= b.contents[i];
@@ -158,10 +158,9 @@ public class Vector {
         double sum = 0;
 
         for (int i = 0; i < maxVectorLength; i++) {
-            if (i >= b.contents.length || i >= a.contents.length){
+            if (i >= b.contents.length || i >= a.contents.length) {
                 continue;
             }
-
             sum += a.contents[i] * b.contents[i];
         }
         return sum;
@@ -173,17 +172,16 @@ public class Vector {
     }
 
     @Override
-    public boolean equals(Object vector) {
-        if (vector == this) {
+    public boolean equals(Object o) {
+        if (o == this) {
             return true;
         }
-        if (vector == null || vector.getClass() != this.getClass()) {
+        if (o == null || o.getClass() != this.getClass()) {
             return false;
         }
+        Vector v = (Vector) o;
 
-        Vector v = (Vector) vector;
-
-        return vector == v.contents && this.contents == v.contents;
+        return contents == v.contents;
     }
 
     @Override
