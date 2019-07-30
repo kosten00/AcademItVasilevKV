@@ -117,54 +117,55 @@ public class Vector {
         return this.contents[index];
     }
 
-    private static double[] getMaxContents(Vector a, Vector b) {
-        double[] max = a.contents;
-        if (max.length < b.contents.length) {
-            max = b.contents;
+    private static int getMaxVectorLength(Vector a, Vector b) {
+        int max = a.contents.length;
+        if (max < b.contents.length) {
+            max = b.contents.length;
         }
         return max;
     }
 
-    private static double[] getMinContents(Vector a, Vector b) {
-        double[] min = b.contents;
-        if (min.length > a.contents.length) {
-            min = a.contents;
-        }
-        return min;
-    }
+    public static Vector getVectorsSum(Vector a, Vector b) {
+        int maxVectorLength = getMaxVectorLength(a, b);
 
-    public static Vector getVectorsSum(Vector a, Vector b) { //это готово
-        double[] maxContents = getMaxContents(a, b);
-        double[] minContents = getMinContents(a, b);
-
-        Vector sum = new Vector(maxContents.length, minContents);
+        Vector sum = new Vector(maxVectorLength, a.contents);
 
         for (int i = 0; i < sum.contents.length; i++) {
-            sum.contents[i] += maxContents[i];
+            if (i >= b.contents.length){
+                continue;
+            }
+            sum.contents[i] += b.contents[i];
         }
         return sum;
     }
 
     public static Vector getVectorsSubtraction(Vector a, Vector b) {
-        a.minusVector(b);
-        return a;
-    } //это НЕ готово
+        int maxVectorLength = getMaxVectorLength(a, b);
+
+        Vector subtraction = new Vector(maxVectorLength, a.contents);
+
+        for (int i = 0; i < maxVectorLength; i++) {
+            if (i >= b.contents.length){
+                continue;
+            }
+            subtraction.contents[i] -= b.contents[i];
+        }
+        return subtraction;
+    }
 
     public static double getVectorsMultiply(Vector a, Vector b) {
-        if (a.contents.length < b.contents.length) {
-            a.contents = Arrays.copyOf(a.contents, b.contents.length);
-        }
-
-        if (a.contents.length > b.contents.length) {
-            b.contents = Arrays.copyOf(b.contents, a.contents.length);
-        }
-
+        int maxVectorLength = getMaxVectorLength(a, b);
         double sum = 0;
-        for (int i = 0; i < a.contents.length; i++) {
+
+        for (int i = 0; i < maxVectorLength; i++) {
+            if (i >= b.contents.length || i >= a.contents.length){
+                continue;
+            }
+
             sum += a.contents[i] * b.contents[i];
         }
         return sum;
-    } //это НЕ готово
+    }
 
     @Override
     public String toString() {

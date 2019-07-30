@@ -57,15 +57,18 @@ public class VectorMain {
 
         System.out.println("static methods: ");
 
+        Vector test1 = new Vector(array1);
+        Vector test2 = new Vector(array2);
+
         //Сложение двух векторов – должен создаваться новый вектор
-        Vector vector5 = Vector.getVectorsSum(vector3, vector4);
-        System.out.println("vector5 " + vector5 + " created from vector3 " + vector3 + " and vector4 " + vector4 + " by sum");
+        Vector vector5 = Vector.getVectorsSum(test1, test2);
+        System.out.println("vector5 " + vector5 + " created from test1 " + test1 + " and test2 " + test2 + " by sum");
 
         //Вычитание векторов – должен создаваться новый вектор
-        Vector vector6 = Vector.getVectorsSubtraction(vector3, vector4);
-        System.out.println("vector6 " + vector6 + " created from vector3 " + vector3 + " and vector4 " + vector4 + " by subtraction");
+        Vector vector6 = Vector.getVectorsSubtraction(test1, test2);
+        System.out.println("vector6 " + vector6 + " created from test1 " + test1 + " and test2 " + test2 + " by subtraction");
 
         //Скалярное произведение векторов
-        System.out.println("scalar product of vector " + vector3 + " and vector4 " + vector4 + " is " + Vector.getVectorsMultiply(vector3, vector4));
+        System.out.println("scalar product of vector test1" + test1 + " and test2 " + test2 + " is " + Vector.getVectorsMultiply(test1, test2));
     }
 }
