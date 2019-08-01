@@ -22,72 +22,35 @@ public class Range {
         return from <= x && to >= x;
     }
 
-    public Range getRangesIntersection(Range range) {
-        if (range.from <= this.from && range.to >= this.to) {
-            return new Range(this.from, this.to);
+    public static Range getIntersection(Range r1, Range r2) {
+        if (Math.min(r1.to, r2.to) < Math.max(r1.from, r2.from)) {
+            return null;
         }
-
-        if (this.from <= range.from && this.to >= range.to) {
-            return new Range(range.from, range.to);
-        }
-
-        if (this.from <= range.from && this.to >= range.from) {
-            return new Range(range.from, this.to);
-        }
-
-        if (range.from <= this.from && range.to >= this.from) {
-            return new Range(this.from, range.to);
-        }
-
-        return null;
+        return new Range(Math.max(r1.from, r2.from), Math.min(r1.to, r2.to));
     }
 
-    public Range[] uniteRanges(Range range) {
-        if (this.getRangesIntersection(range) == null) {
-            return new Range[]{new Range(this.from, this.to), new Range(range.from, range.to)};
-        } else {
-
-            if (this.from >= range.from && this.to >= range.to) {
-                return new Range[]{new Range(range.from, this.to)};
-            }
-
-            if (range.from >= this.from && range.to >= this.to) {
-                return new Range[]{new Range(this.from, range.to)};
-            }
-
-            if (this.from >= range.from && this.to <= range.to) {
-                return new Range[]{new Range(range.from, range.to)};
-            }
-
-            if (range.from >= this.from && range.to <= this.to) {
-                return new Range[]{new Range(this.from, this.to)};
-            }
+    public static Range[] getUnite(Range r1, Range r2) {
+        if (Math.min(r1.to, r2.to) < Math.max(r1.from, r2.from)) {
+            return new Range[]{r1, r2};
         }
-        return new Range[]{new Range(this.from, range.to)};
+        return new Range[]{new Range(Math.min(r1.from, r2.from), Math.max(r1.to, r2.to)),};
     }
 
-    public Range[] getRangesDifference(Range range) {
-        if (this.getRangesIntersection(range) == null) {
-            return new Range[]{this, range};
+    public static Range[] getDifference(Range r1, Range r2) {
+        if (Math.min(r1.to, r2.to) < Math.max(r1.from, r2.from)) {
+            return new Range[]{r1, r2};
         }
-
-        if (range.from < this.from && range.to > this.to) {
-            return new Range[]{new Range(range.from, this.from), new Range(this.to, range.to)};
+        if (r1.from < r2.from && r1.to > r2.to) {
+            return new Range[]{new Range(Math.min(r1.from, r2.from), Math.max(r1.from, r2.from)),
+                    new Range(Math.min(r1.to, r2.to), Math.max(r1.to, r2.to))};
         }
-
-        if (this.from < range.from && this.to > range.to) {
-            return new Range[]{new Range(this.from, range.from), new Range(range.to, this.to)};
+        if (r1.to > r2.to) {
+            return new Range[]{new Range(r2.to, r1.to),};
         }
-
-        if (this.from < range.from) {
-            return new Range[]{new Range(this.from, range.from)};
+        if (r1.from < r2.from) {
+            return new Range[]{new Range(r1.from, r2.from)};
         }
-
-        if (range.from < this.from) {
-            return new Range[]{new Range(range.from, this.from)};
-        }
-
-        return new Range[]{this};
+        return new Range[]{new Range(0, 0), new Range(0, 0)};
     }
 
     public void setFrom(double from) {
