@@ -35,15 +35,15 @@ public class Rectangle implements Shape {
     }
 
     @Override
-    public boolean equals(Object rectangle) {
-        if (rectangle == this) {
+    public boolean equals(Object o) {
+        if (o == this) {
             return true;
         }
-        if (rectangle == null || rectangle.getClass() != this.getClass()) {
+        if (o == null || o.getClass() != this.getClass()) {
             return false;
         }
 
-        Rectangle r = (Rectangle) rectangle;
+        Rectangle r = (Rectangle) o;
 
         return width == r.width && height == r.height;
     }

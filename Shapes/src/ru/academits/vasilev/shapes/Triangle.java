@@ -12,6 +12,8 @@ public class Triangle implements Shape {
     private double ac;
     private double bc;
 
+    private static final double EPSILON = 1.0e-10;
+
     public Triangle(double x1, double y1, double x2, double y2, double x3, double y3) {
         this.x1 = x1;
         this.y1 = y1;
@@ -53,25 +55,22 @@ public class Triangle implements Shape {
 
     @Override
     public double getWidth() {
-        return getMin(x1, x2, x3) - getMax(x1, x2, x3);
+        return getMax(x1, x2, x3) - getMin(x1, x2, x3);
     }
 
     @Override
     public double getHeight() {
-        return getMin(y1, y2, y3) - getMax(y1, y2, y3);
+        return getMax(y1, y2, y3) - getMin(y1, y2, y3);
     }
 
     @Override
     public double getArea() {
-        double epsilon = 1.0e-10;
-
-        if (Math.abs((x2 - x1) * (y3 - y1) - (y2 - y1) * (x3 - x1)) <= epsilon) {
+        if (Math.abs((x2 - x1) * (y3 - y1) - (y2 - y1) * (x3 - x1)) <= EPSILON) {
             return 0;
-        } else {
-            double semiPerimeter = getPerimeter() / 2;
-
-            return Math.sqrt(semiPerimeter * (semiPerimeter - ab) * (semiPerimeter - ac) * (semiPerimeter - bc));
         }
+        double semiPerimeter = getPerimeter() / 2;
+
+        return Math.sqrt(semiPerimeter * (semiPerimeter - ab) * (semiPerimeter - ac) * (semiPerimeter - bc));
     }
 
     @Override
@@ -85,15 +84,15 @@ public class Triangle implements Shape {
     }
 
     @Override
-    public boolean equals(Object triangle) {
-        if (triangle == this) {
+    public boolean equals(Object o) {
+        if (o == this) {
             return true;
         }
-        if (triangle == null || triangle.getClass() != this.getClass()) {
+        if (o == null || o.getClass() != this.getClass()) {
             return false;
         }
 
-        Triangle t = (Triangle) triangle;
+        Triangle t = (Triangle) o;
 
         return x1 == t.x1 && y1 == t.y1 && x2 == t.x2 && y2 == t.y2 && x3 == t.x3 && y3 == t.y3;
     }
