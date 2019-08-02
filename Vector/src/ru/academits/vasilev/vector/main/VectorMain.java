@@ -50,10 +50,10 @@ public class VectorMain {
 
         //Получение и установка компоненты вектора по индексу
         System.out.println("put element = " + 777.0 + " by index " + 2 + " in vector3 " + vector3 + ". Now vector3 is ");
-        vector3.setElementByIndex(2, 777);
+        vector3.setElement(2, 777);
         System.out.println(vector3);
 
-        System.out.println("element with index " + 4 + " from vector3 is " + vector3.getElementByIndex(4));
+        System.out.println("element with index " + 4 + " from vector3 is " + vector3.getElement(4));
 
         System.out.println("static methods: ");
 
