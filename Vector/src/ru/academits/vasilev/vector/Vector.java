@@ -1,7 +1,6 @@
 package ru.academits.vasilev.vector;
 
 import java.util.Arrays;
-import java.util.Collections;
 
 public class Vector {
     private double[] components;
