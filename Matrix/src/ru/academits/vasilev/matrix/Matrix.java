@@ -84,6 +84,25 @@ public class Matrix {
         return new Vector(array);
     }
 
+    public void transpose() {
+        Vector[] transpose = new Vector[elementsRaw[0].getSize()];
+
+        for (int i = 0; i < transpose.length; i++) {
+            transpose[i] = getColumn(i);
+        }
+
+        elementsRaw = transpose;
+    }
+
+    public void multiply(double number) {
+        for (Vector vector : elementsRaw) {
+            for (int j = 0; j < vector.getSize(); j++) {
+                vector.setElement(j, vector.getElement(j) * number);
+            }
+        }
+    }
+
+
     @Override
     public String toString() {
         return Arrays.toString(elementsRaw);

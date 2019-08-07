@@ -22,16 +22,24 @@ public class MatrixMain {
         double[] arr3 = {11, 23};
         Vector[] vectorsArr = {new Vector(arr1), new Vector(arr2), new Vector(arr3)};
         Matrix m4 = new Matrix(vectorsArr);
-        System.out.println(m4);
+        System.out.println("matrix m4: " + m4);
 
-        System.out.println("Matrix m4 have size of " + Arrays.toString(m4.getSize()));
+        System.out.println("matrix m4 have size of " + Arrays.toString(m4.getSize()));
 
-        System.out.println(m4.getColumn(2));
+        System.out.println("return column from matrix m4 with index 2: " + m4.getColumn(2));
 
-        System.out.println("before setRaw " + m2);
+        System.out.println("return raw from matrix m4 with index 0: " + m4.getRaw(0));
+
+        System.out.println("before setRaw: " + m2);
         Vector v1 = new Vector(arr2);
-        System.out.println("raw to set " + v1);
+        System.out.println("raw to set: " + v1);
         m2.setRaw(1, v1);
-        System.out.println("after setRaw " + m2);
+        System.out.println("after setRaw: " + m2);
+
+        m2.transpose();
+        System.out.println("transpose matrix m2: " + m2);
+
+        m2.multiply(2);
+        System.out.println("matrix m2 multiplied by 2: " + m2);
     }
 }
