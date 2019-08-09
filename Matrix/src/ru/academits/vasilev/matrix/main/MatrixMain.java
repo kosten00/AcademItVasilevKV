@@ -41,5 +41,17 @@ public class MatrixMain {
 
         m2.multiply(2);
         System.out.println("matrix m2 multiplied by 2: " + m2);
+
+        double[][] arr4 = new double[][]{{2, 3, 4}, {8, 7, 6}, {9, 1, 0}};
+
+        Matrix matrixArr4 = new Matrix(arr4);
+
+        System.out.println(matrixArr4.getDeterminant());
+
+        double[][] test = {{2, -5, 8}, {-8, 9, 1}, {0, 2, -3}};
+
+        Matrix m9 = new Matrix(test);
+
+        System.out.println(m9.getDeterminant());
     }
 }
