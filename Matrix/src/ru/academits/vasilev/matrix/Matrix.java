@@ -14,6 +14,7 @@ public class Matrix {
             determinant = matrixArray[0][0] * matrixArray[1][1] - matrixArray[1][0] * matrixArray[0][1];
         } else {
             int k;
+
             for (int i = 0; i < matrixArray.length; i++) {
                 if (i % 2 == 1) {
                     k = -1;
