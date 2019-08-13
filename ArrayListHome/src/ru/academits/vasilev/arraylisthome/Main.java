@@ -16,19 +16,17 @@ public class Main {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        ArrayList<Integer> list2 = new ArrayList<>(list1);
-
         System.out.println(list1);
-
-        //System.out.println(list1.get(3));
 
         for (int i = 0; i < list1.size(); i++) {
-            int temp = list1.get(i);
-            if (temp % 2 == 0) {
+            if (list1.get(i) % 2 == 0) {
                 list1.remove(i);
+                i--;
             }
         }
-
         System.out.println(list1);
+
+        ArrayList<Integer> list2 = new ArrayList<>(list1);
+
     }
 }
