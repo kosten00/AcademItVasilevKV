@@ -1,7 +1,7 @@
-package ru.academits.vasilev.csv.main;
+package ru.academits.vasilev.matrix.main;
 
 import ru.academits.vasilev.vector.Vector;
-import ru.academits.vasilev.csv.Matrix;
+import ru.academits.vasilev.matrix.Matrix;
 
 import java.util.Arrays;
 
