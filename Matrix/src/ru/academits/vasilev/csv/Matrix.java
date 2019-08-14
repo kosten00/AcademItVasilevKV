@@ -1,4 +1,4 @@
-package ru.academits.vasilev.matrix;
+package ru.academits.vasilev.csv;
 
 import ru.academits.vasilev.vector.Vector;
 
