@@ -9,6 +9,7 @@ public class Vector {
         if (vectorLength <= 0) {
             throw new IllegalArgumentException("Vector length can't be less than or equal to 0");
         }
+
         components = new double[vectorLength];
     }
 
@@ -20,6 +21,7 @@ public class Vector {
         if (array.length == 0) {
             throw new IllegalArgumentException("Vector length can't be less than or equal to 0");
         }
+
         components = Arrays.copyOf(array, array.length);
     }
 
@@ -27,6 +29,7 @@ public class Vector {
         if (vectorLength <= 0) {
             throw new IllegalArgumentException("Vector length can't be less than or equal to 0");
         }
+
         components = Arrays.copyOf(array, vectorLength);
     }
 
@@ -43,6 +46,7 @@ public class Vector {
             if (i >= vector.components.length) {
                 continue;
             }
+
             components[i] += vector.components[i];
         }
     }
@@ -56,6 +60,7 @@ public class Vector {
             if (i >= vector.components.length) {
                 continue;
             }
+
             components[i] -= vector.components[i];
         }
     }
@@ -126,14 +131,29 @@ public class Vector {
         for (int i = 0; i < Math.min(a.components.length, b.components.length); i++) {
             sum += a.components[i] * b.components[i];
         }
+
         return sum;
     }
 
     @Override
     public String toString() {
-        return Arrays.toString(components).
-                replace('[', '{').
-                replace(']', '}');
+        StringBuilder stringBuilder = new StringBuilder();
+
+        for (int i = 0; i < components.length; i++) {
+            if (i == 0) {
+                stringBuilder.append("{ ").append(components[i]).append(", ");
+                continue;
+            }
+
+            if (i == components.length - 1) {
+                stringBuilder.append(components[i]).append(" }");
+                continue;
+            }
+
+            stringBuilder.append(components[i]).append(", ");
+        }
+
+        return stringBuilder.toString();
     }
 
     @Override
@@ -145,6 +165,7 @@ public class Vector {
         if (o == null || o.getClass() != this.getClass()) {
             return false;
         }
+
         Vector v = (Vector) o;
 
         return Arrays.equals(components, v.components);
