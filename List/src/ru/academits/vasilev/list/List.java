@@ -12,10 +12,28 @@ class ListItem<T> {
         this.data = data;
         this.next = next;
     }
+
+    public T getData() {
+        return data;
+    }
+
+    public void setData(T data) {
+        this.data = data;
+    }
+
+    public ListItem<T> getNext() {
+        return next;
+    }
+
+    public void setNext(ListItem<T> next) {
+        this.next = next;
+    }
 }
 
 class SinglyLinkedList<T> {
     private ListItem<T> head;
     private int count;
+
+
 }
 
