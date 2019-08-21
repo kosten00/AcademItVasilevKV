@@ -13,28 +13,21 @@ class ListItem<T> {
         this.next = next;
     }
 
-    public T getData() {
-        return data;
-    }
-
-    public void setData(T data) {
-        this.data = data;
+    public void setNext(ListItem<T> next) {
+        this.next = next;
     }
 
     public ListItem<T> getNext() {
         return next;
     }
 
-    public void setNext(ListItem<T> next) {
-        this.next = next;
+    public void setData(T data) {
+        this.data = data;
     }
-}
 
-class SinglyLinkedList<T> {
-    private ListItem<T> head;
-    private int count;
-
+    public T getData() {
+        return data;
+    }
 
 
 }
-
