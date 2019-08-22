@@ -26,15 +26,59 @@ public class SinglyLinkedList<T> {
         int counter = 0;
 
         for (ListItem<T> p = head; ; p = p.getNext(), counter++) {
-            if (counter == index - 1) {
+            if (counter == index) {
                 return p.getData();
             }
         }
     }
 
+    public void setElement(int index, T data) {
+        int counter = 0;
+
+        for (ListItem<T> p = head; ; p = p.getNext(), counter++) {
+            if (counter == index) {
+                p.setData(data);
+                break;
+            }
+        }
+    }
+
+    public T replaceElement(int index, T data) {
+        int counter = 0;
+
+        for (ListItem<T> p = head; ; p = p.getNext(), counter++) {
+            if (counter == index) {
+                ListItem<T> temp = new ListItem<T>(p.getData());
+
+                p.setData(data);
+
+                return temp.getData();
+            }
+        }
+    }
+
+    public T removeElement(int index) {
+        int counter = 0;
+
+        for (ListItem<T> p = head; ; p = p.getNext(), counter++) {
+            if (counter == index) {
+                ListItem<T> temp = new ListItem<T>(p.getData());
+
+//                for (; p != null; p = p.getNext()) {
+//                    this = new ListItem<T>();
+//
+//                }
+
+                return temp.getData();
+            }
+        }
+    }
+
     public void print() {
-        for (ListItem<T> p = head; p != null; p = p.getNext()) {
-            System.out.println(p.getData());
+        int i = 0;
+
+        for (ListItem<T> p = head; p != null; p = p.getNext(), i++) {
+            System.out.println(i + ": " + p.getData());
         }
     }
 }
