@@ -32,13 +32,19 @@ public class SinglyLinkedList<T> {
         }
     }
 
-    public void setElement(int index, T data) {
-        int counter = 0;
+    public void addElement(int index, T data) {
+        if (index == 0) {
+            this.add(data);
+        } else {
+            int counter = 0;
 
-        for (ListItem<T> p = head; ; p = p.getNext(), counter++) {
-            if (counter == index) {
-                p.setData(data);
-                break;
+            for (ListItem<T> p = head; ; p = p.getNext(), counter++) {
+                if (counter == index - 1) {
+                    p.setNext(new ListItem<>(data, p.getNext()));
+                    count++;
+
+                    break;
+                }
             }
         }
     }
@@ -87,6 +93,25 @@ public class SinglyLinkedList<T> {
                 }
             }
         }
+    }
+
+    public boolean removeData(T data) {
+        if (head.getData() == data) {
+            head = head.getNext();
+            count--;
+
+            return true;
+        } else {
+            for (ListItem<T> p = head; p != null; p = p.getNext()) {
+                if (p.getNext().getData().equals(data)) {
+                    p.setNext(p.getNext().getNext());
+                    count--;
+
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     public void print() {
