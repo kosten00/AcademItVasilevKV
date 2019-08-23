@@ -118,7 +118,7 @@ public class SinglyLinkedList<T> {
         }
         return false;
     }
-
+    //TODO: доразбираться с разворотом
     public void spread() {
         int counter = count - 1;
 
