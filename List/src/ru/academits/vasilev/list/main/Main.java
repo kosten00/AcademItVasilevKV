@@ -28,5 +28,13 @@ public class Main {
         System.out.println("replace old element: " + "\"" + list.replaceElement(1, "some data") + "\""+ " with new element string \"some data\" by index 1: ");
 
         list.print();
+
+        System.out.println();
+
+        list.removeElement(0);
+
+        list.print();
+
+        System.out.println(list.getSize());
     }
 }

@@ -57,19 +57,34 @@ public class SinglyLinkedList<T> {
         }
     }
 
+    public T removeFirstElement() {
+        ListItem<T> temp = head;
+
+        head = head.getNext();
+        count--;
+
+        return temp.getData();
+    }
+
     public T removeElement(int index) {
-        int counter = 0;
+        if (index == 0) {
+            ListItem<T> temp = this.head;
 
-        for (ListItem<T> p = head; ; p = p.getNext(), counter++) {
-            if (counter == index) {
-                ListItem<T> temp = new ListItem<T>(p.getData());
+            this.removeFirstElement();
 
-//                for (; p != null; p = p.getNext()) {
-//                    this = new ListItem<T>();
-//
-//                }
+            return temp.getData();
+        } else {
+            int counter = 0;
 
-                return temp.getData();
+            for (ListItem<T> p = head; ; p = p.getNext(), counter++) {
+                if (counter == index - 1) {
+                    ListItem<T> temp = new ListItem<>(p.getNext().getData());
+
+                    p.setNext(p.getNext().getNext());
+                    count--;
+
+                    return temp.getData();
+                }
             }
         }
     }

@@ -28,6 +28,4 @@ class ListItem<T> {
     public T getData() {
         return data;
     }
-
-
 }
