@@ -16,35 +16,11 @@ public class Main {
         list.add(11.9);
         list.add(matrix);
 
-//        list.print();
-//        System.out.println();
-//
-//        System.out.println("return list size: " + list.getSize());
-//
-//        System.out.println("return first element from list: " + list.getFirstElement());
-//
-//        System.out.println("return element with index = 2: " + list.getElement(2));
-//
-//        System.out.println("replace old element: " + "\"" + list.replaceElement(1, "some data") + "\""+ " with new element string \"some data\" by index 1: ");
-//
-//        list.print();
-//
-//        System.out.println();
-//
-//        list.removeElement(0);
-//
-//        list.print();
-//
-//        System.out.println(list.getSize());
-//
-//        list.addElement(0, 777);
-//
-//        System.out.println();
-
         list.print();
-        System.out.println(list.getSize());
 
-        System.out.println(list.removeData(matrix));
+        list.spread();
+
+        System.out.println();
 
         list.print();
     }

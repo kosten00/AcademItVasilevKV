@@ -9,6 +9,11 @@ public class SinglyLinkedList<T> {
         count = 0;
     }
 
+    public SinglyLinkedList(SinglyLinkedList<T> list) {
+        head = list.head;
+        count = list.count;
+    }
+
     public void add(T data) {
         head = new ListItem<>(data, head);
         count++;
@@ -34,7 +39,7 @@ public class SinglyLinkedList<T> {
 
     public void addElement(int index, T data) {
         if (index == 0) {
-            this.add(data);
+            add(data);
         } else {
             int counter = 0;
 
@@ -74,9 +79,9 @@ public class SinglyLinkedList<T> {
 
     public T removeElement(int index) {
         if (index == 0) {
-            ListItem<T> temp = this.head;
+            ListItem<T> temp = head;
 
-            this.removeFirstElement();
+            removeFirstElement();
 
             return temp.getData();
         } else {
@@ -96,7 +101,7 @@ public class SinglyLinkedList<T> {
     }
 
     public boolean removeData(T data) {
-        if (head.getData() == data) {
+        if (head.getData().equals(data)) {
             head = head.getNext();
             count--;
 
@@ -114,11 +119,21 @@ public class SinglyLinkedList<T> {
         return false;
     }
 
-    public void print() {
-        int i = 0;
+    public void spread() {
+        int counter = count - 1;
 
-        for (ListItem<T> p = head; p != null; p = p.getNext(), i++) {
-            System.out.println(i + ": " + p.getData());
+        ListItem<T> temp = head;
+
+        for (ListItem<T> p = head; counter != 0; p = p.getNext(), counter--) {
+            head = new ListItem<>(p.getNext().getData(), temp);
+        }
+    }
+
+    public void print() {
+        int counter = 0;
+
+        for (ListItem<T> p = head; p != null; p = p.getNext(), counter++) {
+            System.out.println(counter + ": " + p.getData());
         }
     }
 }
