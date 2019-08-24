@@ -69,32 +69,32 @@ public class SinglyLinkedList<T> {
     }
 
     public T removeFirstElement() {
-        ListItem<T> temp = head;
+        ListItem<T> removalElement = head;
 
         head = head.getNext();
         count--;
 
-        return temp.getData();
+        return removalElement.getData();
     }
 
     public T removeElement(int index) {
         if (index == 0) {
-            ListItem<T> temp = head;
+            ListItem<T> removalElement = head;
 
             removeFirstElement();
 
-            return temp.getData();
+            return removalElement.getData();
         } else {
             int counter = 0;
 
             for (ListItem<T> p = head; ; p = p.getNext(), counter++) {
                 if (counter == index - 1) {
-                    ListItem<T> temp = new ListItem<>(p.getNext().getData());
+                    ListItem<T> removalElement = new ListItem<>(p.getNext().getData());
 
                     p.setNext(p.getNext().getNext());
                     count--;
 
-                    return temp.getData();
+                    return removalElement.getData();
                 }
             }
         }
@@ -118,15 +118,19 @@ public class SinglyLinkedList<T> {
         }
         return false;
     }
-    //TODO: доразбираться с разворотом
-    public void spread() {
-        int counter = count - 1;
 
-        ListItem<T> temp = head;
+    public void revert() {
+        ListItem<T> previous = null;
+        ListItem<T> current = head;
 
-        for (ListItem<T> p = head; counter != 0; p = p.getNext(), counter--) {
-            head = new ListItem<>(p.getNext().getData(), temp);
+        while (current != null) {
+            ListItem<T> next = current.getNext();
+            current.setNext(previous);
+            previous = current;
+            current = next;
         }
+
+        head = previous;
     }
 
     public void print() {
