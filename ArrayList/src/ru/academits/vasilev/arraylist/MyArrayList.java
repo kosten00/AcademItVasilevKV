@@ -103,7 +103,7 @@ public class MyArrayList<T> implements MyList<T> {
     }
 
     @Override
-    public T remove(int index) {   //todo разобраться с этим, не работает
+    public T remove(int index) {
         checkIndex(index);
 
         T elementToRemove = (T) data[index];
@@ -130,9 +130,9 @@ public class MyArrayList<T> implements MyList<T> {
 
     public void print() {
         for (Object object : data) {
-//            if (object == null) {
-//                continue;
-//            }
+            if (object == null) {
+                continue;
+            }
 
             System.out.println(object);
         }
