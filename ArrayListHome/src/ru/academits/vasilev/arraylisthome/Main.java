@@ -59,5 +59,9 @@ public class Main {
         }
 
         System.out.println(list3);
+
+        list3.add(6, 22);
+
+        System.out.println(list3);
     }
 }

@@ -1,12 +1,11 @@
 package ru.academits.vasilev.arraylist;
 
 import java.util.Collection;
-import java.util.Comparator;
 
 public interface MyList<T> {
     void add(int index, T object);
 
-    boolean addAll(int index, Collection<? extends T> c);
+    boolean addAll(int index, T[] object);
 
     T get(int index);
 
