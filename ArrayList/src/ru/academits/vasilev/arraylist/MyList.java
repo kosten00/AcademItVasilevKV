@@ -1,7 +1,5 @@
 package ru.academits.vasilev.arraylist;
 
-import java.util.Collection;
-
 public interface MyList<T> {
     void add(int index, T object);
 
@@ -17,5 +15,4 @@ public interface MyList<T> {
 
     T set(int index, T object);
 
-    //void sort(Comparator<? super T> c);
 }

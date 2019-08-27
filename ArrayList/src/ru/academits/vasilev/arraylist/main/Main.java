@@ -16,7 +16,7 @@ public class Main {
         list.add(3, 4);
         list.add(4, 5);
 
-        list.remove(1);
+        System.out.println(list.remove(1));
 
         list.print();
 
