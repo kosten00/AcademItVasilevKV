@@ -9,7 +9,7 @@ public class Main {
     public static void main(String[] args) {
         ArrayList<Integer> list1 = new ArrayList<>();
 
-        try (Scanner scanner = new Scanner(new FileInputStream("C:\\Users\\я\\IdeaProjects\\AcademItVasilevKV\\ArrayListHome\\src\\ru\\academits\\vasilev\\arraylisthome\\some_file.txt"))) {
+        try (Scanner scanner = new Scanner(new FileInputStream("FileForArrayListHomeTask.txt"))) {
             while (scanner.hasNextLine()) {
                 list1.add(Integer.parseInt(scanner.nextLine()));
             }
@@ -29,7 +29,7 @@ public class Main {
 
         ArrayList<Integer> list2 = new ArrayList<>();
 
-        try (Scanner scanner = new Scanner(new FileInputStream("C:\\Users\\я\\IdeaProjects\\AcademItVasilevKV\\ArrayListHome\\src\\ru\\academits\\vasilev\\arraylisthome\\some_file.txt"))) {
+        try (Scanner scanner = new Scanner(new FileInputStream("FileForArrayListHomeTask.txt"))) {
             while (scanner.hasNextLine()) {
                 list2.add(Integer.parseInt(scanner.nextLine()));
             }
