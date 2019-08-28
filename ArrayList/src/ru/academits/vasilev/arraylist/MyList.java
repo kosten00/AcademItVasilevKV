@@ -7,12 +7,11 @@ public interface MyList<T> {
 
     T get(int index);
 
-    int indexOf(Object object);
+    int indexOf(T object);
 
-    int lastIndexOf(Object object);
+    int lastIndexOf(T object);
 
     T remove(int index);
 
     T set(int index, T object);
-
 }

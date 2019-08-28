@@ -8,19 +8,29 @@ public class Main {
     public static void main(String[] args) {
         MyArrayList<Integer> list = new MyArrayList<>();
 
-        ArrayList list333 = new ArrayList();
-
         list.add(0, 1);
         list.add(1, 2);
         list.add(2, 3);
         list.add(3, 4);
         list.add(4, 5);
 
-        System.out.println(list.remove(1));
+        Integer[] arr = {9, 8, 6};
 
         list.print();
 
         System.out.println();
-        System.out.println(list.getSize());
+
+        list.trimToSize();
+
+        list.print();
+
+        list.add(5, 1000);
+
+        System.out.println(list.addAll(5, arr));
+
+        list.addLast(100500);
+        list.addLast(500);
+
+        list.print();
     }
 }

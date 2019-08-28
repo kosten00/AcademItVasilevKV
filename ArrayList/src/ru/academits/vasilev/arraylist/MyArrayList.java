@@ -7,6 +7,12 @@ public class MyArrayList<T> implements MyList<T> {
     private int size;
     private static final int DEFAULT_CAPACITY = 10;
 
+    private void checkSize() {
+        if (size == data.length) {
+            growCapacity();
+        }
+    }
+
     private void growCapacity() {
         data = Arrays.copyOf(data, data.length * 2);
     }
@@ -14,12 +20,6 @@ public class MyArrayList<T> implements MyList<T> {
     private void checkIndex(int index) {
         if (index < 0 || index > size) {
             throw new IllegalArgumentException("Index " + index + " is out of the list size = " + size);
-        }
-    }
-
-    private void checkSize() {
-        if (size == data.length) {
-            growCapacity();
         }
     }
 
@@ -93,13 +93,25 @@ public class MyArrayList<T> implements MyList<T> {
     }
 
     @Override
-    public int indexOf(Object object) {
-        return 0;
+    public int indexOf(T element) {
+        for (int i = 0; i < data.length; i++) {
+            if (element.equals(data[i])) {
+                return i;
+            }
+        }
+
+        return -1;
     }
 
     @Override
-    public int lastIndexOf(Object object) {
-        return 0;
+    public int lastIndexOf(T element) {
+        for (int i = data.length - 1; i >= 0; i--) {
+            if (element.equals(data[i])) {
+                return i;
+            }
+        }
+
+        return -1;
     }
 
     @Override
@@ -130,9 +142,9 @@ public class MyArrayList<T> implements MyList<T> {
 
     public void print() {
         for (Object object : data) {
-            if (object == null) {
-                continue;
-            }
+//            if (object == null) {
+//                continue;
+//            }
 
             System.out.println(object);
         }
