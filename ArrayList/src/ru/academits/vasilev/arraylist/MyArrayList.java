@@ -1,34 +1,18 @@
 package ru.academits.vasilev.arraylist;
 
-import java.util.Arrays;
+import java.util.*;
 
-public class MyArrayList<T> implements MyList<T> {
-    private Object[] data;
+public class MyArrayList<T> implements List<T> {
+    private T[] data;
     private int size;
     private static final int DEFAULT_CAPACITY = 10;
 
-    private void checkSize() {
-        if (size == data.length) {
-            growCapacity();
-        }
-    }
-
-    private void growCapacity() {
-        data = Arrays.copyOf(data, data.length * 2);
-    }
-
-    private void checkIndex(int index) {
-        if (index < 0 || index > size) {
-            throw new IllegalArgumentException("Index " + index + " is out of the list size = " + size);
-        }
-    }
-
     public MyArrayList() {
-        data = new Object[DEFAULT_CAPACITY];
+        data = (T[]) new Object[DEFAULT_CAPACITY];
     }
 
     public MyArrayList(int capacity) {
-        data = new Object[capacity];
+        data = (T[]) new Object[capacity];
     }
 
     public void ensureCapacity(int capacity) {
@@ -39,114 +23,162 @@ public class MyArrayList<T> implements MyList<T> {
         data = Arrays.copyOf(data, size);
     }
 
-    public void addFirst(T element) {
-        checkSize();
 
-        System.arraycopy(data, 0, data, 1, size);
-
-        data[0] = element;
-        size++;
-    }
-
-    public void addLast(T element) {
-        checkSize();
-
-        data[size] = element;
-        size++;
+    @Override
+    public int size() {
+        return size;
     }
 
     @Override
-    public void add(int index, T element) {
-        if (index == 0) {
-            addFirst(element);
-        } else {
-            checkIndex(index);
-            checkSize();
+    public boolean isEmpty() {
+        return size == 0;
+    }
 
-            System.arraycopy(data, index, data, index + 1, size - index);
+    @Override
+    public boolean contains(Object element) {
+        return false;
+    }
 
-            data[index] = element;
-            size++;
+    @Override
+    public Iterator<T> iterator() {
+        return new MyIterator();
+    }
+
+    private class MyIterator implements Iterator<T> {
+        int cursor;
+        int lastRet = -1;
+        //int expectedModCount = modCount;
+
+        MyIterator() {
+        }
+
+        @Override
+        public boolean hasNext() {
+            return cursor != size;
+        }
+
+        @Override
+        public T next() {
+            //checkForComodification();
+            int i = cursor;
+            if (i >= size)
+                throw new NoSuchElementException();
+            //Object[] elementData = ArrayList.this.elementData;
+            //if (i >= elementData.length)
+            throw new ConcurrentModificationException();
+            //cursor = i + 1;
+            //return (T) elementData[lastRet = i];
+        }
+
+        public void remove() {
+            if (lastRet < 0)
+                throw new IllegalStateException();
+            //checkForComodification();
+
+            try {
+                //ArrayList.this.remove(lastRet);
+                cursor = lastRet;
+                lastRet = -1;
+                //expectedModCount = modCount;
+            } catch (IndexOutOfBoundsException ex) {
+                throw new ConcurrentModificationException();
+            }
         }
     }
 
     @Override
-    public boolean addAll(int index, T[] elements) {
-        checkIndex(index);
+    public Object[] toArray() {
+        return new Object[0];
+    }
 
-        if (elements.length + size >= data.length) {
-            ensureCapacity(elements.length + size);
-        }
+    @Override
+    public <T1> T1[] toArray(T1[] a) {
+        return null;
+    }
 
-        if (size - index > 0) {
-            System.arraycopy(data, index, data, index + elements.length, size - index);
-        }
-        System.arraycopy(elements, 0, data, index, elements.length);
+    @Override
+    public boolean add(T t) {
+        return false;
+    }
 
-        size = size + elements.length;
-        return true;
+    @Override
+    public boolean remove(Object o) {
+        return false;
+    }
+
+    @Override
+    public boolean containsAll(Collection<?> c) {
+        return false;
+    }
+
+    @Override
+    public boolean addAll(Collection<? extends T> c) {
+        return false;
+    }
+
+    @Override
+    public boolean addAll(int index, Collection<? extends T> c) {
+        return false;
+    }
+
+    @Override
+    public boolean removeAll(Collection<?> c) {
+        return false;
+    }
+
+    @Override
+    public boolean retainAll(Collection<?> c) {
+        return false;
+    }
+
+    @Override
+    public void clear() {
+
     }
 
     @Override
     public T get(int index) {
-        return (T) data[index];
-    }
-
-    @Override
-    public int indexOf(T element) {
-        for (int i = 0; i < data.length; i++) {
-            if (element.equals(data[i])) {
-                return i;
-            }
-        }
-
-        return -1;
-    }
-
-    @Override
-    public int lastIndexOf(T element) {
-        for (int i = data.length - 1; i >= 0; i--) {
-            if (element.equals(data[i])) {
-                return i;
-            }
-        }
-
-        return -1;
-    }
-
-    @Override
-    public T remove(int index) {
-        checkIndex(index);
-
-        T elementToRemove = (T) data[index];
-
-        System.arraycopy(data, index + 1, data, index, size - index);
-        size--;
-
-        return elementToRemove;
+        return null;
     }
 
     @Override
     public T set(int index, T element) {
-        checkIndex(index);
-
-        T elementToReplace = (T) data[index];
-        data[index] = element;
-
-        return elementToReplace;
+        return null;
     }
 
-    public int getSize() {
-        return size;
+    @Override
+    public void add(int index, T element) {
+
     }
 
-    public void print() {
-        for (Object object : data) {
-//            if (object == null) {
-//                continue;
-//            }
+    @Override
+    public T remove(int index) {
+        return null;
+    }
 
-            System.out.println(object);
-        }
+    @Override
+    public int indexOf(Object o) {
+        return 0;
+    }
+
+    @Override
+    public int lastIndexOf(Object o) {
+        return 0;
+    }
+
+    //Последные методны реализовывать не нужно
+    @Override
+    public ListIterator<T> listIterator() {
+        return null;
+    }
+
+    @Override
+    public ListIterator<T> listIterator(int index) {
+        return null;
+    }
+
+    @Override
+    public List<T> subList(int fromIndex, int toIndex) {
+        return null;
     }
 }
