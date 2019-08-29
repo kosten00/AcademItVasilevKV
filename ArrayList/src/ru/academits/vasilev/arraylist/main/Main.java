@@ -1,12 +1,12 @@
 package ru.academits.vasilev.arraylist.main;
 
-import ru.academits.vasilev.arraylist.MyArrayList;
+import ru.academits.vasilev.arraylist.OldMyArrayList;
 
-import java.util.ArrayList;
+import java.util.Iterator;
 
 public class Main {
     public static void main(String[] args) {
-        MyArrayList<Integer> list = new MyArrayList<>();
+        OldMyArrayList<Integer> list = new OldMyArrayList<>();
 
         list.add(0, 1);
         list.add(1, 2);
