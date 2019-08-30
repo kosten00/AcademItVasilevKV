@@ -16,5 +16,9 @@ public class Main {
         list.addAll(Arrays.asList(arr));
 
         list.print();
+
+        list.removeAll(Arrays.asList(arr));
+
+        list.print();
     }
 }

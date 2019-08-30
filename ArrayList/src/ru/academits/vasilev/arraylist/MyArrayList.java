@@ -181,13 +181,22 @@ public class MyArrayList<T> implements List<T> {
     }
 
     @Override
-    public boolean removeAll(Collection<?> c) {
+    public boolean removeAll(Collection<?> c) { //не работает
         Object[] a = c.toArray();
 
-//        if (indexOf(a[0]) ) {
-//
-//        }
-//
+        int i = 0;
+
+        if (indexOf(a[i]) != -1) {
+            while ((size - indexOf(a[i]) >= a.length)) {
+                i++;
+            }
+        }
+
+        if (i == a.length - 1) {
+            System.arraycopy(items, indexOf(a[0]), items, indexOf(a.length - 1), size - a.length - 1);
+
+        }
+
         return false;
     }
 
