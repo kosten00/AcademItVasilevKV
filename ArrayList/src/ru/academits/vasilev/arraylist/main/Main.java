@@ -1,35 +1,19 @@
 package ru.academits.vasilev.arraylist.main;
 
-import ru.academits.vasilev.arraylist.OldMyArrayList;
+import ru.academits.vasilev.arraylist.MyArrayList;
 
+import java.util.Arrays;
 import java.util.Iterator;
 
 public class Main {
     public static void main(String[] args) {
-        OldMyArrayList<Integer> list = new OldMyArrayList<>();
+        MyArrayList<Integer> list = new MyArrayList<>();
 
-        list.add(0, 1);
-        list.add(1, 2);
-        list.add(2, 3);
-        list.add(3, 4);
-        list.add(4, 5);
+        list.add(1);
 
-        Integer[] arr = {9, 8, 6};
+        Integer[] arr = {2, 3, 4};
 
-        list.print();
-
-        System.out.println();
-
-        list.trimToSize();
-
-        list.print();
-
-        list.add(5, 1000);
-
-        System.out.println(list.addAll(5, arr));
-
-        list.addLast(100500);
-        list.addLast(500);
+        list.addAll(Arrays.asList(arr));
 
         list.print();
     }
