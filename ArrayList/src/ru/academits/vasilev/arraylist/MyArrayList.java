@@ -40,20 +40,20 @@ public class MyArrayList<T> implements List<T> {
         items = Arrays.copyOf(items, size);
     }
 
-    public void addFirst(T element) {
+    public void addFirst(T item) {
         checkSize();
 
         System.arraycopy(items, 0, items, 1, size);
 
-        items[0] = element;
+        items[0] = item;
         modCount++;
         size++;
     }
 
-    public void addLast(T element) {
+    public void addLast(T item) {
         checkSize();
 
-        items[size] = element;
+        items[size] = item;
         modCount++;
         size++;
     }
@@ -69,8 +69,8 @@ public class MyArrayList<T> implements List<T> {
     }
 
     @Override
-    public boolean contains(Object object) {
-        return indexOf(object) >= 0;
+    public boolean contains(Object item) {
+        return indexOf(item) >= 0;
     }
 
     @Override
@@ -96,7 +96,7 @@ public class MyArrayList<T> implements List<T> {
                 throw new ConcurrentModificationException();
             }
 
-            ++currentIndex;
+            currentIndex++;
 
             if (currentIndex >= size) {
                 throw new NoSuchElementException();
@@ -135,8 +135,9 @@ public class MyArrayList<T> implements List<T> {
     }
 
     @Override
-    public boolean add(T t) {
-        addLast(t);
+    public boolean add(T item) {
+        addLast(item);
+
         return true;
     }
 
@@ -181,48 +182,94 @@ public class MyArrayList<T> implements List<T> {
     }
 
     @Override
-    public boolean removeAll(Collection<?> c) { //не работает
-        Object[] a = c.toArray();
+    public boolean removeAll(Collection<?> c) {
+        int start = getStartIndex(c.toArray());
 
-        int i = 0;
-
-        if (indexOf(a[i]) != -1) {
-            while ((size - indexOf(a[i]) >= a.length)) {
-                i++;
-            }
+        if (start == -1) {
+            return false;
         }
 
-        if (i == a.length - 1) {
-            System.arraycopy(items, indexOf(a[0]), items, indexOf(a.length - 1), size - a.length - 1);
+        int end = start + c.size();
 
-        }
+        System.arraycopy(items, end, items, start, size - end);
+        int sizeBeforeChange = size;
+        size = size - c.size();
+        removeExcessItems(sizeBeforeChange);
 
-        return false;
+        modCount++;
+        return true;
     }
 
     @Override
     public boolean retainAll(Collection<?> c) {
-        return false;
+        int start = getStartIndex(c.toArray());
+
+        if (start == -1) {
+            return false;
+        }
+
+        int end = start + c.size();
+
+        System.arraycopy(items, start, items, 0, end - start);
+        int sizeBeforeChange = size;
+        size = c.size();
+        removeExcessItems(sizeBeforeChange);
+
+        modCount++;
+        return true;
     }
 
+    private int getStartIndex(Object[] a) {
+        return Collections.indexOfSubList(Arrays.asList(items), Arrays.asList(a));
+    }
+
+    private void removeExcessItems(int sizeBeforeChange) {
+        int i = size;
+
+        for (; i < sizeBeforeChange; i++) {
+            items[i] = null;
+        }
+    }
 
     @Override
     public void clear() {
+        for (int i = 0; i < size; i++) {
+            items[i] = null;
+        }
 
+        modCount++;
     }
 
     @Override
     public T get(int index) {
-        return null;
+        checkIndex(index);
+
+        return items[index];
     }
 
     @Override
     public T set(int index, T element) {
-        return null;
+        checkIndex(index);
+        T oldItem = items[index];
+
+        add(index, element);
+        return oldItem;
     }
 
     @Override
     public void add(int index, T element) {
+        if (index == 0) {
+            addFirst(element);
+        } else {
+            checkIndex(index);
+            checkSize();
+
+            System.arraycopy(items, index, items, index + 1, size - index);
+
+            modCount++;
+            items[index] = element;
+            size++;
+        }
 
     }
 
@@ -261,6 +308,18 @@ public class MyArrayList<T> implements List<T> {
         return -1;
     }
 
+    public void print() {
+        int i = -1;
+
+        for (T t : items) {
+//            if (object == null) {
+//                continue;
+//            }
+            i++;
+            System.out.println(i + ": " + t);
+        }
+    }
+
     //Последные методны реализовывать не нужно
     @Override
     public ListIterator<T> listIterator() {
@@ -276,17 +335,4 @@ public class MyArrayList<T> implements List<T> {
     public List<T> subList(int fromIndex, int toIndex) {
         return null;
     }
-
-    public void print() {
-        int i = -1;
-
-        for (T t : items) {
-//            if (object == null) {
-//                continue;
-//            }
-            i++;
-            System.out.println(i + ": " + t);
-        }
-    }
-
 }
