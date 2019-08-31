@@ -188,10 +188,10 @@ public class MyArrayList<T> implements List<T> {
         if (start == -1) {
             return false;
         }
-
         int end = start + c.size();
 
         System.arraycopy(items, end, items, start, size - end);
+
         int sizeBeforeChange = size;
         size = size - c.size();
         removeExcessItems(sizeBeforeChange);
@@ -248,18 +248,18 @@ public class MyArrayList<T> implements List<T> {
     }
 
     @Override
-    public T set(int index, T element) {
+    public T set(int index, T item) {
         checkIndex(index);
         T oldItem = items[index];
 
-        add(index, element);
+        add(index, item);
         return oldItem;
     }
 
     @Override
-    public void add(int index, T element) {
+    public void add(int index, T item) {
         if (index == 0) {
-            addFirst(element);
+            addFirst(item);
         } else {
             checkIndex(index);
             checkSize();
@@ -267,7 +267,7 @@ public class MyArrayList<T> implements List<T> {
             System.arraycopy(items, index, items, index + 1, size - index);
 
             modCount++;
-            items[index] = element;
+            items[index] = item;
             size++;
         }
 
@@ -277,13 +277,13 @@ public class MyArrayList<T> implements List<T> {
     public T remove(int index) {
         checkIndex(index);
 
-        T elementToRemove = items[index];
+        T itemToRemove = items[index];
 
         System.arraycopy(items, index + 1, items, index, size - index);
         modCount++;
         size--;
 
-        return elementToRemove;
+        return itemToRemove;
     }
 
     @Override
@@ -311,12 +311,12 @@ public class MyArrayList<T> implements List<T> {
     public void print() {
         int i = -1;
 
-        for (T t : items) {
+        for (T item : items) {
 //            if (object == null) {
 //                continue;
 //            }
             i++;
-            System.out.println(i + ": " + t);
+            System.out.println(i + ": " + item);
         }
     }
 
