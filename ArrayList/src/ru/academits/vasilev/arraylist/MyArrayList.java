@@ -95,13 +95,11 @@ public class MyArrayList<T> implements List<T> {
             if (modCount != expectedModCount) {
                 throw new ConcurrentModificationException();
             }
-
             currentIndex++;
 
             if (currentIndex >= size) {
                 throw new NoSuchElementException();
             }
-
             if (currentIndex >= items.length) {
                 throw new ConcurrentModificationException();
             }
@@ -124,13 +122,11 @@ public class MyArrayList<T> implements List<T> {
         if (a.length < size) {
             return (T1[]) Arrays.copyOf(items, size, a.getClass());
         }
-
         System.arraycopy(items, 0, a, 0, size);
 
         if (a.length > size) {
             a[size] = null;
         }
-
         return a;
     }
 
@@ -167,10 +163,9 @@ public class MyArrayList<T> implements List<T> {
 
         Object[] a = c.toArray();
 
-        if (a.length + size >= items.length) {
-            ensureCapacity(a.length + size);
+        while (a.length + size >= items.length) {
+            growCapacity();
         }
-
         if (size - index > 0) {
             System.arraycopy(items, index, items, index + a.length, size - index);
         }
@@ -207,7 +202,6 @@ public class MyArrayList<T> implements List<T> {
         if (start == -1) {
             return false;
         }
-
         int end = start + c.size();
 
         System.arraycopy(items, start, items, 0, end - start);
@@ -287,9 +281,9 @@ public class MyArrayList<T> implements List<T> {
     }
 
     @Override
-    public int indexOf(Object o) {
+    public int indexOf(Object item) {
         for (int i = 0; i < items.length; i++) {
-            if (o.equals(items[i])) {
+            if (item.equals(items[i])) {
                 return i;
             }
         }
@@ -298,9 +292,9 @@ public class MyArrayList<T> implements List<T> {
     }
 
     @Override
-    public int lastIndexOf(Object o) {
+    public int lastIndexOf(Object item) {
         for (int i = items.length - 1; i >= 0; i--) {
-            if (o.equals(items[i])) {
+            if (item.equals(items[i])) {
                 return i;
             }
         }
@@ -320,7 +314,6 @@ public class MyArrayList<T> implements List<T> {
         }
     }
 
-    //Последные методны реализовывать не нужно
     @Override
     public ListIterator<T> listIterator() {
         return null;
