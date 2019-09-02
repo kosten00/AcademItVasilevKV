@@ -5,7 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
-public class Main {
+public class OldMain {
     public static String openAndCloseTable(int i) {
         if (i == 0) {
             return "<table><tr><td>";
