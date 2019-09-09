@@ -37,42 +37,34 @@ public class Vector {
         return components.length;
     }
 
-    public void plusVector(Vector vector) {
+    public void sum(Vector vector) {
         if (components.length < vector.components.length) {
             components = Arrays.copyOf(components, vector.components.length);
         }
 
-        for (int i = 0; i < components.length; i++) {
-            if (i >= vector.components.length) {
-                continue;
-            }
-
+        for (int i = 0; i < vector.components.length; i++) {
             components[i] += vector.components[i];
         }
     }
 
-    public void minusVector(Vector vector) {
+    public void subtract(Vector vector) {
         if (components.length < vector.components.length) {
             components = Arrays.copyOf(components, vector.components.length);
         }
 
-        for (int i = 0; i < components.length; i++) {
-            if (i >= vector.components.length) {
-                continue;
-            }
-
+        for (int i = 0; i < vector.components.length; i++) {
             components[i] -= vector.components[i];
         }
     }
 
-    public void multiply(double number) {
+    public void multiplyByScalar(double number) {
         for (int i = 0; i < components.length; i++) {
             components[i] *= number;
         }
     }
 
     public void revert() {
-        this.multiply(-1);
+        this.multiplyByScalar(-1);
     }
 
     public double getLength() {
@@ -112,7 +104,7 @@ public class Vector {
     public static Vector getVectorsSum(Vector a, Vector b) {
         Vector sum = new Vector(a);
 
-        sum.plusVector(b);
+        sum.sum(b);
 
         return sum;
     }
@@ -120,15 +112,16 @@ public class Vector {
     public static Vector getVectorsSubtraction(Vector a, Vector b) {
         Vector subtraction = new Vector(a);
 
-        subtraction.plusVector(b);
+        subtraction.subtract(b);
 
         return subtraction;
     }
 
-    public static double getVectorsMultiply(Vector a, Vector b) {
+    public static double getScalarMultiplication(Vector a, Vector b) {
         double sum = 0;
+        int minLength = Math.min(a.components.length, b.components.length);
 
-        for (int i = 0; i < Math.min(a.components.length, b.components.length); i++) {
+        for (int i = 0; i < minLength; i++) {
             sum += a.components[i] * b.components[i];
         }
 
@@ -137,23 +130,17 @@ public class Vector {
 
     @Override
     public String toString() {
-        StringBuilder stringBuilder = new StringBuilder();
+        StringBuilder stringbuilder = new StringBuilder();
 
-        for (int i = 0; i < components.length; i++) {
-            if (i == 0) {
-                stringBuilder.append("{ ").append(components[i]).append(", ");
-                continue;
-            }
+        stringbuilder.append("{ ").append(components[0]).append(", ");
 
-            if (i == components.length - 1) {
-                stringBuilder.append(components[i]).append(" }");
-                continue;
-            }
-
-            stringBuilder.append(components[i]).append(", ");
+        for (int i = 1; i < components.length - 1; i++) {
+            stringbuilder.append(components[i]).append(", ");
         }
 
-        return stringBuilder.toString();
+        stringbuilder.append(components[components.length - 1]).append(" }");
+
+        return stringbuilder.toString();
     }
 
     @Override

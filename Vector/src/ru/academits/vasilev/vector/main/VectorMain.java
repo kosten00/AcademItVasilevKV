@@ -27,17 +27,19 @@ public class VectorMain {
 
         //Прибавление к вектору другого вектора
         System.out.print("vector3 " + vector3 + " + vector4 " + vector4 + " = ");
-        vector3.plusVector(vector4);
+        vector3.sum(vector4);
         System.out.println(vector3);
+
+        vector3 = new Vector(array1);
 
         //Вычитание из вектора другого вектор
         System.out.println("vector3 " + vector3 + " - vector4 " + vector4 + " = ");
-        vector3.minusVector(vector4);
+        vector3.subtract(vector4);
         System.out.println(vector3);
 
         //Умножение вектора на скаляр
         System.out.print("vector3 " + vector3 + " multiply by double 10: ");
-        vector3.multiply(10.0);
+        vector3.multiplyByScalar(10.0);
         System.out.println(vector3);
 
         //Разворот вектора (умножение всех компонент на -1
@@ -69,6 +71,6 @@ public class VectorMain {
         System.out.println("vector6 " + vector6 + " created from test1 " + test1 + " and test2 " + test2 + " by subtraction");
 
         //Скалярное произведение векторов
-        System.out.println("scalar product of vector test1" + test1 + " and test2 " + test2 + " is " + Vector.getVectorsMultiply(test1, test2));
+        System.out.println("scalar product of vector test1" + test1 + " and test2 " + test2 + " is " + Vector.getScalarMultiplication(test1, test2));
     }
 }
