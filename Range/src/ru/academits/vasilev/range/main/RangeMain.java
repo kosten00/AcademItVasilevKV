@@ -9,12 +9,12 @@ public class RangeMain {
         r1.print();
 
         System.out.println("Ranges r2:");
-        Range r2 = new Range(9, 16);
+        Range r2 = new Range(2, 6);
         r2.print();
         System.out.println();
 
         System.out.println("Range r3 is intersection of r1 and r2:");
-        Range r3 = Range.getIntersection(r1, r2);
+        Range r3 = r1.getIntersection(r2);
         if (r3 == null) {
             System.out.println("Ranges do not intersect");
         } else {
@@ -23,14 +23,14 @@ public class RangeMain {
         System.out.println();
 
         System.out.println("Array of ranges r5 is unity of r1 and r2:");
-        Range[] r5 = Range.getUnite(r1, r2);
+        Range[] r5 = r1.getUnion(r2);
         for (Range e : r5) {
             e.print();
         }
         System.out.println();
 
         System.out.println("Array of Ranges r4 is difference between r2 and r1:");
-        Range[] r4 = Range.getDifference(r2, r1);
+        Range[] r4 = r2.getDifference(r1);
         for (Range e : r4) {
             e.print();
         }

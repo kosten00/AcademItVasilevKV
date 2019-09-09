@@ -9,6 +9,22 @@ public class Range {
         this.to = to;
     }
 
+    public double getFrom() {
+        return from;
+    }
+
+    public void setFrom(double from) {
+        this.from = from;
+    }
+
+    public double getTo() {
+        return to;
+    }
+
+    public void setTo(double to) {
+        this.to = to;
+    }
+
     public double getLength() {
         return to - from;
     }
@@ -19,53 +35,43 @@ public class Range {
     }
 
     public boolean isInside(double x) {
-        return from <= x && to >= x;
+        return x >= from && x <= to;
     }
 
-    public static Range getIntersection(Range r1, Range r2) {
-        if (Math.min(r1.to, r2.to) < Math.max(r1.from, r2.from)) {
+    public Range getIntersection(Range range) {
+        if (Math.min(to, range.to) <= Math.max(from, range.from)) {
             return null;
         }
-        return new Range(Math.max(r1.from, r2.from), Math.min(r1.to, r2.to));
+
+        return new Range(Math.max(from, range.from), Math.min(to, range.to));
     }
 
-    public static Range[] getUnite(Range r1, Range r2) {
-        if (Math.min(r1.to, r2.to) < Math.max(r1.from, r2.from)) {
-            return new Range[]{r1, r2};
+    public Range[] getUnion(Range range) {
+        if (Math.min(to, range.to) < Math.max(from, range.from)) {
+            return new Range[]{this, range};
         }
-        return new Range[]{new Range(Math.min(r1.from, r2.from), Math.max(r1.to, r2.to)),};
+
+        return new Range[]{new Range(Math.min(from, range.from), Math.max(to, range.to)),};
     }
 
-    public static Range[] getDifference(Range r1, Range r2) {
-        if (Math.min(r1.to, r2.to) < Math.max(r1.from, r2.from)) {
-            return new Range[]{r1, r2};
+    public Range[] getDifference(Range range) {
+        if (Math.min(to, range.to) <= Math.max(from, range.from)) {
+            return new Range[]{new Range(from, to),};
         }
-        if (r1.from < r2.from && r1.to > r2.to) {
-            return new Range[]{new Range(Math.min(r1.from, r2.from), Math.max(r1.from, r2.from)),
-                    new Range(Math.min(r1.to, r2.to), Math.max(r1.to, r2.to))};
+
+        if (from <= range.from && to >= range.to) {
+            return new Range[]{new Range(Math.min(from, range.from), Math.max(from, range.from)),
+                    new Range(Math.min(to, range.to), Math.max(to, range.to))};
         }
-        if (r1.to > r2.to) {
-            return new Range[]{new Range(r2.to, r1.to),};
+
+        if (to >= range.to) {
+            return new Range[]{new Range(range.to, to),};
         }
-        if (r1.from < r2.from) {
-            return new Range[]{new Range(r1.from, r2.from)};
+
+        if (from <= range.from) {
+            return new Range[]{new Range(from, range.from)};
         }
-        return new Range[]{new Range(0, 0), new Range(0, 0)};
-    }
 
-    public void setFrom(double from) {
-        this.from = from;
-    }
-
-    public double getFrom() {
-        return from;
-    }
-
-    public void setTo(double to) {
-        this.to = to;
-    }
-
-    public double getTo() {
-        return to;
+        return new Range[]{};
     }
 }
