@@ -14,6 +14,10 @@ public class TreeMain {
         tree.insert(13);
         tree.insert(7);
 
-        tree.breadthFirstTraverse();
+        tree.breadthTraverse();
+
+        System.out.println("root = " + tree.getRoot());
+
+        System.out.println(tree.searchInDepth(3));
     }
 }

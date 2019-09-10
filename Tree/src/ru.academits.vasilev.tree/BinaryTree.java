@@ -1,12 +1,19 @@
 package ru.academits.vasilev.tree;
 
 import java.util.LinkedList;
+import java.util.Stack;
 
 public class BinaryTree<T extends Comparable<? super T>> {
     private TreeNode<T> root;
 
     public TreeNode<T> getRoot() {
         return root;
+    }
+
+    private void checkRoot() {
+        if (root == null) {
+            throw new NullPointerException("tree has no elements");
+        }
     }
 
     public void insert(T data) {
@@ -39,8 +46,27 @@ public class BinaryTree<T extends Comparable<? super T>> {
         }
     }
 
-    public boolean search(T data) {
+    public boolean searchInDepth(T data) {
+        checkRoot();
 
+        Stack<TreeNode<T>> stack = new Stack<>();
+
+        stack.push(root);
+        while (!stack.empty()) {
+            TreeNode<T> current = stack.pop();
+
+            if (current.data.compareTo(data) == 0) {
+                return true;
+            }
+
+            if (current.right != null) {
+                stack.push(current.right);
+            }
+
+            if (current.left != null) {
+                stack.push(current.left);
+            }
+        }
 
         return false;
     }
@@ -53,7 +79,7 @@ public class BinaryTree<T extends Comparable<? super T>> {
         return -1;
     }
 
-    public void breadthFirstTraverse() {
+    public void breadthTraverse() {
         LinkedList<TreeNode<T>> queue = new LinkedList<>();
 
         queue.add(root);
@@ -73,5 +99,5 @@ public class BinaryTree<T extends Comparable<? super T>> {
     }
 }
 
-//обход в ширину рекурсией
+//обход в ширину рекурсией+
 //бход в глубину рекрсией и без
