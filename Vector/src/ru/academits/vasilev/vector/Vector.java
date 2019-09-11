@@ -132,6 +132,12 @@ public class Vector {
     public String toString() {
         StringBuilder stringbuilder = new StringBuilder();
 
+        if (components.length == 1) {
+            stringbuilder.append("{ ").append(components[0]).append(" }");
+
+            return stringbuilder.toString();
+        }
+
         stringbuilder.append("{ ").append(components[0]).append(", ");
 
         for (int i = 1; i < components.length - 1; i++) {
