@@ -6,20 +6,18 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException {
         ArrayList<Integer> list1 = new ArrayList<>();
 
         try (Scanner scanner = new Scanner(new FileInputStream("FileForArrayListHomeTask.txt"))) {
             while (scanner.hasNextLine()) {
                 list1.add(Integer.parseInt(scanner.nextLine()));
             }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         }
         System.out.println(list1);
 
         for (int i = 0; i < list1.size(); i++) {
-            if (list1.get(i) % 2 != 0 || list1.get(i) == 0) {
+            if (list1.get(i) % 2 != 0) {
                 continue;
             }
             list1.remove(i);
@@ -33,34 +31,17 @@ public class Main {
             while (scanner.hasNextLine()) {
                 list2.add(Integer.parseInt(scanner.nextLine()));
             }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         }
         System.out.println(list2);
 
         ArrayList<Integer> list3 = new ArrayList<>();
 
-        for (int i = 0; i < list2.size(); i++) {
-            boolean duplicated = false;
-
-            for (int j = 0; j < i; j++) {
-                if (list2.get(j).equals(list2.get(i))) {
-                    duplicated = true;
-
-                    break;
-                }
-            }
-
-            if (duplicated) {
+        for (Integer integer : list2) {
+            if (list3.contains(integer)) {
                 continue;
             }
-
-            list3.add(list2.get(i));
+            list3.add(integer);
         }
-
-        System.out.println(list3);
-
-        list3.add(6, 22);
 
         System.out.println(list3);
     }
