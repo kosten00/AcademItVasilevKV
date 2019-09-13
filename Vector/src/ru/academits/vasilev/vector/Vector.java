@@ -130,23 +130,23 @@ public class Vector {
 
     @Override
     public String toString() {
-        StringBuilder stringbuilder = new StringBuilder();
+        StringBuilder sb = new StringBuilder();
 
         if (components.length == 1) {
-            stringbuilder.append("{ ").append(components[0]).append(" }");
+            sb.append("{ ").append(components[0]).append(" }");
 
-            return stringbuilder.toString();
+            return sb.toString();
         }
 
-        stringbuilder.append("{ ").append(components[0]).append(", ");
+        sb.append("{ ").append(components[0]).append(", ");
 
         for (int i = 1; i < components.length - 1; i++) {
-            stringbuilder.append(components[i]).append(", ");
+            sb.append(components[i]).append(", ");
         }
 
-        stringbuilder.append(components[components.length - 1]).append(" }");
+        sb.append(components[components.length - 1]).append(" }");
 
-        return stringbuilder.toString();
+        return sb.toString();
     }
 
     @Override

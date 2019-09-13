@@ -39,7 +39,7 @@ public class MatrixMain {
         m2.transpose();
         System.out.println("transpose matrix m2: " + m2);
 
-        m2.multiply(2);
+        m2.multiplyByScalar(2);
         System.out.println("matrix m2 multiplied by 2: " + m2);
 
         double[][] arr4 = new double[][]{{2, 3, 4}, {8, 7, 6}, {9, 1, 0}};
@@ -53,5 +53,13 @@ public class MatrixMain {
         Matrix m9 = new Matrix(test);
 
         System.out.println(m9.getDeterminant());
+
+        Vector v = new Vector(arr2);
+
+        System.out.println(m2);
+
+        m2.multiply(v);
+
+        System.out.println(m2);
     }
 }
