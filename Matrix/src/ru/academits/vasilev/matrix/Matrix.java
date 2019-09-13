@@ -164,7 +164,8 @@ public class Matrix {
 
     public void multiply(Vector vector) {
         int columnsCount = getSize()[1];
-        int rowsCount = elementsRow.length;
+        int rowsCount = getSize()[0];
+        ;
 
         if (vector.getSize() > columnsCount) {
             throw new IllegalArgumentException("Vector's length must be equal to the number of matrix columns");
@@ -177,6 +178,29 @@ public class Matrix {
         }
 
         elementsRow = result;
+    }
+
+    public void add(Matrix matrix) {
+        if (!Arrays.equals(this.getSize(), matrix.getSize())) {
+            throw new IllegalArgumentException("Matrix should have same size!");
+        }
+
+        int columnsCount = getSize()[1];
+        int rowsCount = getSize()[0];
+
+        for (int i = 0; i < rowsCount; i++) {
+            for (int j = 0; j < columnsCount; j++) {
+                elementsRow[i].setElement(j, elementsRow[i].getElement(j) + matrix.elementsRow[i].getElement(j));
+            }
+        }
+    }
+
+    public static Matrix sum(Matrix m1, Matrix m2) {
+        Matrix sum = new Matrix(m1);
+
+        sum.add(m2);
+
+        return sum;
     }
 
     @Override

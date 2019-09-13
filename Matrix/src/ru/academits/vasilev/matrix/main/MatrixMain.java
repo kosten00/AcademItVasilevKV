@@ -61,5 +61,14 @@ public class MatrixMain {
         m2.multiply(v);
 
         System.out.println(m2);
+
+        Matrix matrixSum1 = new Matrix(arr4);
+        Matrix matrixSum2 = new Matrix(arr4);
+
+        System.out.println(matrixSum1);
+
+        matrixSum1.add(matrixSum2);
+
+        System.out.println(matrixSum1);
     }
 }
