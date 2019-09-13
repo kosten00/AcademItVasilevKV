@@ -165,7 +165,6 @@ public class Matrix {
     public void multiply(Vector vector) {
         int columnsCount = getSize()[1];
         int rowsCount = getSize()[0];
-        ;
 
         if (vector.getSize() > columnsCount) {
             throw new IllegalArgumentException("Vector's length must be equal to the number of matrix columns");
