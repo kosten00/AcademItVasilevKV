@@ -28,12 +28,12 @@ public class MatrixMain {
 
         System.out.println("return column from matrix m4 with index 2: " + m4.getColumn(2));
 
-        System.out.println("return raw from matrix m4 with index 0: " + m4.getRaw(0));
+        System.out.println("return raw from matrix m4 with index 0: " + m4.getRow(0));
 
         System.out.println("before setRaw: " + m2);
         Vector v1 = new Vector(arr2);
         System.out.println("raw to set: " + v1);
-        m2.setRaw(1, v1);
+        m2.setRow(1, v1);
         System.out.println("after setRaw: " + m2);
 
         m2.transpose();
@@ -67,8 +67,19 @@ public class MatrixMain {
 
         System.out.println(matrixSum1);
 
-        matrixSum1.add(matrixSum2);
+        matrixSum1.getSum(matrixSum2);
 
         System.out.println(matrixSum1);
+
+        System.out.println();
+
+        double[][] arr11 = {{3, 4, 5}, {6, 7, 8}, {1, 2, 3}};
+        double[][] arr22 = {{44, 55, 66}, {11, 2, 33}, {8, 5, 4}};
+
+        Matrix m11 = new Matrix(arr11);
+        Matrix m22 = new Matrix(arr22);
+
+        System.out.println(Matrix.multiply(m11, m22));
+        System.out.println(m11 + "" + m22);
     }
 }

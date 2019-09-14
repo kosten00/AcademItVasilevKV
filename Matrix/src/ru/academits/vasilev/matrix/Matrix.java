@@ -7,10 +7,10 @@ import java.util.Arrays;
 public class Matrix {
     private Vector[] elementsRow;
 
-    public Matrix(int raw, int column) {
-        elementsRow = new Vector[raw];
+    public Matrix(int row, int column) {
+        elementsRow = new Vector[row];
 
-        for (int i = 0; i < raw; i++) {
+        for (int i = 0; i < row; i++) {
             elementsRow[i] = new Vector(column);
         }
     }
@@ -35,43 +35,43 @@ public class Matrix {
         }
     }
 
-    public Matrix(Vector[] elementsRaw) {
-        int maxSize = elementsRaw[0].getSize();
+    public Matrix(Vector[] elementsRow) {
+        int maxSize = elementsRow[0].getSize();
 
-        for (int i = 1; i < elementsRaw.length; i++) {
-            if (maxSize < elementsRaw[i].getSize()) {
-                maxSize = elementsRaw[i].getSize();
+        for (int i = 1; i < elementsRow.length; i++) {
+            if (maxSize < elementsRow[i].getSize()) {
+                maxSize = elementsRow[i].getSize();
             }
         }
 
-        this.elementsRow = new Vector[elementsRaw.length];
+        this.elementsRow = new Vector[elementsRow.length];
 
         for (int i = 0; i < this.elementsRow.length; i++) {
             this.elementsRow[i] = new Vector(maxSize);
 
             for (int j = 0; j < maxSize; j++) {
-                if (j >= elementsRaw[i].getSize()) {
+                if (j >= elementsRow[i].getSize()) {
                     break;
                 }
 
-                this.elementsRow[i].setElement(j, elementsRaw[i].getElement(j));
+                this.elementsRow[i].setElement(j, elementsRow[i].getElement(j));
             }
         }
     }
 
     public int[] getSize() {
-        int raw = elementsRow.length;
+        int row = elementsRow.length;
 
         int column = elementsRow[0].getSize();
 
-        return new int[]{raw, column};
+        return new int[]{row, column};
     }
 
-    public Vector getRaw(int index) {
+    public Vector getRow(int index) {
         return elementsRow[index];
     }
 
-    public void setRaw(int index, Vector elementsRaw) {
+    public void setRow(int index, Vector elementsRaw) {
         this.elementsRow[index] = elementsRaw;
     }
 
@@ -179,7 +179,7 @@ public class Matrix {
         elementsRow = result;
     }
 
-    public void add(Matrix matrix) {
+    public void getSum(Matrix matrix) {
         if (!Arrays.equals(this.getSize(), matrix.getSize())) {
             throw new IllegalArgumentException("Matrix should have same size!");
         }
@@ -194,12 +194,63 @@ public class Matrix {
         }
     }
 
-    public static Matrix sum(Matrix m1, Matrix m2) {
+    public void getDifference(Matrix matrix) {
+        if (!Arrays.equals(this.getSize(), matrix.getSize())) {
+            throw new IllegalArgumentException("Matrix should have same size!");
+        }
+
+        int columnsCount = getSize()[1];
+        int rowsCount = getSize()[0];
+
+        for (int i = 0; i < rowsCount; i++) {
+            for (int j = 0; j < columnsCount; j++) {
+                elementsRow[i].setElement(j, elementsRow[i].getElement(j) - matrix.elementsRow[i].getElement(j));
+            }
+        }
+    }
+
+    public static Matrix getSum(Matrix m1, Matrix m2) {
         Matrix sum = new Matrix(m1);
 
-        sum.add(m2);
+        sum.getSum(m2);
 
         return sum;
+    }
+
+    public static Matrix getDifference(Matrix m1, Matrix m2) {
+        Matrix difference = new Matrix(m1);
+
+        difference.getDifference(m2);
+
+        return difference;
+    }
+
+    public static Matrix multiply(Matrix m1, Matrix m2) {
+        if (m1.getSize()[0] != m2.getSize()[1]) {
+            throw new IllegalArgumentException("First matrix rows count should be equal to second matrix columns count");
+        }
+
+        int columnsCount = m2.getSize()[1];
+        int rowsCount = m1.getSize()[0];
+
+        Matrix multiplication = new Matrix(rowsCount, columnsCount);
+
+        Matrix transposed = new Matrix(m2);
+
+        transposed.transpose();
+
+        for (int i = 0; i < rowsCount; i++) {
+            multiplication.elementsRow[i].setElement
+                    (i, Vector.getScalarMultiplication
+                            (m1.elementsRow[i], transposed.elementsRow[i]));
+            for (int j = columnsCount - 1; j >= 0; j--) {
+                multiplication.elementsRow[i].setElement
+                        (j, Vector.getScalarMultiplication
+                                (m1.elementsRow[i], transposed.elementsRow[j]));
+            }
+        }
+
+        return multiplication;
     }
 
     @Override
@@ -215,11 +266,4 @@ public class Matrix {
 
         return sb.toString();
     }
-
-    /*
-     Вычитание матриц
-     Статические методы:
-     Вычитание матриц
-     Умножение матриц
-     */
 }
