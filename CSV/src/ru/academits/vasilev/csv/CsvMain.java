@@ -14,7 +14,7 @@ public class CsvMain {
 
             while (scanner.hasNextLine()) {
                 s.append(scanner.nextLine().
-                        replaceAll("&", "&amp").
+                        replaceAll("&", "&amp;").
                         replaceAll(">", "&gt;").
                         replaceAll("<", "&lt;"));
 
