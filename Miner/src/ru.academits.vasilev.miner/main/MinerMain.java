@@ -1,11 +1,9 @@
 package ru.academits.vasilev.miner.main;
 
-import ru.academits.vasilev.miner.gui.GUI;
+import ru.academits.vasilev.miner.gui.StartFrame;
 
 public class MinerMain {
     public static void main(String[] args) {
-        GUI gui = new GUI();
-        gui.openStartFrame();
+        new StartFrame();
     }
-
 }
