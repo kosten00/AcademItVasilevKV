@@ -4,6 +4,6 @@ import ru.academits.vasilev.miner.gui.StartFrame;
 
 public class MinerMain {
     public static void main(String[] args) {
-        new StartFrame();
+        javax.swing.SwingUtilities.invokeLater(StartFrame::new);
     }
 }
