@@ -6,16 +6,16 @@ import java.util.Random;
 public class Board {
     private int boardSize;
     private int minesCount;
-    private Cell[][] cells = new Cell[boardSize][boardSize];
+    private Cell[][] cells = new Cell[boardSize][boardSize]; /// изза дефолтных значений переменных не пишется нифига
 
     private void putMines() {
         Random random = new Random();
 
-        for (int i = 0; i < boardSize; i++) {
-            for (int j = 0; j < boardSize; j++) {
-                cells[i][j] = new Cell();
-            }
-        }
+//        for (int i = 0; i < boardSize; i++) {
+//            for (int j = 0; j < boardSize; j++) {
+//                cells[i][j] = new Cell();
+//            }
+//        }
 
         for (int i = minesCount; i >= 0; i--) {
             int cellToPutMine = random.nextInt(boardSize * 2);
