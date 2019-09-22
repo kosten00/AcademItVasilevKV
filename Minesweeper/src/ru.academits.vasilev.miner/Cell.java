@@ -1,20 +1,20 @@
 package ru.academits.vasilev.miner;
 
 public class Cell {
-    private boolean isOpened;
+    private boolean closed;
     private boolean isMined;
     private boolean isMarked;
-    private int MinesNearby;
+    private int minesNearby;
 
     public Cell() {
-        isOpened = false;
+        closed = true;
         isMined = false;
         isMarked = false;
-        MinesNearby = 0;
+        minesNearby = 0;
     }
 
     public void open() {
-        isOpened = true;
+        closed = false;
     }
 
     public void putMine() {
@@ -30,11 +30,11 @@ public class Cell {
     }
 
     public void increaseMinesNearby() {
-        this.MinesNearby++;
+        this.minesNearby++;
     }
 
     public int getMinesNearby() {
-        return MinesNearby;
+        return minesNearby;
     }
 
     public boolean isMined() {
@@ -45,7 +45,7 @@ public class Cell {
         return isMarked;
     }
 
-    public boolean isOpened() {
-        return isOpened;
+    public boolean isClosed() {
+        return closed;
     }
 }

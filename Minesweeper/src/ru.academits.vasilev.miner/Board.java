@@ -11,12 +11,6 @@ public class Board {
     private void putMines() {
         Random random = new Random();
 
-//        for (int i = 0; i < boardSize; i++) {
-//            for (int j = 0; j < boardSize; j++) {
-//                cells[i][j] = new Cell();
-//            }
-//        }
-
         for (int i = minesCount; i >= 0; i--) {
             int cellToPutMine = random.nextInt(boardSize * 2);
 
@@ -51,6 +45,12 @@ public class Board {
     public Board(int boardSize, int minesCount) {
         this.boardSize = boardSize;
         this.minesCount = minesCount;
+
+        for (int i = 0; i < cells.length; i++) {
+            for (int j = 0; j < cells[i].length; j++) {
+                cells[i][j] = new Cell();
+            }
+        }
 
         putMines();
     }
