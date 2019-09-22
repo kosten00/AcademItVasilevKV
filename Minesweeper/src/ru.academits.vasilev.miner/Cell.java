@@ -4,13 +4,13 @@ public class Cell {
     private boolean isOpened;
     private boolean isMined;
     private boolean isMarked;
-    private int number;
+    private int MinesNearby;
 
     public Cell() {
+        isOpened = false;
         isMined = false;
         isMarked = false;
-        isOpened = false;
-        number = 0;
+        MinesNearby = 0;
     }
 
     public void open() {
@@ -29,12 +29,12 @@ public class Cell {
         isMarked = false;
     }
 
-    public void setNumber(int number) {
-        this.number = number;
+    public void increaseMinesNearby() {
+        this.MinesNearby++;
     }
 
-    public int getNumber() {
-        return number;
+    public int getMinesNearby() {
+        return MinesNearby;
     }
 
     public boolean isMined() {
