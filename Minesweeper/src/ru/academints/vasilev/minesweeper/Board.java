@@ -47,15 +47,15 @@ public class Board {
         int endRow = row + 1;
         int endColumn = column + 1;
 
-        int i = startRow;
-        int j = startColumn;
+        int i;
+        int j;
 
         if (startRow < 0) {
-            i = row;
+            startRow = row;
         }
 
         if (startColumn < 0) {
-            j = column;
+            startColumn = column;
         }
 
         if (endRow >= cells.length) {
@@ -66,9 +66,12 @@ public class Board {
             endColumn = column;
         }
 
-        for (; i <= endRow; i++) {
-            for (; j <= endColumn; j++) {
-                cells[i][j].increaseMinesNearby();
+        for (i = startRow; i <= endRow; i++) {
+            for (j = startColumn; j <= endColumn; j++) {
+                if (!cells[i][j].isMined()) {
+
+                    cells[i][j].increaseMinesNearby();
+                }
             }
         }
     }
