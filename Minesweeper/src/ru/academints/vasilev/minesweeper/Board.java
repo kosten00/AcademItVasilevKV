@@ -2,6 +2,7 @@ package ru.academints.vasilev.minesweeper;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.stream.Stream;
 
 public class Board {
     private int boardSize;
@@ -23,6 +24,7 @@ public class Board {
         for (int i = 0; i < random.length; i++) {
             random[i] = i;
         }
+
         putMines(random);
     }
 
@@ -41,33 +43,49 @@ public class Board {
         }
     }
 
-    private void countNearbyMines(int row, int column) {
+    private int getStartRow(int row) {
         int startRow = row - 1;
-        int startColumn = column - 1;
-        int endRow = row + 1;
-        int endColumn = column + 1;
-
-        int i;
-        int j;
 
         if (startRow < 0) {
             startRow = row;
         }
 
+        return startRow;
+    }
+
+    private int getStartColumn(int column) {
+        int startColumn = column - 1;
+
         if (startColumn < 0) {
             startColumn = column;
         }
+
+        return startColumn;
+    }
+
+    private int getEndRow(int row) {
+        int endRow = row + 1;
 
         if (endRow >= cells.length) {
             endRow = row;
         }
 
-        if (endColumn >= cells[row].length) {
+        return endRow;
+    }
+
+    private int getEndColumn(int column) {
+        int endColumn = column + 1;
+
+        if (endColumn >= cells[0].length) {
             endColumn = column;
         }
 
-        for (i = startRow; i <= endRow; i++) {
-            for (j = startColumn; j <= endColumn; j++) {
+        return endColumn;
+    }
+
+    private void countNearbyMines(int row, int column) {
+        for (int i = getStartRow(row); i <= getEndRow(row); i++) {
+            for (int j = getStartColumn(column); j <= getEndColumn(column); j++) {
                 if (!cells[i][j].isMined()) {
 
                     cells[i][j].increaseMinesNearby();
@@ -76,14 +94,25 @@ public class Board {
         }
     }
 
+    private void revealConnectedEmptyCells(int row, int column) {
+        //проверка на то, что по этим координатам нет бимбы
+
+        for (int i = getStartRow(row); i <= getEndRow(row); i++) {
+            for (int j = getStartColumn(column); j <= getEndColumn(column); j++) {
+                if (!cells[i][j].isMined() && !cells[i][j].isMarked() && !cells[i][j].isOpened() && cells[i][j].getMinesNearbyCount() == 0) {
+
+                    cells[i][j].open();
+                }
+            }
+        }
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        int i = 0;
 
         for (Cell[] cell : cells) {
             sb.append(Arrays.toString(cell)).append(System.lineSeparator());
-            i++;
         }
 
         return sb.toString();

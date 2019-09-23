@@ -14,7 +14,7 @@ public class Cell {
     }
 
     public void open() {
-        isOpened = false;
+        isOpened = true;
     }
 
     public void putMine() {
