@@ -1,4 +1,4 @@
-package ru.academits.vasilev.miner.gui;
+package ru.academints.vasilev.minesweeper.gui;
 
 import javax.swing.*;
 import java.awt.*;

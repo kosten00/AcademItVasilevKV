@@ -1,20 +1,20 @@
-package ru.academits.vasilev.miner;
+package ru.academints.vasilev.minesweeper;
 
 public class Cell {
-    private boolean closed;
+    private boolean isOpened;
     private boolean isMined;
     private boolean isMarked;
-    private int minesNearby;
+    private int minesNearbyCount;
 
     public Cell() {
-        closed = true;
+        isOpened = false;
         isMined = false;
         isMarked = false;
-        minesNearby = 0;
+        minesNearbyCount = 0;
     }
 
     public void open() {
-        closed = false;
+        isOpened = false;
     }
 
     public void putMine() {
@@ -30,11 +30,11 @@ public class Cell {
     }
 
     public void increaseMinesNearby() {
-        this.minesNearby++;
+        minesNearbyCount++;
     }
 
-    public int getMinesNearby() {
-        return minesNearby;
+    public int getMinesNearbyCount() {
+        return minesNearbyCount;
     }
 
     public boolean isMined() {
@@ -45,7 +45,16 @@ public class Cell {
         return isMarked;
     }
 
-    public boolean isClosed() {
-        return closed;
+    public boolean isOpened() {
+        return isOpened;
+    }
+
+    @Override
+    public String toString() {
+        if (isMined) {
+            return "B";
+        }
+
+        return "" + getMinesNearbyCount();
     }
 }
