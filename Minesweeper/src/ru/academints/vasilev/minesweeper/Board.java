@@ -99,9 +99,14 @@ public class Board {
 
         for (int i = getStartRow(row); i <= getEndRow(row); i++) {
             for (int j = getStartColumn(column); j <= getEndColumn(column); j++) {
-                if (!cells[i][j].isMined() && !cells[i][j].isMarked() && !cells[i][j].isOpened() && cells[i][j].getMinesNearbyCount() == 0) {
+                if (!cells[i][j].isMined() && !cells[i][j].isMarked() && !cells[i][j].isOpened()) {
 
                     cells[i][j].open();
+                }
+
+                if (cells[i][j].getMinesNearbyCount() == 0) {
+
+                    revealConnectedEmptyCells(i, j);
                 }
             }
         }
