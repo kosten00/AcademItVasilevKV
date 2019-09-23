@@ -8,10 +8,9 @@ public class StartFrame extends JFrame {
     private JButton highScore = new JButton("High score");
     private JButton about = new JButton("About");
     private JButton exit = new JButton("Exit");
-    //TODO buttons width, add stream
 
     public StartFrame() {
-        super("Miner");
+        super("Minesweeper");
         this.setBounds(0, 0, 250, 250);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setVisible(true);

@@ -1,5 +1,7 @@
 package ru.academints.vasilev.minesweeper;
 
+import java.awt.*;
+
 public class Cell {
     private boolean isOpened;
     private boolean isMined;
