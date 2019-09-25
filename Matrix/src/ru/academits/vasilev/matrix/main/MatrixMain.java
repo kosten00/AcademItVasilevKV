@@ -22,7 +22,6 @@ public class MatrixMain {
         Matrix m4 = new Matrix(vectorsArr);
         System.out.println("matrix m4: " + m4);
 
-
         System.out.println("return column from matrix m4 with index 2: " + m4.getColumn(2));
 
         System.out.println("return raw from matrix m4 with index 0: " + m4.getRow(0));
@@ -63,7 +62,6 @@ public class MatrixMain {
         Matrix matrixSum2 = new Matrix(arr4);
 
         System.out.println(matrixSum1);
-
 
         System.out.println(matrixSum1);
 

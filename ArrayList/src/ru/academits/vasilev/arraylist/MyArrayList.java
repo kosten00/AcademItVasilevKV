@@ -24,38 +24,30 @@ public class MyArrayList<T> implements List<T> {
         items = Arrays.copyOf(items, items.length * 2);
     }
 
+    @SuppressWarnings("unchecked")
     public MyArrayList() {
         items = (T[]) new Object[DEFAULT_CAPACITY];
     }
 
+    @SuppressWarnings("unchecked")
     public MyArrayList(int capacity) {
+        if (capacity <= 0) {
+            throw new IllegalArgumentException("Capacity can't be less or equal to 0!");
+        }
+
         items = (T[]) new Object[capacity];
     }
 
     public void ensureCapacity(int capacity) {
-        items = Arrays.copyOf(items, capacity);
+        if (capacity > items.length) {
+            items = Arrays.copyOf(items, capacity);
+        }
     }
 
     public void trimToSize() {
-        items = Arrays.copyOf(items, size);
-    }
-
-    public void addFirst(T item) {
-        checkSize();
-
-        System.arraycopy(items, 0, items, 1, size);
-
-        items[0] = item;
-        modCount++;
-        size++;
-    }
-
-    public void addLast(T item) {
-        checkSize();
-
-        items[size] = item;
-        modCount++;
-        size++;
+        if (items.length > size) {
+            items = Arrays.copyOf(items, size);
+        }
     }
 
     @Override
@@ -79,11 +71,8 @@ public class MyArrayList<T> implements List<T> {
     }
 
     private class MyIterator implements Iterator<T> {
-        int currentIndex = -1;
-        int expectedModCount = modCount;
-
-        MyIterator() {
-        }
+        private int currentIndex = -1;
+        private int expectedModCount = modCount;
 
         @Override
         public boolean hasNext() {
@@ -93,15 +82,15 @@ public class MyArrayList<T> implements List<T> {
         @Override
         public T next() {
             if (modCount != expectedModCount) {
-                throw new ConcurrentModificationException();
+                throw new ConcurrentModificationException("Concurrent list modification during iteration through! ");
             }
             currentIndex++;
 
             if (currentIndex >= size) {
-                throw new NoSuchElementException();
+                throw new NoSuchElementException("Index is out of the list's size");
             }
             if (currentIndex >= items.length) {
-                throw new ConcurrentModificationException();
+                throw new ConcurrentModificationException("Concurrent list size modification during iteration through! ");
             }
 
             return items[currentIndex];
@@ -117,6 +106,7 @@ public class MyArrayList<T> implements List<T> {
         return Arrays.copyOf(items, size);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public <T1> T1[] toArray(T1[] a) {
         if (a.length < size) {
@@ -132,7 +122,11 @@ public class MyArrayList<T> implements List<T> {
 
     @Override
     public boolean add(T item) {
-        addLast(item);
+        checkSize();
+
+        items[size] = item;
+        modCount++;
+        size++;
 
         return true;
     }
@@ -252,19 +246,14 @@ public class MyArrayList<T> implements List<T> {
 
     @Override
     public void add(int index, T item) {
-        if (index == 0) {
-            addFirst(item);
-        } else {
-            checkIndex(index);
-            checkSize();
+        checkIndex(index);
+        checkSize();
 
-            System.arraycopy(items, index, items, index + 1, size - index);
+        System.arraycopy(items, index, items, index + 1, size - index);
 
-            modCount++;
-            items[index] = item;
-            size++;
-        }
-
+        modCount++;
+        items[index] = item;
+        size++;
     }
 
     @Override
@@ -282,36 +271,38 @@ public class MyArrayList<T> implements List<T> {
 
     @Override
     public int indexOf(Object item) {
-        for (int i = 0; i < items.length; i++) {
-            if (item.equals(items[i])) {
-                return i;
+        if (item == null) {
+            for (int i = 0; i < size; i++) {
+                if (items[i] == null) {
+                    return i;
+                }
+            }
+        } else {
+            for (int i = 0; i < items.length; i++) {
+                if (item.equals(items[i])) {
+                    return i;
+                }
             }
         }
-
         return -1;
     }
 
     @Override
     public int lastIndexOf(Object item) {
-        for (int i = items.length - 1; i >= 0; i--) {
-            if (item.equals(items[i])) {
-                return i;
+        if (item == null) {
+            for (int i = items.length - 1; i >= 0; i--) {
+                if (items[i] == null) {
+                    return i;
+                }
+            }
+        } else {
+            for (int i = items.length - 1; i >= 0; i--) {
+                if (item.equals(items[i])) {
+                    return i;
+                }
             }
         }
-
         return -1;
-    }
-
-    public void print() {
-        int i = -1;
-
-        for (T item : items) {
-//            if (object == null) {
-//                continue;
-//            }
-            i++;
-            System.out.println(i + ": " + item);
-        }
     }
 
     @Override
