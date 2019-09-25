@@ -3,8 +3,6 @@ package ru.academits.vasilev.matrix.main;
 import ru.academits.vasilev.vector.Vector;
 import ru.academits.vasilev.matrix.Matrix;
 
-import java.util.Arrays;
-
 public class MatrixMain {
     public static void main(String[] args) {
         Matrix m1 = new Matrix(5, 3);
@@ -24,7 +22,6 @@ public class MatrixMain {
         Matrix m4 = new Matrix(vectorsArr);
         System.out.println("matrix m4: " + m4);
 
-        System.out.println("matrix m4 have size of " + Arrays.toString(m4.getSize()));
 
         System.out.println("return column from matrix m4 with index 2: " + m4.getColumn(2));
 
@@ -67,7 +64,6 @@ public class MatrixMain {
 
         System.out.println(matrixSum1);
 
-        matrixSum1.getSum(matrixSum2);
 
         System.out.println(matrixSum1);
 
