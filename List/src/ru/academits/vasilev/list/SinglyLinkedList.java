@@ -32,7 +32,7 @@ public class SinglyLinkedList<T> {
 
     private void checkInputIndex(int index) {
         if (index < 0 || index > count) {
-            throw new IllegalArgumentException("Index is out of list bounds");
+            throw new IllegalArgumentException("Index is out of list's bounds");
         }
     }
 
@@ -96,17 +96,13 @@ public class SinglyLinkedList<T> {
     public T replaceElement(int index, T data) {
         checkInputIndex(index);
 
-        int i = 0;
+        ListItem<T> p = moveThrough(head, index);
 
-        for (ListItem<T> p = head; ; p = p.getNext(), i++) {
-            if (i == index) {
-                ListItem<T> temp = new ListItem<T>(p.getData());
+        ListItem<T> oldItem = p;
 
-                p.setData(data);
+        p.setData(data);
 
-                return temp.getData();
-            }
-        }
+        return oldItem.getData();
     }
 
     public T removeFirstElement() {
