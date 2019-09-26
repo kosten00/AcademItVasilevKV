@@ -11,10 +11,10 @@ public class Main {
 
         System.out.println("List list: ");
 
-        list.add("some string");
-        list.add(666);
-        list.add(11.9);
-        list.add(matrix);
+        list.addFirst("some string");
+        list.addFirst(666);
+        list.addFirst(11.9);
+        list.addFirst(matrix);
 
         list.print();
 
