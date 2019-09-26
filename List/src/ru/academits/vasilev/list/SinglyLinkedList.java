@@ -1,11 +1,11 @@
 package ru.academits.vasilev.list;
+
+import java.util.List;
+
 /**
- * 1. Второй конструктор работает неверно.
- * Должен создаваться полностью новый список, и его узлы должны быть новыми
- *
  * 4. Во многих методах дублируется итерирование до узла с нужным индексом.
  * Нужно сделать вспомогательный метод
-**/
+ **/
 
 public class SinglyLinkedList<T> {
     private ListItem<T> head;
@@ -19,12 +19,19 @@ public class SinglyLinkedList<T> {
     public SinglyLinkedList(SinglyLinkedList<T> list) {
         list.checkHead();
 
-        head = list.head;
         count = list.count;
+
+        ListItem<T> q = new ListItem<>(list.head.getData());
+
+        head = q;
+
+        for (ListItem<T> p = list.head; p.getNext() != null; p = p.getNext(), q = q.getNext()) {
+            q.setNext(new ListItem<>(p.getNext().getData()));
+        }
     }
 
     private void checkInputIndex(int index) {
-        if (index < 0 || index >= count) {
+        if (index < 0 || index > count) {
             throw new IllegalArgumentException("Index is out of list bounds");
         }
     }
@@ -50,16 +57,26 @@ public class SinglyLinkedList<T> {
         return head.getData();
     }
 
+    private ListItem<T> moveThrough(ListItem<T> head, int index) {
+        int i = 0;
+
+        ListItem<T> current = head;
+
+        while (i != index) {
+            ListItem<T> next = current.getNext();
+
+            current = next;
+
+            i++;
+        }
+
+        return current;
+    }
+
     public T getElement(int index) {
         checkInputIndex(index);
 
-        int i = 0;
-
-        for (ListItem<T> p = head; ; p = p.getNext(), i++) {
-            if (i == index) {
-                return p.getData();
-            }
-        }
+        return moveThrough(head, index).getData();
     }
 
     public void addElement(int index, T data) {
@@ -68,16 +85,11 @@ public class SinglyLinkedList<T> {
         if (index == 0) {
             addFirst(data);
         } else {
-            int i = 0;
+            ListItem<T> p = moveThrough(head, index - 1);
 
-            for (ListItem<T> p = head; ; p = p.getNext(), i++) {
-                if (i == index - 1) {
-                    p.setNext(new ListItem<>(data, p.getNext()));
-                    count++;
+            p.setNext(new ListItem<>(data, p.getNext()));
 
-                    break;
-                }
-            }
+            count++;
         }
     }
 
