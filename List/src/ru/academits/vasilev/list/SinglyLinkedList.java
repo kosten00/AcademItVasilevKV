@@ -101,18 +101,37 @@ public class SinglyLinkedList<T> {
     }
 
     public boolean removeData(T data) {
-        if (head.getData().equals(data)) {
-            head = head.getNext();
-            count--;
+        if (data == null) {
+            if (head.getData() == null) {
+                head = head.getNext();
+                count--;
 
-            return true;
+                return true;
+            } else {
+                for (ListItem<T> p = head; p != null; p = p.getNext()) {
+                    if (p.getNext().getData() == null) {
+                        p.setNext(p.getNext().getNext());
+                        count--;
+
+                        return true;
+                    }
+                }
+            }
+            return false;
         } else {
-            for (ListItem<T> p = head; p != null; p = p.getNext()) {
-                if (p.getNext().getData().equals(data)) {
-                    p.setNext(p.getNext().getNext());
-                    count--;
+            if (head.getData().equals(data)) {
+                head = head.getNext();
+                count--;
 
-                    return true;
+                return true;
+            } else {
+                for (ListItem<T> p = head; p != null; p = p.getNext()) {
+                    if (p.getNext().getData().equals(data)) {
+                        p.setNext(p.getNext().getNext());
+                        count--;
+
+                        return true;
+                    }
                 }
             }
         }
