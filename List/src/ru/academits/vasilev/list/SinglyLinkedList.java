@@ -1,7 +1,5 @@
 package ru.academits.vasilev.list;
 
-import java.util.List;
-
 /**
  * 4. Во многих методах дублируется итерирование до узла с нужным индексом.
  * Нужно сделать вспомогательный метод
@@ -57,12 +55,12 @@ public class SinglyLinkedList<T> {
         return head.getData();
     }
 
-    private ListItem<T> moveThrough(ListItem<T> head, int index) {
+    private ListItem<T> iterateToIndex(ListItem<T> start, int end) {
         int i = 0;
 
-        ListItem<T> current = head;
+        ListItem<T> current = start;
 
-        while (i != index) {
+        while (i != end) {
             ListItem<T> next = current.getNext();
 
             current = next;
@@ -76,7 +74,7 @@ public class SinglyLinkedList<T> {
     public T getElement(int index) {
         checkInputIndex(index);
 
-        return moveThrough(head, index).getData();
+        return iterateToIndex(head, index).getData();
     }
 
     public void addElement(int index, T data) {
@@ -85,7 +83,7 @@ public class SinglyLinkedList<T> {
         if (index == 0) {
             addFirst(data);
         } else {
-            ListItem<T> p = moveThrough(head, index - 1);
+            ListItem<T> p = iterateToIndex(head, index - 1);
 
             p.setNext(new ListItem<>(data, p.getNext()));
 
@@ -96,7 +94,7 @@ public class SinglyLinkedList<T> {
     public T replaceElement(int index, T data) {
         checkInputIndex(index);
 
-        ListItem<T> p = moveThrough(head, index);
+        ListItem<T> p = iterateToIndex(head, index);
 
         ListItem<T> oldItem = p;
 
