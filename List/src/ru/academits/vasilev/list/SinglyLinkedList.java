@@ -1,10 +1,5 @@
 package ru.academits.vasilev.list;
 
-/**
- * 4. Во многих методах дублируется итерирование до узла с нужным индексом.
- * Нужно сделать вспомогательный метод
- **/
-
 public class SinglyLinkedList<T> {
     private ListItem<T> head;
     private int count;
@@ -17,15 +12,16 @@ public class SinglyLinkedList<T> {
     public SinglyLinkedList(SinglyLinkedList<T> list) {
         list.checkHead();
 
-        count = list.count;
+        ListItem<T> listItemCopy = new ListItem<>(list.head.getData());
 
-        ListItem<T> q = new ListItem<>(list.head.getData());
+        head = listItemCopy;
 
-        head = q;
+        for (ListItem<T> p = list.head; p.getNext() != null; p = p.getNext()) {
+            listItemCopy.setNext(new ListItem<>(p.getNext().getData()));
 
-        for (ListItem<T> p = list.head; p.getNext() != null; p = p.getNext(), q = q.getNext()) {
-            q.setNext(new ListItem<>(p.getNext().getData()));
+            listItemCopy = listItemCopy.getNext();
         }
+        count = list.count;
     }
 
     private void checkInputIndex(int index) {
@@ -38,6 +34,20 @@ public class SinglyLinkedList<T> {
         if (head == null) {
             throw new NullPointerException("List is empty");
         }
+    }
+
+    private ListItem<T> iterateTo(ListItem<T> start, int end) {
+        int i = 0;
+
+        ListItem<T> current = start;
+
+        while (i != end) {
+            ListItem<T> next = current.getNext();
+
+            current = next;
+            i++;
+        }
+        return current;
     }
 
     public void addFirst(T data) {
@@ -55,52 +65,37 @@ public class SinglyLinkedList<T> {
         return head.getData();
     }
 
-    private ListItem<T> iterateToIndex(ListItem<T> start, int end) {
-        int i = 0;
-
-        ListItem<T> current = start;
-
-        while (i != end) {
-            ListItem<T> next = current.getNext();
-
-            current = next;
-
-            i++;
-        }
-
-        return current;
-    }
-
     public T getElement(int index) {
+        checkHead();
         checkInputIndex(index);
 
-        return iterateToIndex(head, index).getData();
+        return iterateTo(head, index).getData();
     }
 
     public void addElement(int index, T data) {
+        checkHead();
         checkInputIndex(index);
 
         if (index == 0) {
             addFirst(data);
         } else {
-            ListItem<T> p = iterateToIndex(head, index - 1);
+            ListItem<T> itemToAddAfter = iterateTo(head, index - 1);
 
-            p.setNext(new ListItem<>(data, p.getNext()));
-
+            itemToAddAfter.setNext(new ListItem<>(data, itemToAddAfter.getNext()));
             count++;
         }
     }
 
     public T replaceElement(int index, T data) {
+        checkHead();
         checkInputIndex(index);
 
-        ListItem<T> p = iterateToIndex(head, index);
+        ListItem<T> itemToReplaceData = iterateTo(head, index);
 
-        ListItem<T> oldItem = p;
+        ListItem<T> itemToReturnData = itemToReplaceData;
 
-        p.setData(data);
-
-        return oldItem.getData();
+        itemToReplaceData.setData(data);
+        return itemToReturnData.getData();
     }
 
     public T removeFirstElement() {
@@ -110,33 +105,26 @@ public class SinglyLinkedList<T> {
 
         head = head.getNext();
         count--;
-
         return removalElement.getData();
     }
 
     public T removeElement(int index) {
+        checkHead();
         checkInputIndex(index);
 
         if (index == 0) {
             ListItem<T> removalElement = head;
-
             removeFirstElement();
 
             return removalElement.getData();
         }
+        ListItem<T> itemToRemoveAfter = iterateTo(head, index - 1);
 
-        int i = 0;
+        ListItem<T> removalElement = new ListItem<>(itemToRemoveAfter.getNext().getData());
 
-        for (ListItem<T> p = head; ; p = p.getNext(), i++) {
-            if (i == index - 1) {
-                ListItem<T> removalElement = new ListItem<>(p.getNext().getData());
-
-                p.setNext(p.getNext().getNext());
-                count--;
-
-                return removalElement.getData();
-            }
-        }
+        itemToRemoveAfter.setNext(itemToRemoveAfter.getNext().getNext());
+        count--;
+        return removalElement.getData();
     }
 
     public boolean removeData(T data) {
@@ -146,16 +134,13 @@ public class SinglyLinkedList<T> {
             if (head.getData() == null) {
                 head = head.getNext();
                 count--;
-
                 return true;
-            } else {
-                for (ListItem<T> p = head; p != null; p = p.getNext()) {
-                    if (p.getNext().getData() == null) {
-                        p.setNext(p.getNext().getNext());
-                        count--;
-
-                        return true;
-                    }
+            }
+            for (ListItem<T> p = head; p != null; p = p.getNext()) {
+                if (p.getNext().getData() == null) {
+                    p.setNext(p.getNext().getNext());
+                    count--;
+                    return true;
                 }
             }
             return false;
@@ -164,19 +149,15 @@ public class SinglyLinkedList<T> {
         if (head.getData().equals(data)) {
             head = head.getNext();
             count--;
-
             return true;
         }
-
         for (ListItem<T> p = head; p != null; p = p.getNext()) {
             if (p.getNext().getData().equals(data)) {
                 p.setNext(p.getNext().getNext());
                 count--;
-
                 return true;
             }
         }
-
         return false;
     }
 
@@ -192,7 +173,6 @@ public class SinglyLinkedList<T> {
             previous = current;
             current = next;
         }
-
         head = previous;
     }
 

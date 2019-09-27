@@ -3,7 +3,7 @@ package ru.academits.vasilev.list.main;
 import ru.academits.vasilev.list.SinglyLinkedList;
 import ru.academits.vasilev.matrix.Matrix;
 
-public class Main {
+public class SingleLinkListMain {
     public static void main(String[] args) {
         SinglyLinkedList list = new SinglyLinkedList();
 
@@ -21,9 +21,18 @@ public class Main {
 
         list2.print();
 
-        list2.addElement(4, "new element");
+        list2.addElement(4, null);
+        list2.addElement(5, 111);
 
         list2.print();
 
+        list2.addElement(3,"sssss");
+        list2.print();
+        System.out.println(list2.removeData(null));
+        list2.removeElement(4);
+
+        list2.print();
+
+        System.out.println(list2.getSize());
     }
 }
