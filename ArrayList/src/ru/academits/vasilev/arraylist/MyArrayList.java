@@ -4,13 +4,7 @@
  10. containsAll - нужно реализовать
  11. addAll, removeAll, retainAll - выдается неверный boolean
  12. addAll - нужно обойтись без преобразования коллекции в массив
- 13. size - index > 0.
- Вместо этого лучше писать size > index или index < size
- 14. addAll, removeAll - можно использовать += и -=
- 16. clear - есть ошибка
- 17. set работает неверно
  18. Не должно быть пустых строк перед }
- 19. Для выхода индекса за границы есть более подходящий тип исключения
  20. Не во всех методах правильно делается проверка индекса
  21. remove(int) - есть ошибка
  */
@@ -27,7 +21,7 @@ public class MyArrayList<T> implements List<T> {
 
     private void checkIndex(int index) {
         if (index < 0 || index > size) {
-            throw new IllegalArgumentException("Index " + index + " is out of the list size = " + size);
+            throw new IndexOutOfBoundsException("Index " + index + " is out of the list size = " + size);
         }
     }
 
@@ -177,13 +171,13 @@ public class MyArrayList<T> implements List<T> {
         while (a.length + size >= items.length) {
             growCapacity();
         }
-        if (size - index > 0) {
+        if (size > index) {
             System.arraycopy(items, index, items, index + a.length, size - index);
         }
         System.arraycopy(a, 0, items, index, a.length);
 
         modCount++;
-        size = size + a.length;
+        size += a.length;
         return true;
     }
 
@@ -199,7 +193,7 @@ public class MyArrayList<T> implements List<T> {
         System.arraycopy(items, end, items, start, size - end);
 
         int sizeBeforeChange = size;
-        size = size - c.size();
+        size -= c.size();
         removeExcessItems(sizeBeforeChange);
 
         modCount++;
@@ -240,6 +234,7 @@ public class MyArrayList<T> implements List<T> {
             items[i] = null;
         }
 
+        size = 0;
         modCount++;
     }
 
@@ -253,9 +248,10 @@ public class MyArrayList<T> implements List<T> {
     @Override
     public T set(int index, T item) {
         checkIndex(index);
+
         T oldItem = items[index];
 
-        add(index, item);
+        items[index] = item;
         return oldItem;
     }
 
