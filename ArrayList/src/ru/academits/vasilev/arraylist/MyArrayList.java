@@ -1,16 +1,12 @@
 /*
  3. Многие методы сейчас не умеют работать с null данными.
  Например, indexOf
- 8. В классе самого итератора не нужен метод iterator
- 9. remove(Object) сделан неэффективно - поиск делается несколько раз.
- Кроме того, выдается неверный boolean и есть ошибки
  10. containsAll - нужно реализовать
  11. addAll, removeAll, retainAll - выдается неверный boolean
  12. addAll - нужно обойтись без преобразования коллекции в массив
  13. size - index > 0.
  Вместо этого лучше писать size > index или index < size
  14. addAll, removeAll - можно использовать += и -=
- 15. removeExcessItems - счетчик можно объявить в цикле
  16. clear - есть ошибка
  17. set работает неверно
  18. Не должно быть пустых строк перед }
@@ -116,10 +112,6 @@ public class MyArrayList<T> implements List<T> {
 
             return items[currentIndex];
         }
-
-        public Iterator<T> iterator() {
-            return new MyIterator();
-        }
     }
 
     @Override
@@ -154,11 +146,15 @@ public class MyArrayList<T> implements List<T> {
 
     @Override
     public boolean remove(Object o) {
-        System.arraycopy(items, indexOf(o) + 1, items, indexOf(o), size - indexOf(o));
+        int objectIndex = indexOf(o);
+
+        checkIndex(objectIndex);
+
+        System.arraycopy(items, objectIndex + 1, items, objectIndex, size - objectIndex);
+
         modCount++;
         size--;
-
-        return false;
+        return true;
     }
 
     @Override
@@ -233,9 +229,7 @@ public class MyArrayList<T> implements List<T> {
     }
 
     private void removeExcessItems(int sizeBeforeChange) {
-        int i = size;
-
-        for (; i < sizeBeforeChange; i++) {
+        for (int i = size; i < sizeBeforeChange; i++) {
             items[i] = null;
         }
     }
