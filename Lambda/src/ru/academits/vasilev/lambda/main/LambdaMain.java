@@ -16,7 +16,5 @@ public class LambdaMain {
         personList.add(new Person("Витя", 35));
         personList.add(new Person("Витя", 5));
         personList.add(new Person("Глаша", 19));
-
-
     }
 }
