@@ -2,6 +2,17 @@ package ru.academits.vasilev.tree.main;
 
 import ru.academits.vasilev.tree.BinaryTree;
 
+/**
+ * Реализовать бинарное дерево поиска
+ * Нужны операции:
+ * Вставка
+ * Поиск узла
+ * Удаление первого вхождения узла по значению
+ * Получение числа элементов
+ * Обходы в ширину и глубину
+ * Обход в глубину двумя вариантами – с рекурсией и без
+ */
+
 public class TreeMain {
     public static void main(String[] args) {
         BinaryTree<Integer> tree = new BinaryTree<>();
