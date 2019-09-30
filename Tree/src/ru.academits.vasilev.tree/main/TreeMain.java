@@ -25,10 +25,20 @@ public class TreeMain {
         tree.insert(13);
         tree.insert(7);
 
-        tree.breadthTraverse();
+//        tree.breadthTraverse();
+//
+//        System.out.println("root = " + tree.getRoot());
+//
+//        System.out.println(tree.searchInDepth(3));
 
-        System.out.println("root = " + tree.getRoot());
+        tree.visitInDepthRecursive(tree.getRoot());
 
-        System.out.println(tree.searchInDepth(3));
+        System.out.println();
+
+        System.out.println("nodes count = " + tree.getNodeCountBreadthTraverse());
+
+        System.out.println(tree.remove(12));
+
+        tree.visitInDepthRecursive(tree.getRoot());
     }
 }
