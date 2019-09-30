@@ -186,19 +186,15 @@ public class MyArrayList<T> implements List<T> {
         if (c.size() == 0) {
             return false;
         }
+        size += c.size();
 
         int i = index;
-//ошибка итератора, надо разобраться
         for (T value : c) {
             add(i, value);
             i++;
-            modCount++;
         }
 
-
-        //modCount++;
-        size += c.size();
-
+        modCount++;
         return true;
     }
 
