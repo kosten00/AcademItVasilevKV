@@ -5,7 +5,7 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class Main {
+public class ArrayListHomeMain {
     public static void main(String[] args) {
         ArrayList<Integer> list1 = new ArrayList<>();
 

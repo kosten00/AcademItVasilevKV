@@ -1,9 +1,8 @@
 /*
  3. Многие методы сейчас не умеют работать с null данными.
- Например, indexOf
- 10. containsAll - нужно реализовать
+ Например, indexOf  --- вроде везде убрал
  11. addAll, removeAll, retainAll - выдается неверный boolean
- 12. addAll - нужно обойтись без преобразования коллекции в массив
+ 12. addAll - нужно обойтись без преобразования коллекции в массив  --- убрал массив, вылетает ошибка итератора нужно разобраться.
  18. Не должно быть пустых строк перед }
  20. Не во всех методах правильно делается проверка индекса
  21. remove(int) - есть ошибка
@@ -100,10 +99,10 @@ public class MyArrayList<T> implements List<T> {
             if (currentIndex >= size) {
                 throw new NoSuchElementException("Index is out of the list's size");
             }
+
             if (currentIndex >= items.length) {
                 throw new ConcurrentModificationException("Concurrent list size modification during iteration through! ");
             }
-
             return items[currentIndex];
         }
     }
@@ -153,7 +152,25 @@ public class MyArrayList<T> implements List<T> {
 
     @Override
     public boolean containsAll(Collection<?> c) {
-        return false;
+        Object[] a = c.toArray();
+
+        if (a.length == 0) {
+            return false;
+        }
+
+        checkIndex(indexOf(a[0]));
+
+        for (int i = 0, j = indexOf(a[i]); j < a.length; i++, j++) {
+            if (a[i] == null) {
+                if (items[j] != null) {
+                    return false;
+                }
+            } else if (!a[i].equals(items[j])) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     @Override
@@ -166,34 +183,47 @@ public class MyArrayList<T> implements List<T> {
     public boolean addAll(int index, Collection<? extends T> c) {
         checkIndex(index);
 
-        Object[] a = c.toArray();
-
-        while (a.length + size >= items.length) {
-            growCapacity();
+        if (c.size() == 0) {
+            return false;
         }
-        if (size > index) {
-            System.arraycopy(items, index, items, index + a.length, size - index);
-        }
-        System.arraycopy(a, 0, items, index, a.length);
 
-        modCount++;
-        size += a.length;
+        int i = index;
+//ошибка итератора, надо разобраться
+        for (T value : c) {
+            add(i, value);
+            i++;
+            modCount++;
+        }
+
+
+        //modCount++;
+        size += c.size();
+
         return true;
     }
 
     @Override
     public boolean removeAll(Collection<?> c) {
-        int start = getStartIndex(c.toArray());
+        if (!containsAll(c)) {
+            return false;
+        }
+
+        Object[] a = c.toArray();
+
+        if (a.length == 0) {
+            return false;
+        }
+        int start = getStartIndex(a);
 
         if (start == -1) {
             return false;
         }
-        int end = start + c.size();
+        int end = start + a.length;
 
         System.arraycopy(items, end, items, start, size - end);
 
         int sizeBeforeChange = size;
-        size -= c.size();
+        size -= a.length;
         removeExcessItems(sizeBeforeChange);
 
         modCount++;
@@ -202,16 +232,17 @@ public class MyArrayList<T> implements List<T> {
 
     @Override
     public boolean retainAll(Collection<?> c) {
-        int start = getStartIndex(c.toArray());
-
-        if (start == -1) {
+        if (!containsAll(c)) {
             return false;
         }
-        int end = start + c.size();
+        Object[] a = c.toArray();
+
+        int start = getStartIndex(a);
+        int end = start + a.length;
 
         System.arraycopy(items, start, items, 0, end - start);
         int sizeBeforeChange = size;
-        size = c.size();
+        size = a.length;
         removeExcessItems(sizeBeforeChange);
 
         modCount++;
