@@ -14,16 +14,36 @@ Generic’и
 
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 public class MyHashTable<T> implements Collection<T> {
+    private List[] array;
+    private int size;
+    private int modCount;
+    private final int DEFAULT_ARRAY_SIZE = 10;
+
+    private int countIndex(T object) {
+        return Math.abs(object.hashCode() % array.length);
+    }
+
+    public MyHashTable() {
+        array = new List[DEFAULT_ARRAY_SIZE];
+        size = DEFAULT_ARRAY_SIZE;
+    }
+
+    public MyHashTable(int size) {
+        array = new List[size];
+        this.size = size;
+    }
+
     @Override
     public int size() {
-        return 0;
+        return size;
     }
 
     @Override
     public boolean isEmpty() {
-        return false;
+        return size == 0;
     }
 
     @Override
@@ -47,7 +67,11 @@ public class MyHashTable<T> implements Collection<T> {
     }
 
     @Override
-    public boolean add(T t) {
+    public boolean add(T object) {
+        int index = countIndex(object);
+        array[index].add(object);
+
+        modCount++;
         return false;
     }
 
