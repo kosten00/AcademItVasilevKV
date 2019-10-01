@@ -14,30 +14,19 @@ public class ArrayListMain {
         list.add("two");
         list.add("three");
         list.add("four");
-        list.add(null);
-
-        list2.add("one");
-        list2.add("two");
-        list2.add("three");
-
-        list.set(3, null);
-
-        System.out.println(list.addAll(5, list2));
-
-        //System.out.println(list.retainAll(list2));
 
         for (String item : list) {
             System.out.println(item);
         }
 
+        System.out.println();
 
+        list.remove(0);
 
-        ArrayList<String> AList= new ArrayList<>();
+        for (String item : list) {
+            System.out.println(item);
+        }
 
-//        AList.addAll(list2);
-//        AList.add("one");
-//        AList.add("two");
-//        AList.add("three");
-//        AList.add("four");
+        System.out.println(list.size());
     }
 }

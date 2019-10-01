@@ -1,13 +1,3 @@
-/*
- 3. Многие методы сейчас не умеют работать с null данными.
- Например, indexOf  --- вроде везде убрал
- 11. addAll, removeAll, retainAll - выдается неверный boolean
- 12. addAll - нужно обойтись без преобразования коллекции в массив  --- проверить итератор, но вроде все норм
- 18. Не должно быть пустых строк перед }
- 20. Не во всех методах правильно делается проверка индекса
- 21. remove(int) - есть ошибка
- */
-
 package ru.academits.vasilev.arraylist;
 
 import java.util.*;
@@ -71,8 +61,8 @@ public class MyArrayList<T> implements List<T> {
     }
 
     @Override
-    public boolean contains(Object item) {
-        return indexOf(item) >= 0;
+    public boolean contains(Object object) {
+        return indexOf(object) >= 0;
     }
 
     @Override
@@ -114,16 +104,16 @@ public class MyArrayList<T> implements List<T> {
 
     @SuppressWarnings("unchecked")
     @Override
-    public <T1> T1[] toArray(T1[] a) {
-        if (a.length < size) {
-            return (T1[]) Arrays.copyOf(items, size, a.getClass());
+    public <T1> T1[] toArray(T1[] objects) {
+        if (objects.length < size) {
+            return (T1[]) Arrays.copyOf(items, size, objects.getClass());
         }
-        System.arraycopy(items, 0, a, 0, size);
+        System.arraycopy(items, 0, objects, 0, size);
 
-        if (a.length > size) {
-            a[size] = null;
+        if (objects.length > size) {
+            objects[size] = null;
         }
-        return a;
+        return objects;
     }
 
     @Override
@@ -138,8 +128,8 @@ public class MyArrayList<T> implements List<T> {
     }
 
     @Override
-    public boolean remove(Object o) {
-        int objectIndex = indexOf(o);
+    public boolean remove(Object object) {
+        int objectIndex = indexOf(object);
 
         checkIndex(objectIndex);
 
@@ -151,21 +141,20 @@ public class MyArrayList<T> implements List<T> {
     }
 
     @Override
-    public boolean containsAll(Collection<?> c) {
-        Object[] a = c.toArray();
+    public boolean containsAll(Collection<?> collection) {
+        Object[] objects = collection.toArray();
 
-        if (a.length == 0) {
+        if (objects.length == 0) {
             return false;
         }
+        checkIndex(indexOf(objects[0]));
 
-        checkIndex(indexOf(a[0]));
-
-        for (int i = 0, j = indexOf(a[i]); j < a.length; i++, j++) {
-            if (a[i] == null) {
+        for (int i = 1, j = indexOf(objects[i]); j < objects.length; i++, j++) {
+            if (objects[i] == null) {
                 if (items[j] != null) {
                     return false;
                 }
-            } else if (!a[i].equals(items[j])) {
+            } else if (!objects[i].equals(items[j])) {
                 return false;
             }
         }
@@ -174,23 +163,24 @@ public class MyArrayList<T> implements List<T> {
     }
 
     @Override
-    public boolean addAll(Collection<? extends T> c) {
-        addAll(size, c);
+    public boolean addAll(Collection<? extends T> collection) {
+        addAll(size, collection);
         return true;
     }
 
     @Override
-    public boolean addAll(int index, Collection<? extends T> c) {
+    public boolean addAll(int index, Collection<? extends T> collection) {
         checkIndex(index);
 
-        if (c.size() == 0) {
+        if (collection.size() == 0) {
             return false;
         }
-        size += c.size();
+        size += collection.size();
 
         int i = index;
-        for (T value : c) {
+        for (T value : collection) {
             add(i, value);
+
             i++;
         }
 
@@ -199,27 +189,19 @@ public class MyArrayList<T> implements List<T> {
     }
 
     @Override
-    public boolean removeAll(Collection<?> c) {
-        if (!containsAll(c)) {
+    public boolean removeAll(Collection<?> collection) {
+        if (!containsAll(collection)) {
             return false;
         }
+        Object[] objects = collection.toArray();
 
-        Object[] a = c.toArray();
-
-        if (a.length == 0) {
-            return false;
-        }
-        int start = getStartIndex(a);
-
-        if (start == -1) {
-            return false;
-        }
-        int end = start + a.length;
+        int start = getStartIndex(objects);
+        int end = start + objects.length;
 
         System.arraycopy(items, end, items, start, size - end);
 
         int sizeBeforeChange = size;
-        size -= a.length;
+        size -= objects.length;
         removeExcessItems(sizeBeforeChange);
 
         modCount++;
@@ -227,26 +209,26 @@ public class MyArrayList<T> implements List<T> {
     }
 
     @Override
-    public boolean retainAll(Collection<?> c) {
-        if (!containsAll(c)) {
+    public boolean retainAll(Collection<?> collection) {
+        if (!containsAll(collection)) {
             return false;
         }
-        Object[] a = c.toArray();
+        Object[] objects = collection.toArray();
 
-        int start = getStartIndex(a);
-        int end = start + a.length;
+        int start = getStartIndex(objects);
+        int end = start + objects.length;
 
         System.arraycopy(items, start, items, 0, end - start);
         int sizeBeforeChange = size;
-        size = a.length;
+        size = objects.length;
         removeExcessItems(sizeBeforeChange);
 
         modCount++;
         return true;
     }
 
-    private int getStartIndex(Object[] a) {
-        return Collections.indexOfSubList(Arrays.asList(items), Arrays.asList(a));
+    private int getStartIndex(Object[] objects) {
+        return Collections.indexOfSubList(Arrays.asList(items), Arrays.asList(objects));
     }
 
     private void removeExcessItems(int sizeBeforeChange) {
@@ -300,16 +282,19 @@ public class MyArrayList<T> implements List<T> {
 
         T itemToRemove = items[index];
 
-        System.arraycopy(items, index + 1, items, index, size - index);
+        int sizeBeforeChange = size;
+
+        System.arraycopy(items, index + 1, items, index, (size - 1) - index);
         modCount++;
         size--;
+        removeExcessItems(sizeBeforeChange);
 
         return itemToRemove;
     }
 
     @Override
-    public int indexOf(Object item) {
-        if (item == null) {
+    public int indexOf(Object object) {
+        if (object == null) {
             for (int i = 0; i < size; i++) {
                 if (items[i] == null) {
                     return i;
@@ -317,7 +302,7 @@ public class MyArrayList<T> implements List<T> {
             }
         } else {
             for (int i = 0; i < items.length; i++) {
-                if (item.equals(items[i])) {
+                if (object.equals(items[i])) {
                     return i;
                 }
             }
@@ -326,8 +311,8 @@ public class MyArrayList<T> implements List<T> {
     }
 
     @Override
-    public int lastIndexOf(Object item) {
-        if (item == null) {
+    public int lastIndexOf(Object object) {
+        if (object == null) {
             for (int i = items.length - 1; i >= 0; i--) {
                 if (items[i] == null) {
                     return i;
@@ -335,7 +320,7 @@ public class MyArrayList<T> implements List<T> {
             }
         } else {
             for (int i = items.length - 1; i >= 0; i--) {
-                if (item.equals(items[i])) {
+                if (object.equals(items[i])) {
                     return i;
                 }
             }
