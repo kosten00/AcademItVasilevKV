@@ -1,14 +1,24 @@
 package ru.academits.vasilev.csv;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.Scanner;
 
+/*
+1. Нужно, чтобы пути к файлам брались из аргументов программы -- вроде поправил
+2. После &amp должна быть точка с запятой -- поправил
+3. Должен быть корректный html документ, включающий: doctype, head, body, meta с кодировкой
+4. На приложенном файле результат неверный
+5. Программа должна обрабатывать исключения
+6. Не нужно применять StringBuilder, так как файлы могут быть большими и занимать много памяти.
+Нужно сразу писать в выходной файл
+7. Лучше, чтобы алгоритм не использовал строковые функции (indexOf, replace, и др.)
+В этой задаче лучше использовать посимвольный проход: взяли символ из входного файла, записали что-то в выходной файл
+ */
+
 public class CsvMain {
-    public static void main(String[] args) throws FileNotFoundException {
-        try (PrintWriter writer = new PrintWriter("FileForCsvTask.html");
-             Scanner scanner = new Scanner(new FileInputStream("FileForCsvTask.csv"))) {
+    private static void csvToHtmlConverter(String inputCsvFile, String outputHtmlFile) throws FileNotFoundException {
+        try (PrintWriter writer = new PrintWriter(outputHtmlFile);
+             Scanner scanner = new Scanner(new FileInputStream(inputCsvFile))) {
 
             StringBuilder s = new StringBuilder("<table><tr><td>");
 
@@ -48,5 +58,38 @@ public class CsvMain {
 
             writer.print(s);
         }
+    }
+
+    /*
+    <!DOCTYPE html>
+        <html lang="ru">
+        <head>
+        <meta charset="UTF-8">
+        <title>Ваша страница</title>
+        </head>
+        <body>
+        <h1>Страница</h1>
+        <p>Текст</p>
+        </body>
+        </html>
+     */
+
+    private static void newCsvToHtmlConverter(String inputCsvFile, String outputHtmlFile) throws IOException {
+        try (PrintWriter writer = new PrintWriter(outputHtmlFile);
+             FileReader reader = new FileReader(inputCsvFile)) {
+
+            int ch;
+            while ((ch = reader.read()) != -1) {
+
+                writer.print((char) ch);
+            }
+        }
+    }
+
+    public static void main(String[] args) throws IOException {
+        String inputCsvFile = "FileForCsvTask.csv";
+        String outputHtmlFile = "FileForCsvTask.html";
+
+        newCsvToHtmlConverter(inputCsvFile, outputHtmlFile);
     }
 }
