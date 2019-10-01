@@ -13,7 +13,7 @@ public class Matrix {
 
     private void checkInputIndex(int index) {
         if (index < 0 || index >= rows.length) {
-            throw new IllegalArgumentException("Row index is out of range");
+            throw new IndexOutOfBoundsException("Row index is out of range");
         }
     }
 
@@ -103,8 +103,8 @@ public class Matrix {
     }
 
     public Vector getColumn(int index) {
-        if (index < 0 || index >= rows[0].getSize()) {
-            throw new IllegalArgumentException("Column index is out of range");
+        if (index < 0 || index >= getColumnsCount()) {
+            throw new IndexOutOfBoundsException("Column index is out of range");
         }
         double[] array = new double[rows.length];
 
@@ -116,7 +116,7 @@ public class Matrix {
     }
 
     public void transpose() {
-        Vector[] transpose = new Vector[rows[0].getSize()];
+        Vector[] transpose = new Vector[getColumnsCount()];
 
         for (int i = 0; i < transpose.length; i++) {
             transpose[i] = getColumn(i);
@@ -175,7 +175,7 @@ public class Matrix {
     }
 
     public double getDeterminant() {
-        if (rows.length != rows[0].getSize()) {
+        if (rows.length != getColumnsCount()) {
             throw new IllegalArgumentException("to calculate determinant matrix must be square!");
         }
 
@@ -183,7 +183,7 @@ public class Matrix {
             return rows[0].getElement(0);
         }
 
-        double[][] matrixArray = new double[rows.length][rows[0].getSize()];
+        double[][] matrixArray = new double[rows.length][getColumnsCount()];
 
         for (int i = 0; i < matrixArray.length; i++) {
             for (int j = 0; j < matrixArray[i].length; j++) {
@@ -195,7 +195,7 @@ public class Matrix {
     }
 
     public Vector multiply(Vector vector) {
-        if (vector.getSize() > getColumnsCount()) {
+        if (vector.getSize() != getColumnsCount()) {
             throw new IllegalArgumentException("Vector's length must be equal to the number of matrix columns");
         }
         Vector result = new Vector(getRowsCount());
