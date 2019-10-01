@@ -78,6 +78,9 @@ public class CsvMain {
         try (PrintWriter writer = new PrintWriter(outputHtmlFile);
              FileReader reader = new FileReader(inputCsvFile)) {
 
+            writer.print("<!DOCTYPE html><head><meta charset=\"UTF-8\"><body><table><tr><td>");
+            //с боди начинается само содержимое файла
+
             int ch;
             while ((ch = reader.read()) != -1) {
 
