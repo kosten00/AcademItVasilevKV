@@ -1,18 +1,21 @@
 package ru.academits.vasilev.hashtable.main;
 
 import org.w3c.dom.ls.LSOutput;
+import ru.academits.vasilev.hashtable.MyHashTable;
 
 import java.util.Hashtable;
+import java.util.List;
 
 public class MyHashTableMain {
 
     public static void main(String[] args) {
-        int[] arr = {0,1,5, 9, 0 , 77, 694967467};
+        String arr = null;
 
-        int i = Math.abs(arr.hashCode() % 10);
+        List<String> list1 = null;
 
+        MyHashTable<String> myHashTable = new MyHashTable<>();
 
-        System.out.println(i);
+        myHashTable.addAll(list1);
     }
 
 }
