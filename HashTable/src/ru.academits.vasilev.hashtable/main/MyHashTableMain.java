@@ -9,13 +9,7 @@ import java.util.List;
 public class MyHashTableMain {
 
     public static void main(String[] args) {
-        String arr = null;
-
-        List<String> list1 = null;
-
-        MyHashTable<String> myHashTable = new MyHashTable<>();
-
-        myHashTable.addAll(list1);
+        int i;
     }
 
 }

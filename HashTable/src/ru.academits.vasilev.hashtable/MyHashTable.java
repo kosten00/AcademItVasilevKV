@@ -18,13 +18,14 @@ import java.util.*;
 
 public class MyHashTable<T> implements Collection<T> {
     private LinkedList<T>[] table;
-    private int size;
+    private int tableSize;
+    private int elementsCount;
     private int modCount;
-    private final int DEFAULT_ARRAY_SIZE = 10;
+    private final int DEFAULT_TABLE_SIZE = 10;
     //число, при котором вся таблица перестраивается, формируется исходя из губины вложенных списков.
 
     private int countIndex(T object) {
-        return Math.abs(object.hashCode() % table.length);
+        return Math.abs(object.hashCode() % tableSize);
     }
 
     private void checkNullEquality(T object) {
@@ -44,23 +45,25 @@ public class MyHashTable<T> implements Collection<T> {
     }
 
     public MyHashTable() {
-        table = new LinkedList[DEFAULT_ARRAY_SIZE];
-        size = DEFAULT_ARRAY_SIZE;
+        table = new LinkedList[DEFAULT_TABLE_SIZE];
+        tableSize = DEFAULT_TABLE_SIZE;
+        elementsCount = 0;
     }
 
-    public MyHashTable(int size) {
-        table = new LinkedList[size];
-        this.size = size;
+    public MyHashTable(int tableSize) {
+        table = new LinkedList[tableSize];
+        this.tableSize = tableSize;
+        elementsCount = 0;
     }
 
     @Override
     public int size() {
-        return size;
+        return elementsCount;
     }
 
     @Override
     public boolean isEmpty() {
-        return size == 0;
+        return elementsCount == 0;
     }
 
     @Override
@@ -83,7 +86,7 @@ public class MyHashTable<T> implements Collection<T> {
 
         @Override
         public boolean hasNext() {
-            return currentIndex + 1 < size;
+            return currentIndex + 1 < tableSize;
         }
 
         @Override
@@ -93,7 +96,7 @@ public class MyHashTable<T> implements Collection<T> {
             }
             currentIndex++;
 
-            if (currentIndex >= size) {
+            if (currentIndex >= tableSize) {
                 throw new NoSuchElementException("Index is out of the list's size");
             }
 
@@ -106,9 +109,9 @@ public class MyHashTable<T> implements Collection<T> {
 
     @Override
     public Object[] toArray() {
-        Object[] array = new Object[size];
+        Object[] array = new Object[tableSize];
 
-        System.arraycopy(table, 0, array, 0, size);
+        System.arraycopy(table, 0, array, 0, tableSize);
 
         return array;
     }
@@ -126,7 +129,7 @@ public class MyHashTable<T> implements Collection<T> {
         table[index].add(object);
 
         modCount++;
-        size++;
+        elementsCount++;
         return true;
     }
 
@@ -138,7 +141,7 @@ public class MyHashTable<T> implements Collection<T> {
 
         if (table[index].remove(object)) {
             modCount++;
-            size--;
+            elementsCount--;
             return true;
         }
         return false;
@@ -166,7 +169,7 @@ public class MyHashTable<T> implements Collection<T> {
         }
 
         modCount++;
-        size += collection.size();
+        elementsCount += collection.size();
         return true;
     }
 
@@ -177,7 +180,7 @@ public class MyHashTable<T> implements Collection<T> {
         }
 
         modCount++;
-        size -= collection.size();
+        elementsCount -= collection.size();
 
         for (Object object : collection) {
             table[countIndex((T) object)].remove(object);
@@ -194,7 +197,7 @@ public class MyHashTable<T> implements Collection<T> {
         LinkedList<T> singleObjectCollection = new LinkedList<>();
 
         modCount++;
-        size = collection.size();
+        elementsCount = collection.size();
 
         int i = 0;
         for (Object object : collection) {
@@ -212,5 +215,6 @@ public class MyHashTable<T> implements Collection<T> {
         for (LinkedList<T> list : table) {
             list.clear();
         }
+        elementsCount = 0;
     }
 }
