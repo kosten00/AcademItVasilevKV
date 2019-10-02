@@ -10,7 +10,6 @@ HashTable
 Понимание работы хэш-таблицы
 Реализация интересного итератора
 Generic’и
-
 ЧИСЛО КОЛЛИЗИЙ - КОЛ-ВО ЭЛЕМЕНТОВ СПИСКА, ПРИ КОТОРОМ ПЕРЕСТРАИВАЕТСЯ ТАБЛИЦА, НАДО УТОЧНИТЬ СКОКА
  */
 
@@ -18,14 +17,14 @@ import java.util.*;
 
 public class MyHashTable<T> implements Collection<T> {
     private LinkedList<T>[] table;
-    private int tableSize;
+    private int tablesCount;
     private int elementsCount;
     private int modCount;
-    private final int DEFAULT_TABLE_SIZE = 10;
+    //private final int DEFAULT_TABLE_SIZE = 10;
     //число, при котором вся таблица перестраивается, формируется исходя из губины вложенных списков.
 
     private int countIndex(T object) {
-        return Math.abs(object.hashCode() % tableSize);
+        return Math.abs(object.hashCode() % table.length);
     }
 
     private void checkNullEquality(T object) {
@@ -45,14 +44,22 @@ public class MyHashTable<T> implements Collection<T> {
     }
 
     public MyHashTable() {
-        table = new LinkedList[DEFAULT_TABLE_SIZE];
-        tableSize = DEFAULT_TABLE_SIZE;
+        tablesCount = 10;
+        table = new LinkedList[tablesCount];
+
+        for (int i = 0; i < tablesCount; i++) {
+            table[i] = new LinkedList<>();
+        }
         elementsCount = 0;
     }
 
-    public MyHashTable(int tableSize) {
-        table = new LinkedList[tableSize];
-        this.tableSize = tableSize;
+    public MyHashTable(int tablesCount) {
+        this.tablesCount = tablesCount;
+        table = new LinkedList[tablesCount];
+
+        for (int i = 0; i < tablesCount; i++) {
+            table[i] = new LinkedList<>();
+        }
         elementsCount = 0;
     }
 
@@ -76,42 +83,49 @@ public class MyHashTable<T> implements Collection<T> {
 
     @Override
     public Iterator<T> iterator() {
-        return null;
+        return new MyIterator();
     }
 
     //еще пока не делал
     private class MyIterator implements Iterator<T> {
-        private int currentIndex = -1;
+        private int currentElementIndex = -1;
+        private int currentTableIndex = 0;
         private int expectedModCount = modCount;
 
         @Override
         public boolean hasNext() {
-            return currentIndex + 1 < tableSize;
+            return currentElementIndex + 1 < elementsCount;
         }
 
         @Override
-        public T next() {
+        public T next() { //// ТУТА НАДО ПОДУМАТЬ!!
             if (modCount != expectedModCount) {
                 throw new ConcurrentModificationException("Concurrent list modification during iteration through! ");
             }
-            currentIndex++;
 
-            if (currentIndex >= tableSize) {
+            if (currentElementIndex + 1 == table[currentTableIndex].size()) {
+                currentElementIndex = -1;
+                currentTableIndex++;
+            }
+            currentElementIndex++;
+
+            if (currentElementIndex >= elementsCount) {
                 throw new NoSuchElementException("Index is out of the list's size");
             }
 
-            if (currentIndex >= table.length) {
+            if (currentTableIndex >= table.length) {
                 throw new ConcurrentModificationException("Concurrent list size modification during iteration through! ");
             }
-            return (T) table[currentIndex];
+
+            return table[currentElementIndex].get(currentElementIndex);
         }
     }
 
     @Override
     public Object[] toArray() {
-        Object[] array = new Object[tableSize];
+        Object[] array = new Object[tablesCount];
 
-        System.arraycopy(table, 0, array, 0, tableSize);
+        System.arraycopy(table, 0, array, 0, tablesCount);
 
         return array;
     }
@@ -164,8 +178,11 @@ public class MyHashTable<T> implements Collection<T> {
     public boolean addAll(Collection<? extends T> collection) {
         checkLength(collection);
 
+
         for (Object object : collection) {
-            table[countIndex((T) object)].add((T) object);
+            int index = countIndex((T) object);
+
+            table[index].add((T) object);
         }
 
         modCount++;
