@@ -1,14 +1,5 @@
 package ru.academits.vasilev.list;
 
-/*
-7. removeElement:
-- http://joxi.ru/Vm6OYK1u4ZQDa2 - здесь нужно использовать возвращаемое значение removeFirstElement
-- не нужно создавать дополнительный узел removalElement
-9. В main нужно использовать список с указанием типа данных, которые он содержит.
-Не нужно класть в него разнотипные элементы.
-Там сейчас много warning'ов
- */
-
 import java.util.Objects;
 
 public class SinglyLinkedList<T> {
@@ -126,10 +117,7 @@ public class SinglyLinkedList<T> {
         checkInputIndex(index);
 
         if (index == 0) {
-            ListItem<T> removalElement = head;
-            removeFirstElement();
-
-            return removalElement.getData();
+            return removeFirstElement();
         }
         ListItem<T> itemToRemoveAfter = iterateTo(index - 1);
 
@@ -143,14 +131,8 @@ public class SinglyLinkedList<T> {
     public boolean removeData(T data) {
         checkHead();
 
-        if (Objects.equals(head, data)) {
-            head = head.getNext();
-            count--;
-            return true;
-        }
-
         for (ListItem<T> p = head; p != null; p = p.getNext()) {
-            if (p.getNext().getData().equals(data)) {
+            if (Objects.equals(p.getNext().getData(), data)) {
                 p.setNext(p.getNext().getNext());
                 count--;
                 return true;
