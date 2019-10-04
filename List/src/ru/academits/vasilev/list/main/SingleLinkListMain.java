@@ -10,12 +10,12 @@ public class SingleLinkListMain {
         Matrix matrix = new Matrix(2, 2);
         System.out.println("List list: ");
 
-        list.addFirst("some string");
-        list.addFirst(666);
-        list.addFirst(11.9);
-        list.addFirst(matrix);
+//        list.addFirst("some string");
+//        list.addFirst(666);
+//        list.addFirst(11.9);
+//        list.addFirst(matrix);
 
-        list.print();
+        //list.print();
 
         SinglyLinkedList list2 = new SinglyLinkedList(list);
 

@@ -117,7 +117,7 @@ public class MyHashTable<T> implements Collection<T> {
                 throw new ConcurrentModificationException("Concurrent list size modification during iteration through! ");
             }
 
-            return table[currentElementIndex].get(currentElementIndex);
+            return table[currentTableIndex].get(currentElementIndex);
         }
     }
 

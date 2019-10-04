@@ -1,31 +1,42 @@
 package ru.academits.vasilev.list;
 
+/*
+7. removeElement:
+- http://joxi.ru/Vm6OYK1u4ZQDa2 - здесь нужно использовать возвращаемое значение removeFirstElement
+- не нужно создавать дополнительный узел removalElement
+9. В main нужно использовать список с указанием типа данных, которые он содержит.
+Не нужно класть в него разнотипные элементы.
+Там сейчас много warning'ов
+ */
+
+import java.util.Objects;
+
 public class SinglyLinkedList<T> {
     private ListItem<T> head;
     private int count;
 
     public SinglyLinkedList() {
-        head = null;
-        count = 0;
     }
 
     public SinglyLinkedList(SinglyLinkedList<T> list) {
-        list.checkHead();
+        if (list.head == null) {
+            new SinglyLinkedList<>();
+        } else {
+            ListItem<T> listItemCopy = new ListItem<>(list.head.getData());
 
-        ListItem<T> listItemCopy = new ListItem<>(list.head.getData());
+            head = listItemCopy;
 
-        head = listItemCopy;
+            for (ListItem<T> p = list.head; p.getNext() != null; p = p.getNext()) {
+                listItemCopy.setNext(new ListItem<>(p.getNext().getData()));
 
-        for (ListItem<T> p = list.head; p.getNext() != null; p = p.getNext()) {
-            listItemCopy.setNext(new ListItem<>(p.getNext().getData()));
-
-            listItemCopy = listItemCopy.getNext();
+                listItemCopy = listItemCopy.getNext();
+            }
+            count = list.count;
         }
-        count = list.count;
     }
 
     private void checkInputIndex(int index) {
-        if (index < 0 || index > count) {
+        if (index < 0 || index >= count) {
             throw new IllegalArgumentException("Index is out of list's bounds");
         }
     }
@@ -36,15 +47,14 @@ public class SinglyLinkedList<T> {
         }
     }
 
-    private ListItem<T> iterateTo(ListItem<T> start, int end) {
+    private ListItem<T> iterateTo(int index) {
         int i = 0;
 
-        ListItem<T> current = start;
+        ListItem<T> current = head;
 
-        while (i != end) {
-            ListItem<T> next = current.getNext();
+        while (i != index) {
+            current = current.getNext();
 
-            current = next;
             i++;
         }
         return current;
@@ -66,31 +76,35 @@ public class SinglyLinkedList<T> {
     }
 
     public T getElement(int index) {
-        checkHead();
         checkInputIndex(index);
 
-        return iterateTo(head, index).getData();
+        return iterateTo(index).getData();
     }
 
     public void addElement(int index, T data) {
-        checkHead();
-        checkInputIndex(index);
-
-        if (index == 0) {
-            addFirst(data);
-        } else {
-            ListItem<T> itemToAddAfter = iterateTo(head, index - 1);
-
-            itemToAddAfter.setNext(new ListItem<>(data, itemToAddAfter.getNext()));
-            count++;
+        if (index < 0 || index > count) {
+            throw new IndexOutOfBoundsException("Index is out of list's bounds");
         }
+
+        if (head == null) {
+            head = new ListItem<>(data);
+        } else {
+            if (index == 0) {
+                addFirst(data);
+            } else {
+                ListItem<T> itemToAddAfter = iterateTo(index - 1);
+
+                itemToAddAfter.setNext(new ListItem<>(data, itemToAddAfter.getNext()));
+            }
+        }
+
+        count++;
     }
 
-    public T replaceElement(int index, T data) {
-        checkHead();
+    public T setElement(int index, T data) {
         checkInputIndex(index);
 
-        ListItem<T> itemToReplaceData = iterateTo(head, index);
+        ListItem<T> itemToReplaceData = iterateTo(index);
 
         ListItem<T> itemToReturnData = itemToReplaceData;
 
@@ -109,7 +123,6 @@ public class SinglyLinkedList<T> {
     }
 
     public T removeElement(int index) {
-        checkHead();
         checkInputIndex(index);
 
         if (index == 0) {
@@ -118,7 +131,7 @@ public class SinglyLinkedList<T> {
 
             return removalElement.getData();
         }
-        ListItem<T> itemToRemoveAfter = iterateTo(head, index - 1);
+        ListItem<T> itemToRemoveAfter = iterateTo(index - 1);
 
         ListItem<T> removalElement = new ListItem<>(itemToRemoveAfter.getNext().getData());
 
@@ -130,27 +143,12 @@ public class SinglyLinkedList<T> {
     public boolean removeData(T data) {
         checkHead();
 
-        if (data == null) {
-            if (head.getData() == null) {
-                head = head.getNext();
-                count--;
-                return true;
-            }
-            for (ListItem<T> p = head; p != null; p = p.getNext()) {
-                if (p.getNext().getData() == null) {
-                    p.setNext(p.getNext().getNext());
-                    count--;
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        if (head.getData().equals(data)) {
+        if (Objects.equals(head, data)) {
             head = head.getNext();
             count--;
             return true;
         }
+
         for (ListItem<T> p = head; p != null; p = p.getNext()) {
             if (p.getNext().getData().equals(data)) {
                 p.setNext(p.getNext().getNext());
@@ -158,6 +156,7 @@ public class SinglyLinkedList<T> {
                 return true;
             }
         }
+
         return false;
     }
 
