@@ -3,6 +3,7 @@ package ru.academits.vasilev.arraylist.main;
 import ru.academits.vasilev.arraylist.MyArrayList;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ArrayListMain {
     public static void main(String[] args) {
@@ -13,20 +14,33 @@ public class ArrayListMain {
         list.add("one");
         list.add("two");
         list.add("three");
-        list.add("four");
+        list2.add("four");
+        list2.add("five");
+        list2.add("six");
+        System.out.println("List1 :");
 
         for (String item : list) {
             System.out.println(item);
         }
+        System.out.println();
+        System.out.println("List2: ");
+        for (String item : list2) {
+            System.out.println(item);
+        }
+        System.out.println();
+        list2.addAll(3, list);
+
+        System.out.println("New list2: ");
+        for (String item : list2) {
+            System.out.println(item);
+        }
+
+        System.out.println(list2.removeAllTemp(list));
 
         System.out.println();
 
-        list.remove(0);
-
-        for (String item : list) {
+        for (String item : list2) {
             System.out.println(item);
         }
-
-        System.out.println(list.size());
     }
 }

@@ -2,14 +2,22 @@ package ru.academits.vasilev.arraylist;
 
 import java.util.*;
 
+/*
+
+6. removeAll и retainAll:
+- не должен вызывать containsAll, это слишком долго.
+И это неверно по смыслу
+- нужно обойтись без преобразования коллекции в массив
+ */
+
 public class MyArrayList<T> implements List<T> {
     private T[] items;
     private int size;
     private int modCount;
     private static final int DEFAULT_CAPACITY = 10;
 
-    private void checkIndex(int index) {
-        if (index < 0 || index > size) {
+    private void checkIndex(int index, boolean isAdditive) {
+        if (index < 0 || !isAdditive && index >= size || index > size) {
             throw new IndexOutOfBoundsException("Index " + index + " is out of the list size = " + size);
         }
     }
@@ -84,15 +92,16 @@ public class MyArrayList<T> implements List<T> {
             if (modCount != expectedModCount) {
                 throw new ConcurrentModificationException("Concurrent list modification during iteration through! ");
             }
-            currentIndex++;
 
-            if (currentIndex >= size) {
+            if (!hasNext()) {
                 throw new NoSuchElementException("Index is out of the list's size");
             }
 
             if (currentIndex >= items.length) {
                 throw new ConcurrentModificationException("Concurrent list size modification during iteration through! ");
             }
+            currentIndex++;
+
             return items[currentIndex];
         }
     }
@@ -131,7 +140,9 @@ public class MyArrayList<T> implements List<T> {
     public boolean remove(Object object) {
         int objectIndex = indexOf(object);
 
-        checkIndex(objectIndex);
+        if (objectIndex == -1) {
+            return false;
+        }
 
         System.arraycopy(items, objectIndex + 1, items, objectIndex, size - objectIndex);
 
@@ -142,19 +153,12 @@ public class MyArrayList<T> implements List<T> {
 
     @Override
     public boolean containsAll(Collection<?> collection) {
-        Object[] objects = collection.toArray();
-
-        if (objects.length == 0) {
+        if (collection.size() == 0) {
             return false;
         }
-        checkIndex(indexOf(objects[0]));
 
-        for (int i = 1, j = indexOf(objects[i]); j < objects.length; i++, j++) {
-            if (objects[i] == null) {
-                if (items[j] != null) {
-                    return false;
-                }
-            } else if (!objects[i].equals(items[j])) {
+        for (Object object : collection) {
+            if (!contains(object)) {
                 return false;
             }
         }
@@ -164,22 +168,26 @@ public class MyArrayList<T> implements List<T> {
 
     @Override
     public boolean addAll(Collection<? extends T> collection) {
-        addAll(size, collection);
-        return true;
+        return addAll(size, collection);
     }
 
     @Override
     public boolean addAll(int index, Collection<? extends T> collection) {
-        checkIndex(index);
+        checkIndex(index, true);
 
-        if (collection.size() == 0) {
+        int collectionSize = collection.size();
+
+        if (collectionSize == 0) {
             return false;
         }
-        size += collection.size();
+        size += collectionSize;
+
+        ensureCapacity(size);
+        System.arraycopy(items, index, items, index + collectionSize, collectionSize);
 
         int i = index;
         for (T value : collection) {
-            add(i, value);
+            items[i] = value;
 
             i++;
         }
@@ -190,19 +198,43 @@ public class MyArrayList<T> implements List<T> {
 
     @Override
     public boolean removeAll(Collection<?> collection) {
-        if (!containsAll(collection)) {
+        if (collection.size() == 0) {
             return false;
         }
-        Object[] objects = collection.toArray();
 
-        int start = getStartIndex(objects);
-        int end = start + objects.length;
+        for (Object object : collection) {
+            while (indexOf(object) != -1) {
+                remove(object);
+            }
+        }
 
-        System.arraycopy(items, end, items, start, size - end);
+        return true;
+    }
 
-        int sizeBeforeChange = size;
-        size -= objects.length;
-        removeExcessItems(sizeBeforeChange);
+    //TODO попробовать реализовать это и, по аналогии, ретеинАлл:
+    public boolean removeAllTemp(Collection<?> collection) {
+        T[] newItems = (T[]) new Object[size];
+
+        for (Object object : collection) {
+            int previousIndex = 0;
+
+            while (indexOf(object) != -1) {
+                int currentIndex = indexOf(object);
+
+                size--;
+
+                if (previousIndex < currentIndex) {
+                    for (int i = previousIndex; i < currentIndex; i++) {
+                        newItems[i] = items[i];
+                    }
+
+                }
+                previousIndex = currentIndex + 1;
+            }
+        }
+        size--;
+
+        items = Arrays.copyOf(newItems, size);
 
         modCount++;
         return true;
@@ -210,25 +242,19 @@ public class MyArrayList<T> implements List<T> {
 
     @Override
     public boolean retainAll(Collection<?> collection) {
-        if (!containsAll(collection)) {
+        if (collection.size() == 0) {
             return false;
         }
-        Object[] objects = collection.toArray();
 
-        int start = getStartIndex(objects);
-        int end = start + objects.length;
+        for (int i = 0; i < size; i++) {
+            if (!collection.contains(items[i])) {
+                remove(items[i]);
 
-        System.arraycopy(items, start, items, 0, end - start);
-        int sizeBeforeChange = size;
-        size = objects.length;
-        removeExcessItems(sizeBeforeChange);
+                i--;
+            }
+        }
 
-        modCount++;
         return true;
-    }
-
-    private int getStartIndex(Object[] objects) {
-        return Collections.indexOfSubList(Arrays.asList(items), Arrays.asList(objects));
     }
 
     private void removeExcessItems(int sizeBeforeChange) {
@@ -249,14 +275,14 @@ public class MyArrayList<T> implements List<T> {
 
     @Override
     public T get(int index) {
-        checkIndex(index);
+        checkIndex(index, false);
 
         return items[index];
     }
 
     @Override
     public T set(int index, T item) {
-        checkIndex(index);
+        checkIndex(index, false);
 
         T oldItem = items[index];
 
@@ -266,7 +292,7 @@ public class MyArrayList<T> implements List<T> {
 
     @Override
     public void add(int index, T item) {
-        checkIndex(index);
+        checkIndex(index, true);
         checkSize();
 
         System.arraycopy(items, index, items, index + 1, size - index);
@@ -278,7 +304,7 @@ public class MyArrayList<T> implements List<T> {
 
     @Override
     public T remove(int index) {
-        checkIndex(index);
+        checkIndex(index, false);
 
         T itemToRemove = items[index];
 
@@ -294,37 +320,23 @@ public class MyArrayList<T> implements List<T> {
 
     @Override
     public int indexOf(Object object) {
-        if (object == null) {
-            for (int i = 0; i < size; i++) {
-                if (items[i] == null) {
-                    return i;
-                }
-            }
-        } else {
-            for (int i = 0; i < items.length; i++) {
-                if (object.equals(items[i])) {
-                    return i;
-                }
+        for (int i = 0; i < size; i++) {
+            if (Objects.equals(items[i], object)) {
+                return i;
             }
         }
+
         return -1;
     }
 
     @Override
     public int lastIndexOf(Object object) {
-        if (object == null) {
-            for (int i = items.length - 1; i >= 0; i--) {
-                if (items[i] == null) {
-                    return i;
-                }
-            }
-        } else {
-            for (int i = items.length - 1; i >= 0; i--) {
-                if (object.equals(items[i])) {
-                    return i;
-                }
+        for (int i = size - 1; i >= 0; i--) {
+            if (Objects.equals(items[i], object)) {
+                return i;
             }
         }
+
         return -1;
     }
 
