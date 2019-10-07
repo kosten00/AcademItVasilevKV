@@ -28,14 +28,14 @@ public class ArrayListMain {
             System.out.println(item);
         }
         System.out.println();
-        list2.addAll(3, list);
+        list2.addAll(0, list);
 
         System.out.println("New list2: ");
         for (String item : list2) {
             System.out.println(item);
         }
 
-        System.out.println(list2.removeAllTemp(list));
+        System.out.println(list2.removeAll(list));
 
         System.out.println();
 

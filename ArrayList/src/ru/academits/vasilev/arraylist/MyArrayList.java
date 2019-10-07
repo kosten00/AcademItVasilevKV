@@ -2,14 +2,6 @@ package ru.academits.vasilev.arraylist;
 
 import java.util.*;
 
-/*
-
-6. removeAll и retainAll:
-- не должен вызывать containsAll, это слишком долго.
-И это неверно по смыслу
-- нужно обойтись без преобразования коллекции в массив
- */
-
 public class MyArrayList<T> implements List<T> {
     private T[] items;
     private int size;
@@ -208,35 +200,6 @@ public class MyArrayList<T> implements List<T> {
             }
         }
 
-        return true;
-    }
-
-    //TODO попробовать реализовать это и, по аналогии, ретеинАлл:
-    public boolean removeAllTemp(Collection<?> collection) {
-        T[] newItems = (T[]) new Object[size];
-
-        for (Object object : collection) {
-            int previousIndex = 0;
-
-            while (indexOf(object) != -1) {
-                int currentIndex = indexOf(object);
-
-                size--;
-
-                if (previousIndex < currentIndex) {
-                    for (int i = previousIndex; i < currentIndex; i++) {
-                        newItems[i] = items[i];
-                    }
-
-                }
-                previousIndex = currentIndex + 1;
-            }
-        }
-        size--;
-
-        items = Arrays.copyOf(newItems, size);
-
-        modCount++;
         return true;
     }
 
