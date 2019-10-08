@@ -1,5 +1,7 @@
 package ru.academits.vasilev.temperature;
 
+import javax.swing.*;
+
 /**
  * Задача 7. Сделать программу на Swing  / Windows Forms для перевода температуры из одной шкалы в другую.
  * Лекции, нужные для решения задачи: 1-15, 21-22.
@@ -17,5 +19,15 @@ package ru.academits.vasilev.temperature;
  * Принцип открытости-закрытости
  */
 
-public class TemperatureConversation {
+public class TemperatureConversation extends JFrame {
+    final static int WIDTH = 200;
+    final static int HEIGHT = 300;
+
+    public TemperatureConversation() {
+        super("Temperature conversation");
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setVisible(true);
+        setSize(WIDTH, HEIGHT);
+        setLocationRelativeTo(null);
+    }
 }
