@@ -16,7 +16,7 @@ Generic’и
 import java.util.*;
 
 public class MyHashTable<T> implements Collection<T> {
-    private LinkedList<T>[] table;
+    public LinkedList<T>[] table;
     private int tablesCount;
     private int elementsCount;
     private int modCount;
@@ -86,7 +86,6 @@ public class MyHashTable<T> implements Collection<T> {
         return new MyIterator();
     }
 
-    //еще пока не делал
     private class MyIterator implements Iterator<T> {
         private int currentElementIndex = -1;
         private int currentTableIndex = 0;
@@ -94,28 +93,39 @@ public class MyHashTable<T> implements Collection<T> {
 
         @Override
         public boolean hasNext() {
-            return currentElementIndex + 1 < elementsCount;
+            if (!isLastInTable()) {
+                return true;
+            }
+
+            if (hasNextTable()) {
+                currentTableIndex++;
+                currentElementIndex = -1;
+
+                return hasNext();
+            }
+
+            return false;
+        }
+
+        private boolean hasNextTable() {
+            return currentTableIndex + 1 < tablesCount;
+        }
+
+        private boolean isLastInTable() {
+            return currentElementIndex + 1 == table[currentTableIndex].size();
         }
 
         @Override
-        public T next() { //// ТУТА НАДО ПОДУМАТЬ!!
+        public T next() {
             if (modCount != expectedModCount) {
                 throw new ConcurrentModificationException("Concurrent list modification during iteration through! ");
             }
 
-            if (currentElementIndex + 1 == table[currentTableIndex].size()) {
-                currentElementIndex = -1;
-                currentTableIndex++;
-            }
-            currentElementIndex++;
-
-            if (currentElementIndex >= elementsCount) {
+            if (!hasNext()) {
                 throw new NoSuchElementException("Index is out of the list's size");
             }
 
-            if (currentTableIndex >= table.length) {
-                throw new ConcurrentModificationException("Concurrent list size modification during iteration through! ");
-            }
+            currentElementIndex++;
 
             return table[currentTableIndex].get(currentElementIndex);
         }
@@ -166,7 +176,9 @@ public class MyHashTable<T> implements Collection<T> {
         checkLength(collection);
 
         for (Object object : collection) {
-            if (!table[countIndex((T) object)].contains(object)) {
+            int index = countIndex((T) object);
+
+            if (!table[index].contains(object)) {
                 return false;
             }
         }
@@ -177,7 +189,6 @@ public class MyHashTable<T> implements Collection<T> {
     @Override
     public boolean addAll(Collection<? extends T> collection) {
         checkLength(collection);
-
 
         for (Object object : collection) {
             int index = countIndex((T) object);
@@ -192,38 +203,50 @@ public class MyHashTable<T> implements Collection<T> {
 
     @Override
     public boolean removeAll(Collection<?> collection) {
-        if (!containsAll(collection)) {
+        if (collection.size() == 0) {
             return false;
         }
 
-        modCount++;
-        elementsCount -= collection.size();
-
         for (Object object : collection) {
-            table[countIndex((T) object)].remove(object);
-        }
+            int objectIndex;
 
+            if (table[(objectIndex = countIndex((T) object))].contains(object)) {
+                for (int i = 0; i < table[objectIndex].size(); i++) {
+                    if (Objects.equals(object, table[objectIndex].get(i))) {
+                        table[objectIndex].remove(i);
+                        elementsCount--;
+
+                        i--;
+                    }
+                }
+            }
+
+        }
+        modCount++;
         return true;
     }
 
     @Override
     public boolean retainAll(Collection<?> collection) {
-        if (!containsAll(collection)) {
+        if (collection.size() == 0) {
             return false;
         }
-        LinkedList<T> singleObjectCollection = new LinkedList<>();
 
-        modCount++;
-        elementsCount = collection.size();
-
-        int i = 0;
         for (Object object : collection) {
-            singleObjectCollection.add((T) object);
+            int objectIndex;
 
-            table[i].retainAll(singleObjectCollection);
-            i++;
+            if (table[(objectIndex = countIndex((T) object))].contains(object)) {
+                for (int i = 0; i < table[objectIndex].size(); i++) {
+                    if (!Objects.equals(object, table[objectIndex].get(i))) {
+                        table[objectIndex].remove(i);
+                        elementsCount--;
+
+                        i--;
+                    }
+                }
+            }
         }
-
+        modCount++;
         return true;
     }
 
