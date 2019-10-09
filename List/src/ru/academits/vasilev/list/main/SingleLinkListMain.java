@@ -7,6 +7,8 @@ public class SingleLinkListMain {
     public static void main(String[] args) {
         SinglyLinkedList<String> list = new SinglyLinkedList<>();
 
+        list.revert();
+
         Matrix matrix = new Matrix(2, 2);
         System.out.println("List list: ");
 
@@ -26,13 +28,17 @@ public class SingleLinkListMain {
 
         list2.print();
 
-        list2.addElement(3,"sssss");
+        list2.addElement(3, "sssss");
         list2.print();
         System.out.println(list2.removeData(null));
         list2.removeElement(4);
 
+        list2.addFirst( null);
+
         list2.print();
 
-        System.out.println(list2.getSize());
+        System.out.println(list2.setElement(1, "element"));
+
+        list2.print();
     }
 }
