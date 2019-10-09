@@ -20,17 +20,12 @@ public class MyHashTableMain {
         //LinkedList<Integer> ll1 = new LinkedList<>();
         // ll1.add(n);
 
-
         mht1.addAll(Arrays.asList(arr1));
-
-        for (int i = 0; i < mht1.table.length; i++) {
-            System.out.println(mht1.table[i].size());
-        }
 
         System.out.println();
 
         for (Integer i : mht1) {
-            System.out.println(i);
+            System.out.println(i + " " + mht1.size());
         }
     }
 }

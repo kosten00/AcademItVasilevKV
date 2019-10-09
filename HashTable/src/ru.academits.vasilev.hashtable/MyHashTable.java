@@ -16,12 +16,14 @@ Generic’и
 import java.util.*;
 
 public class MyHashTable<T> implements Collection<T> {
-    public LinkedList<T>[] table;
-    private int tablesCount;
+    private LinkedList<T>[] table;
     private int elementsCount;
+    private int tablesCount;
     private int modCount;
-    //private final int DEFAULT_TABLE_SIZE = 10;
-    //число, при котором вся таблица перестраивается, формируется исходя из губины вложенных списков.
+    private final int DEFAULT_TABLE_SIZE = 10;
+    private final int RESIZE_COEFFICIENT = 2;
+    private final double MAX_LOAD_FACTOR = 1;
+    //private final double LOAD_FACTOR = (double) elementsCount / tablesCount;
 
     private int countIndex(T object) {
         return Math.abs(object.hashCode() % table.length);
@@ -37,29 +39,59 @@ public class MyHashTable<T> implements Collection<T> {
         if (collection == null) {
             throw new IllegalArgumentException("Can't add objects = null");
         }
-
         if (collection.size() == 0) {
             throw new IllegalArgumentException("Can't add empty collection");
         }
     }
 
-    public MyHashTable() {
-        tablesCount = 10;
-        table = new LinkedList[tablesCount];
+    private void checkLoadFactor() {
+        System.out.println("Checking load factor");
+        double loadFactor = elementsCount / tablesCount;
 
-        for (int i = 0; i < tablesCount; i++) {
-            table[i] = new LinkedList<>();
+        if (loadFactor > MAX_LOAD_FACTOR) {
+            resize();
+
+            System.out.println("jump to resize");
+
+            //checkLoadFactor();
         }
+        System.out.println("loadfactor checked");
+    }
+
+    private void resize() {
+        System.out.println("Resizing");
+
+        LinkedList<T>[] resizedTable = new LinkedList[table.length * RESIZE_COEFFICIENT];
+
+        //TODO заполнение массива!
+
+        LinkedList<T>[] tempTable = table;
+        table = resizedTable;
+
+        for (LinkedList<T> list : tempTable) {
+            addAll(list);
+        }
+    }
+
+    public MyHashTable() {
+        tablesCount = DEFAULT_TABLE_SIZE;
+
+        table = new LinkedList[tablesCount];
+        for (int i = 0; i < tablesCount; i++) {
+            table[i] = new LinkedList<T>();
+        }
+
         elementsCount = 0;
     }
 
     public MyHashTable(int tablesCount) {
         this.tablesCount = tablesCount;
-        table = new LinkedList[tablesCount];
 
-        for (int i = 0; i < tablesCount; i++) {
-            table[i] = new LinkedList<>();
+        table = new LinkedList[this.tablesCount];
+        for (int i = 0; i < this.tablesCount; i++) {
+            table[i] = new LinkedList<T>();
         }
+
         elementsCount = 0;
     }
 
@@ -122,9 +154,8 @@ public class MyHashTable<T> implements Collection<T> {
             }
 
             if (!hasNext()) {
-                throw new NoSuchElementException("Index is out of the list's size");
+                throw new NoSuchElementException("Index is out of the hashtable size");
             }
-
             currentElementIndex++;
 
             return table[currentTableIndex].get(currentElementIndex);
@@ -133,16 +164,26 @@ public class MyHashTable<T> implements Collection<T> {
 
     @Override
     public Object[] toArray() {
-        Object[] array = new Object[tablesCount];
+        Object[] array = new Object[elementsCount];
 
-        System.arraycopy(table, 0, array, 0, tablesCount);
+        if (elementsCount > 0) {
+            int i = 0;
+            for (T element : this) {
+                array[i] = element;
+                i++;
+            }
+        }
 
         return array;
     }
 
     @Override
     public <T1> T1[] toArray(T1[] array) {
-        return array;
+        if (elementsCount > array.length) {
+            return (T1[]) Arrays.copyOf(toArray(), elementsCount);
+        }
+
+        return (T1[]) Arrays.copyOf(toArray(), array.length);
     }
 
     @Override
@@ -154,6 +195,8 @@ public class MyHashTable<T> implements Collection<T> {
 
         modCount++;
         elementsCount++;
+
+        //checkLoadFactor();
         return true;
     }
 
@@ -192,12 +235,16 @@ public class MyHashTable<T> implements Collection<T> {
 
         for (Object object : collection) {
             int index = countIndex((T) object);
-
             table[index].add((T) object);
+
+            elementsCount++;
+
+            System.out.println("object from collection added, elementsCount = " + elementsCount);
         }
 
         modCount++;
-        elementsCount += collection.size();
+        //elementsCount += collection.size();
+        //checkLoadFactor();
         return true;
     }
 
