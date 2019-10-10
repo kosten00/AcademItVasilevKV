@@ -1,18 +1,5 @@
 package ru.academits.vasilev.hashtable;
 
-/*
-HashTable
-Лекции, нужные для решения задачи: 1-8, 10 понятие итератора, 13.
-Сделать свою реализацию хэш-таблицы, сделать ее generic’ом.
-Класс должен реализовать интерфейс Collection<T> (ICollection<T> в C#).
-И в одном из конструкторов сделать параметр, который задает размер массива хэш-таблицы.
-Чему научитесь:
-Понимание работы хэш-таблицы
-Реализация интересного итератора
-Generic’и
-ЧИСЛО КОЛЛИЗИЙ - КОЛ-ВО ЭЛЕМЕНТОВ СПИСКА, ПРИ КОТОРОМ ПЕРЕСТРАИВАЕТСЯ ТАБЛИЦА, НАДО УТОЧНИТЬ СКОКА
- */
-
 import java.util.*;
 
 public class MyHashTable<T> implements Collection<T> {
@@ -22,77 +9,65 @@ public class MyHashTable<T> implements Collection<T> {
     private int modCount;
     private final int DEFAULT_TABLE_SIZE = 10;
     private final int RESIZE_COEFFICIENT = 2;
-    private final double MAX_LOAD_FACTOR = 1;
-    //private final double LOAD_FACTOR = (double) elementsCount / tablesCount;
 
-    private int countIndex(T object) {
-        return Math.abs(object.hashCode() % table.length);
+    private int countIndex(T object, int arrayLength) {
+        return Math.abs(object.hashCode() % arrayLength);
     }
 
     private void checkNullEquality(T object) {
         if (object == null) {
-            throw new IllegalArgumentException("Can't add objects = null");
+            throw new IllegalArgumentException("Can't add null object");
         }
     }
 
-    private void checkLength(Collection<?> collection) {
+    private void checkNullEquality(Collection<?> collection) {
         if (collection == null) {
-            throw new IllegalArgumentException("Can't add objects = null");
-        }
-        if (collection.size() == 0) {
-            throw new IllegalArgumentException("Can't add empty collection");
+            throw new IllegalArgumentException("Can't add null collection");
         }
     }
 
     private void checkLoadFactor() {
-        System.out.println("Checking load factor");
-        double loadFactor = elementsCount / tablesCount;
-
-        if (loadFactor > MAX_LOAD_FACTOR) {
+        if (tablesCount <= elementsCount) {
             resize();
-
-            System.out.println("jump to resize");
-
-            //checkLoadFactor();
         }
-        System.out.println("loadfactor checked");
+    }
+
+    private void resize(int size) {
+        T[] array = (T[]) this.toArray();
+
+        int sizeAfterAddingCollection = (int) Math.ceil((double) size / DEFAULT_TABLE_SIZE);
+        table = fillTable(new LinkedList[tablesCount = sizeAfterAddingCollection]);
+        elementsCount = 0;
+
+        for (int i = 0; i < array.length; i++) {
+            this.add(array[i]);
+        }
     }
 
     private void resize() {
-        System.out.println("Resizing");
+        T[] array = (T[]) this.toArray();
+        table = fillTable(new LinkedList[tablesCount = tablesCount * RESIZE_COEFFICIENT]);
+        elementsCount = 0;
 
-        LinkedList<T>[] resizedTable = new LinkedList[table.length * RESIZE_COEFFICIENT];
-
-        //TODO заполнение массива!
-
-        LinkedList<T>[] tempTable = table;
-        table = resizedTable;
-
-        for (LinkedList<T> list : tempTable) {
-            addAll(list);
+        for (int i = 0; i < array.length; i++) {
+            this.add(array[i]);
         }
+    }
+
+    private LinkedList<T>[] fillTable(LinkedList<T>[] tableArray) {
+        for (int i = 0; i < tableArray.length; i++) {
+            tableArray[i] = new LinkedList<>();
+        }
+
+        return tableArray;
     }
 
     public MyHashTable() {
-        tablesCount = DEFAULT_TABLE_SIZE;
-
-        table = new LinkedList[tablesCount];
-        for (int i = 0; i < tablesCount; i++) {
-            table[i] = new LinkedList<T>();
-        }
-
-        elementsCount = 0;
+        table = fillTable(new LinkedList[tablesCount = DEFAULT_TABLE_SIZE]);
     }
 
     public MyHashTable(int tablesCount) {
-        this.tablesCount = tablesCount;
-
-        table = new LinkedList[this.tablesCount];
-        for (int i = 0; i < this.tablesCount; i++) {
-            table[i] = new LinkedList<T>();
-        }
-
-        elementsCount = 0;
+        table = fillTable(new LinkedList[this.tablesCount = tablesCount]);
     }
 
     @Override
@@ -109,7 +84,7 @@ public class MyHashTable<T> implements Collection<T> {
     public boolean contains(Object object) {
         checkNullEquality((T) object);
 
-        int index = countIndex((T) object);
+        int index = countIndex((T) object, table.length);
         return table[index].contains(object);
     }
 
@@ -189,14 +164,14 @@ public class MyHashTable<T> implements Collection<T> {
     @Override
     public boolean add(T object) {
         checkNullEquality(object);
+        checkLoadFactor();
 
-        int index = countIndex(object);
+        int index = countIndex(object, table.length);
         table[index].add(object);
 
         modCount++;
         elementsCount++;
 
-        //checkLoadFactor();
         return true;
     }
 
@@ -204,22 +179,26 @@ public class MyHashTable<T> implements Collection<T> {
     public boolean remove(Object object) {
         checkNullEquality((T) object);
 
-        int index = countIndex((T) object);
-
+        int index = countIndex((T) object, table.length);
         if (table[index].remove(object)) {
             modCount++;
             elementsCount--;
             return true;
         }
+
         return false;
     }
 
     @Override
     public boolean containsAll(Collection<?> collection) {
-        checkLength(collection);
+        checkNullEquality(collection);
+
+        if (collection.size() == 0) {
+            return false;
+        }
 
         for (Object object : collection) {
-            int index = countIndex((T) object);
+            int index = countIndex((T) object, table.length);
 
             if (!table[index].contains(object)) {
                 return false;
@@ -231,20 +210,23 @@ public class MyHashTable<T> implements Collection<T> {
 
     @Override
     public boolean addAll(Collection<? extends T> collection) {
-        checkLength(collection);
+        checkNullEquality(collection);
+
+        if (collection.size() == 0) {
+            return false;
+        }
+
+        if (collection.size() + elementsCount >= tablesCount) {
+            resize(collection.size() + elementsCount);
+        }
 
         for (Object object : collection) {
-            int index = countIndex((T) object);
+            int index = countIndex((T) object, table.length);
             table[index].add((T) object);
-
             elementsCount++;
-
-            System.out.println("object from collection added, elementsCount = " + elementsCount);
         }
 
         modCount++;
-        //elementsCount += collection.size();
-        //checkLoadFactor();
         return true;
     }
 
@@ -257,18 +239,17 @@ public class MyHashTable<T> implements Collection<T> {
         for (Object object : collection) {
             int objectIndex;
 
-            if (table[(objectIndex = countIndex((T) object))].contains(object)) {
+            if (table[(objectIndex = countIndex((T) object, table.length))].contains(object)) {
                 for (int i = 0; i < table[objectIndex].size(); i++) {
                     if (Objects.equals(object, table[objectIndex].get(i))) {
                         table[objectIndex].remove(i);
                         elementsCount--;
-
                         i--;
                     }
                 }
             }
-
         }
+
         modCount++;
         return true;
     }
@@ -282,7 +263,7 @@ public class MyHashTable<T> implements Collection<T> {
         for (Object object : collection) {
             int objectIndex;
 
-            if (table[(objectIndex = countIndex((T) object))].contains(object)) {
+            if (table[(objectIndex = countIndex((T) object, table.length))].contains(object)) {
                 for (int i = 0; i < table[objectIndex].size(); i++) {
                     if (!Objects.equals(object, table[objectIndex].get(i))) {
                         table[objectIndex].remove(i);
@@ -293,6 +274,7 @@ public class MyHashTable<T> implements Collection<T> {
                 }
             }
         }
+
         modCount++;
         return true;
     }
@@ -302,6 +284,7 @@ public class MyHashTable<T> implements Collection<T> {
         for (LinkedList<T> list : table) {
             list.clear();
         }
+
         elementsCount = 0;
     }
 }
