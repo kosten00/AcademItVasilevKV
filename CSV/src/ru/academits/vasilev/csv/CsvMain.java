@@ -82,10 +82,14 @@ public class CsvMain {
             //с боди начинается само содержимое файла
 
             int ch;
-            while ((ch = reader.read()) != -1) {
+            while ((ch = reader.read()) != -1) { // посимвольно читает из файла
 
-                writer.print((char) ch);
+
+
+                writer.print((char) ch); //печатет в файл
             }
+
+            writer.print("</td></tr></table></body></head>");
         }
     }
 
