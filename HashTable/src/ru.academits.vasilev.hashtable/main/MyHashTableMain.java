@@ -42,38 +42,38 @@ public class MyHashTableMain {
 
         mht1.getElementsPerTable();
 
-//        Integer[] arr1 = {12, 32, 434, 543, 5554, 233, 11, 0, -1, -23, -2221, 0};
-//
-//        System.out.println("size before addAll " + mht1.size());
-//
-//        mht1.addAll(Arrays.asList(arr1));
-//
-//        System.out.println("size after addAll " + mht1.size());
-//
-//        System.out.println(Arrays.toString(mht1.toArray()));
-//
-//        for (Integer i : mht1) {
-//            System.out.print(" " + i + " ");
-//        }
-//        System.out.println("size = " + mht1.size());
-//
-//        System.out.println("contains : " + mht1.containsAll(Arrays.asList(arr1)));
-//
-//        System.out.println("size before addAll " + mht1.size());
-//
-//        mht1.removeAll(Arrays.asList(arr1));
-//
-//        System.out.println("size after removeAll " + mht1.size());
-//
-//        for (Integer i : mht1) {
-//            System.out.print(" " + i + " ");
-//        }
-//        System.out.println("size = " + mht1.size());
-//
-//        mht1.clear();
-//
-//        for (Integer i : mht1) {
-//            System.out.println(" " + i + " ");
-//        }
+        Integer[] arr1 = {12, 32, 434, 543, 5554, 233, 11, 0, -1, -23, -2221, 0};
+
+        System.out.println("size before addAll " + mht1.size());
+
+        mht1.addAll(Arrays.asList(arr1));
+
+        System.out.println("size after addAll " + mht1.size());
+
+        System.out.println(Arrays.toString(mht1.toArray()));
+
+        for (Integer i : mht1) {
+            System.out.print(" " + i + " ");
+        }
+        System.out.println("size = " + mht1.size());
+
+        System.out.println("contains : " + mht1.containsAll(Arrays.asList(arr1)));
+
+        System.out.println("size before addAll " + mht1.size());
+
+        mht1.removeAll(Arrays.asList(arr1));
+
+        System.out.println("size after removeAll " + mht1.size());
+
+        for (Integer i : mht1) {
+            System.out.print(" " + i + " ");
+        }
+        System.out.println("size = " + mht1.size());
+
+        mht1.clear();
+
+        for (Integer i : mht1) {
+            System.out.println(" " + i + " ");
+        }
     }
 }

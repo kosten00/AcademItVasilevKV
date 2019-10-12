@@ -3,18 +3,13 @@ package ru.academits.vasilev.hashtable;
 import java.util.*;
 
 /*
-1. В этой задаче не нужна логика по изменению размера массива, ее нужно убрать
-2. DEFAULT_TABLE_SIZE, RESIZE_COEFFICIENT нужно сделать константами
-4. Плохо использовать присваивание как выражение.
-Например, конструкторы
 5. Очень много warning'ов из-за приведения к T.
 Например, checkNullEquality можно сделать чтобы принимал Object, тогда приведение не понадобится и т.д.
-6. toArray() - лишний if
 7. toArray(T1[] array):
 - если длины переданного массива хватает, должен использоваться он
 - нужно сделать логику про null
 - когда используем Arrays.copyOf, здесь еще нужно передать третий аргумент array.getClass()
-8. Коллекция должна нормально работать с null данными
+8. Коллекция должна нормально работать с null данными -- вроде поправил!
 9. containsAll - неверный результат для пустой коллекции.
 И можно просто использовать contains
 10. addAll - можно просто использовать add
@@ -35,12 +30,6 @@ public class MyHashTable<T> implements Collection<T> {
         }
 
         return Math.abs(object.hashCode() % (arrayLength - 1));
-    }
-
-    private void checkNullEquality(Object object) {
-        if (object == null) {
-            throw new IllegalArgumentException("Can't add null object");
-        }
     }
 
     private void checkNullEquality(Collection<?> collection) {
@@ -86,8 +75,6 @@ public class MyHashTable<T> implements Collection<T> {
 
     @Override
     public boolean contains(Object object) {
-        //checkNullEquality(object);
-
         int index = getIndex(object, table.length);
         return table[index].contains(object);
     }
@@ -145,12 +132,10 @@ public class MyHashTable<T> implements Collection<T> {
     public Object[] toArray() {
         Object[] array = new Object[elementsCount];
 
-        if (elementsCount > 0) {
-            int i = 0;
-            for (T element : this) {
-                array[i] = element;
-                i++;
-            }
+        int i = 0;
+        for (T element : this) {
+            array[i] = element;
+            i++;
         }
 
         return array;
@@ -178,8 +163,6 @@ public class MyHashTable<T> implements Collection<T> {
 
     @Override
     public boolean remove(Object object) {
-        checkNullEquality(object);
-
         int index = getIndex(object, table.length);
         if (table[index].remove(object)) {
             modCount++;
@@ -199,7 +182,7 @@ public class MyHashTable<T> implements Collection<T> {
         }
 
         for (Object object : collection) {
-            int index = getIndex((T) object, table.length);
+            int index = getIndex(object, table.length);
 
             if (!table[index].contains(object)) {
                 return false;
