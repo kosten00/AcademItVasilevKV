@@ -35,9 +35,14 @@ public class ArrayListMain {
             System.out.println(item);
         }
 
-        System.out.println(list2.removeAll(list));
+        MyArrayList<String> list3 = new MyArrayList<>();
+        list3.add("eight");
+        list3.add("seven");
 
-        System.out.println();
+        System.out.println(list2.size());
+        //System.out.println(list2.retainAll(list2));
+        System.out.println(list2.remove("eight"));
+        System.out.println(list2.size());
 
         for (String item : list2) {
             System.out.println(item);

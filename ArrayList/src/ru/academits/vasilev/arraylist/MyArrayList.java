@@ -8,8 +8,14 @@ public class MyArrayList<T> implements List<T> {
     private int modCount;
     private static final int DEFAULT_CAPACITY = 10;
 
-    private void checkIndex(int index, boolean isAdditive) {
-        if (index < 0 || !isAdditive && index >= size || index > size) {
+    private void checkIndexInside(int index) {
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException("Index " + index + " is out of the list size = " + size);
+        }
+    }
+
+    private void checkIndexAdd(int index) {
+        if (index < 0 || index > size) {
             throw new IndexOutOfBoundsException("Index " + index + " is out of the list size = " + size);
         }
     }
@@ -92,8 +98,8 @@ public class MyArrayList<T> implements List<T> {
             if (currentIndex >= items.length) {
                 throw new ConcurrentModificationException("Concurrent list size modification during iteration through! ");
             }
-            currentIndex++;
 
+            currentIndex++;
             return items[currentIndex];
         }
     }
@@ -136,25 +142,24 @@ public class MyArrayList<T> implements List<T> {
             return false;
         }
 
-        System.arraycopy(items, objectIndex + 1, items, objectIndex, size - objectIndex);
+        int sizeBeforeChange = size;
+        System.arraycopy(items, objectIndex + 1, items, objectIndex, (size - 1) - objectIndex);
 
         modCount++;
         size--;
+        removeExcessItems(sizeBeforeChange);
         return true;
     }
 
     @Override
     public boolean containsAll(Collection<?> collection) {
-        if (collection.size() == 0) {
-            return false;
-        }
-
-        for (Object object : collection) {
-            if (!contains(object)) {
-                return false;
+        if (collection.size() > 0) {
+            for (Object object : collection) {
+                if (!contains(object)) {
+                    return false;
+                }
             }
         }
-
         return true;
     }
 
@@ -165,7 +170,7 @@ public class MyArrayList<T> implements List<T> {
 
     @Override
     public boolean addAll(int index, Collection<? extends T> collection) {
-        checkIndex(index, true);
+        checkIndexAdd(index);
 
         int collectionSize = collection.size();
 
@@ -191,33 +196,38 @@ public class MyArrayList<T> implements List<T> {
     @Override
     public boolean removeAll(Collection<?> collection) {
         if (collection.size() == 0) {
-            return false;
+            return true;
         }
 
+        boolean isRemoved = false;
         for (Object object : collection) {
-            while (indexOf(object) != -1) {
-                remove(object);
+            int index;
+            while ((index = indexOf(object)) != -1) {
+                remove(index);
+                isRemoved = true;
             }
         }
 
-        return true;
+        return isRemoved;
     }
 
     @Override
     public boolean retainAll(Collection<?> collection) {
         if (collection.size() == 0) {
-            return false;
+            clear();
+            return true;
         }
 
+        boolean isRemoved = false;
         for (int i = 0; i < size; i++) {
             if (!collection.contains(items[i])) {
-                remove(items[i]);
-
+                remove(i);
                 i--;
+                isRemoved = true;
             }
         }
 
-        return true;
+        return isRemoved;
     }
 
     private void removeExcessItems(int sizeBeforeChange) {
@@ -238,14 +248,14 @@ public class MyArrayList<T> implements List<T> {
 
     @Override
     public T get(int index) {
-        checkIndex(index, false);
+        checkIndexInside(index);
 
         return items[index];
     }
 
     @Override
     public T set(int index, T item) {
-        checkIndex(index, false);
+        checkIndexInside(index);
 
         T oldItem = items[index];
 
@@ -255,7 +265,7 @@ public class MyArrayList<T> implements List<T> {
 
     @Override
     public void add(int index, T item) {
-        checkIndex(index, true);
+        checkIndexAdd(index);
         checkSize();
 
         System.arraycopy(items, index, items, index + 1, size - index);
@@ -267,7 +277,7 @@ public class MyArrayList<T> implements List<T> {
 
     @Override
     public T remove(int index) {
-        checkIndex(index, false);
+        checkIndexInside(index);
 
         T itemToRemove = items[index];
 
