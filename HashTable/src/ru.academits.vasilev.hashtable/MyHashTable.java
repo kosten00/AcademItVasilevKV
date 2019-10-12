@@ -5,7 +5,6 @@ import java.util.*;
 /*
 1. В этой задаче не нужна логика по изменению размера массива, ее нужно убрать
 2. DEFAULT_TABLE_SIZE, RESIZE_COEFFICIENT нужно сделать константами
-3. countIndex - лучше назвать getIndex
 4. Плохо использовать присваивание как выражение.
 Например, конструкторы
 5. Очень много warning'ов из-за приведения к T.
@@ -23,15 +22,19 @@ import java.util.*;
 */
 
 public class MyHashTable<T> implements Collection<T> {
-    private LinkedList<T>[] table;
+    private LinkedList[] table;
     private int elementsCount;
     private int tablesCount;
     private int modCount;
-    private final int DEFAULT_TABLE_SIZE = 10;
-    private final int RESIZE_COEFFICIENT = 2;
+    private static final int DEFAULT_TABLE_SIZE = 10;
+    private static final int RESIZE_COEFFICIENT = 2;
 
-    private int countIndex(T object, int arrayLength) {
-        return Math.abs(object.hashCode() % arrayLength);
+    private int getIndex(Object object, int arrayLength) {
+        if (object == null) {
+            return arrayLength - 1;
+        }
+
+        return Math.abs(object.hashCode() % (arrayLength - 1));
     }
 
     private void checkNullEquality(Object object) {
@@ -46,34 +49,6 @@ public class MyHashTable<T> implements Collection<T> {
         }
     }
 
-    private void checkLoadFactor() {
-        if (tablesCount <= elementsCount) {
-            resize();
-        }
-    }
-
-    private void resize(int size) {
-        T[] array = (T[]) this.toArray();
-
-        int sizeAfterAddingCollection = (int) Math.ceil((double) size / DEFAULT_TABLE_SIZE);
-        table = fillTable(new LinkedList[tablesCount = sizeAfterAddingCollection]);
-        elementsCount = 0;
-
-        for (int i = 0; i < array.length; i++) {
-            this.add(array[i]);
-        }
-    }
-
-    private void resize() {
-        T[] array = (T[]) this.toArray();
-        table = fillTable(new LinkedList[tablesCount = tablesCount * RESIZE_COEFFICIENT]);
-        elementsCount = 0;
-
-        for (int i = 0; i < array.length; i++) {
-            this.add(array[i]);
-        }
-    }
-
     private LinkedList<T>[] fillTable(LinkedList<T>[] tableArray) {
         for (int i = 0; i < tableArray.length; i++) {
             tableArray[i] = new LinkedList<>();
@@ -83,11 +58,20 @@ public class MyHashTable<T> implements Collection<T> {
     }
 
     public MyHashTable() {
-        table = fillTable(new LinkedList[tablesCount = DEFAULT_TABLE_SIZE]);
+        tablesCount = DEFAULT_TABLE_SIZE;
+        table = fillTable(new LinkedList[tablesCount]);
+
     }
 
     public MyHashTable(int tablesCount) {
-        table = fillTable(new LinkedList[this.tablesCount = tablesCount]);
+        this.tablesCount = tablesCount;
+        table = fillTable(new LinkedList[this.tablesCount]);
+    }
+
+    public void getElementsPerTable() {
+        for (LinkedList list : table) {
+            System.out.println(list.size());
+        }
     }
 
     @Override
@@ -102,9 +86,9 @@ public class MyHashTable<T> implements Collection<T> {
 
     @Override
     public boolean contains(Object object) {
-        checkNullEquality((T) object);
+        //checkNullEquality(object);
 
-        int index = countIndex((T) object, table.length);
+        int index = getIndex(object, table.length);
         return table[index].contains(object);
     }
 
@@ -153,7 +137,7 @@ public class MyHashTable<T> implements Collection<T> {
             }
             currentElementIndex++;
 
-            return table[currentTableIndex].get(currentElementIndex);
+            return (T) table[currentTableIndex].get(currentElementIndex);
         }
     }
 
@@ -182,11 +166,8 @@ public class MyHashTable<T> implements Collection<T> {
     }
 
     @Override
-    public boolean add(T object) {
-        checkNullEquality(object);
-        checkLoadFactor();
-
-        int index = countIndex(object, table.length);
+    public boolean add(Object object) {
+        int index = getIndex(object, table.length);
         table[index].add(object);
 
         modCount++;
@@ -197,9 +178,9 @@ public class MyHashTable<T> implements Collection<T> {
 
     @Override
     public boolean remove(Object object) {
-        checkNullEquality((T) object);
+        checkNullEquality(object);
 
-        int index = countIndex((T) object, table.length);
+        int index = getIndex(object, table.length);
         if (table[index].remove(object)) {
             modCount++;
             elementsCount--;
@@ -218,7 +199,7 @@ public class MyHashTable<T> implements Collection<T> {
         }
 
         for (Object object : collection) {
-            int index = countIndex((T) object, table.length);
+            int index = getIndex((T) object, table.length);
 
             if (!table[index].contains(object)) {
                 return false;
@@ -236,13 +217,9 @@ public class MyHashTable<T> implements Collection<T> {
             return false;
         }
 
-        if (collection.size() + elementsCount >= tablesCount) {
-            resize(collection.size() + elementsCount);
-        }
-
         for (Object object : collection) {
-            int index = countIndex((T) object, table.length);
-            table[index].add((T) object);
+            int index = getIndex(object, table.length);
+            table[index].add(object);
             elementsCount++;
         }
 
@@ -259,7 +236,7 @@ public class MyHashTable<T> implements Collection<T> {
         for (Object object : collection) {
             int objectIndex;
 
-            if (table[(objectIndex = countIndex((T) object, table.length))].contains(object)) {
+            if (table[(objectIndex = getIndex(object, table.length))].contains(object)) {
                 for (int i = 0; i < table[objectIndex].size(); i++) {
                     if (Objects.equals(object, table[objectIndex].get(i))) {
                         table[objectIndex].remove(i);
@@ -283,7 +260,7 @@ public class MyHashTable<T> implements Collection<T> {
         for (Object object : collection) {
             int objectIndex;
 
-            if (table[(objectIndex = countIndex((T) object, table.length))].contains(object)) {
+            if (table[(objectIndex = getIndex(object, table.length))].contains(object)) {
                 for (int i = 0; i < table[objectIndex].size(); i++) {
                     if (!Objects.equals(object, table[objectIndex].get(i))) {
                         table[objectIndex].remove(i);
