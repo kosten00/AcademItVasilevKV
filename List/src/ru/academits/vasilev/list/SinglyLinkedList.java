@@ -1,5 +1,6 @@
 package ru.academits.vasilev.list;
 
+import java.util.NoSuchElementException;
 import java.util.Objects;
 
 public class SinglyLinkedList<T> {
@@ -10,18 +11,20 @@ public class SinglyLinkedList<T> {
     }
 
     public SinglyLinkedList(SinglyLinkedList<T> list) {
-        if (list.head != null) {
-            ListItem<T> listItemCopy = new ListItem<>(list.head.getData());
-
-            head = listItemCopy;
-
-            for (ListItem<T> p = list.head; p.getNext() != null; p = p.getNext()) {
-                listItemCopy.setNext(new ListItem<>(p.getNext().getData()));
-
-                listItemCopy = listItemCopy.getNext();
-            }
-            count = list.count;
+        if (list.head == null) {
+            return;
         }
+
+        ListItem<T> listItemCopy = new ListItem<>(list.head.getData());
+        head = listItemCopy;
+
+        for (ListItem<T> p = list.head; p.getNext() != null; p = p.getNext()) {
+            listItemCopy.setNext(new ListItem<>(p.getNext().getData()));
+
+            listItemCopy = listItemCopy.getNext();
+        }
+
+        count = list.count;
     }
 
     private void checkInputIndex(int index) {
@@ -32,7 +35,7 @@ public class SinglyLinkedList<T> {
 
     private void checkHead() {
         if (head == null) {
-            throw new IllegalStateException("List is empty");
+            throw new NoSuchElementException("List is empty");
         }
     }
 
@@ -92,9 +95,11 @@ public class SinglyLinkedList<T> {
     public T setElement(int index, T data) {
         checkInputIndex(index);
 
-        T itemToReplaceData = iterateTo(index).getData();
+        ListItem<T> listItemByIndex = iterateTo(index);
 
-        iterateTo(index).setData(data);
+        T itemToReplaceData = listItemByIndex.getData();
+
+        listItemByIndex.setData(data);
 
         return itemToReplaceData;
     }
@@ -124,7 +129,9 @@ public class SinglyLinkedList<T> {
     }
 
     public boolean removeData(T data) {
-        checkHead();
+        if (head == null) {
+            return false;
+        }
 
         if (Objects.equals(head.getData(), data)) {
             head = head.getNext();
@@ -144,7 +151,6 @@ public class SinglyLinkedList<T> {
 
     public void revert() {
         if (head == null) {
-            System.out.println("list is empty");
             return;
         }
 
