@@ -46,12 +46,18 @@ public class Controller {
         });
 
         view.getConvertButton().addActionListener(e -> {
-            //stringBuilder.toString();
-            System.out.println(view.getRadioGroupFrom().getSelection().getActionCommand());
-            System.out.println(view.getRadioGroupTo().getSelection().getActionCommand());
+            if (stringBuilder.length() == 0) {
+                return;
+            }
 
+            double someDouble = Double.parseDouble(stringBuilder.toString());
+
+            model.setInputTemperature(someDouble);
+            model.setFromScale(view.getRadioGroupFrom().getSelection().getActionCommand());
+            model.setToScale(view.getRadioGroupTo().getSelection().getActionCommand());
             stringBuilder.replace(0, stringBuilder.length(), "");
             view.getInputTemperatureField().setText("");
+            view.getOutputTemperatureField().setText(model.convert());
         });
 
 

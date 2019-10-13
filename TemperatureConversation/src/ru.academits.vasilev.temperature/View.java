@@ -93,19 +93,19 @@ public class View extends JFrame {
         JRadioButton celsiusButtonFrom = new JRadioButton("Celsius", true);
         c.gridx = 0;
         c.gridy = 1;
-        celsiusButtonFrom.setActionCommand("CBF");
+        celsiusButtonFrom.setActionCommand("celsiusButtonFrom");
         add(celsiusButtonFrom, c);
 
         JRadioButton fahrenheitButtonFrom = new JRadioButton("Fahrenheit", false);
         c.gridx = 0;
         c.gridy = 2;
-        fahrenheitButtonFrom.setActionCommand("FBF");
+        fahrenheitButtonFrom.setActionCommand("fahrenheitButtonFrom");
         add(fahrenheitButtonFrom, c);
 
         JRadioButton kelvinButtonFrom = new JRadioButton("Kelvin", false);
         c.gridx = 0;
         c.gridy = 3;
-        kelvinButtonFrom.setActionCommand("KBF");
+        kelvinButtonFrom.setActionCommand("kelvinButtonFrom");
         add(kelvinButtonFrom, c);
 
         radioGroupFrom = new ButtonGroup();
@@ -121,19 +121,19 @@ public class View extends JFrame {
         JRadioButton celsiusButtonTo = new JRadioButton("Celsius", true);
         c.gridx = 2;
         c.gridy = 1;
-        celsiusButtonTo.setActionCommand("CBT");
+        celsiusButtonTo.setActionCommand("celsiusButtonTo");
         add(celsiusButtonTo, c);
 
         JRadioButton fahrenheitButtonTo = new JRadioButton("Fahrenheit", false);
         c.gridx = 2;
         c.gridy = 2;
-        fahrenheitButtonTo.setActionCommand("FBT");
+        fahrenheitButtonTo.setActionCommand("fahrenheitButtonTo");
         add(fahrenheitButtonTo, c);
 
         JRadioButton kelvinButtonTo = new JRadioButton("Kelvin", false);
         c.gridx = 2;
         c.gridy = 3;
-        kelvinButtonTo.setActionCommand("KBT");
+        kelvinButtonTo.setActionCommand("kelvinButtonTo");
         add(kelvinButtonTo, c);
 
         radioGroupTo = new ButtonGroup();

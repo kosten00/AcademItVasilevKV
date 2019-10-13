@@ -1,14 +1,11 @@
 package ru.academits.vasilev.temperature;
 
 public class Model {
-    private String inputTemperature;
+    private double inputTemperature;
     private String fromScale;
     private String toScale;
 
-    private final double CELSIUS_TO_FAHRENHEIT = (Double.parseDouble(inputTemperature) * (9. / 5.)) + 32.;
-    private final double FAHRENHEIT_TO_CELSIUS = (Double.parseDouble(inputTemperature) - 32.) * (5. / 9.);
-
-    public void setInputTemperature(String inputTemperature) {
+    public void setInputTemperature(double inputTemperature) {
         this.inputTemperature = inputTemperature;
     }
 
@@ -20,12 +17,28 @@ public class Model {
         this.toScale = toScale;
     }
 
-    public String convert() {
-
-
-        return "";
+    public Model() {
     }
 
-    public Model() {
+    public String convert() {
+        double temp = inputTemperature;
+
+        if (fromScale.equals("celsiusButtonFrom")) {
+            if (toScale.equals("fahrenheitButtonTo")) {
+                setFromScale(null);
+                setToScale(null);
+                return Double.toString((temp * (9. / 5.)) + 32.);
+            }
+        }
+
+        if (fromScale.equals("fahrenheitButtonFrom")) {
+            if (toScale.equals("celsiusButtonTo")) {
+                setFromScale(null);
+                setToScale(null);
+                return Double.toString((temp - 32.) * (5. / 9.));
+            }
+        }
+
+        return "missed";
     }
 }
