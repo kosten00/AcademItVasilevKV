@@ -12,13 +12,20 @@ public class Model {
         this.inputTemperature = inputTemperature;
     }
 
-    public String getInputTemperature() {
-        return inputTemperature;
+    public void setFromScale(String fromScale) {
+        this.fromScale = fromScale;
     }
 
-    public Model(String inputTemperature, String fromScale, String toScale) {
-        this.inputTemperature = inputTemperature;
-        this.fromScale = fromScale;
+    public void setToScale(String toScale) {
         this.toScale = toScale;
+    }
+
+    public String convert() {
+
+
+        return "";
+    }
+
+    public Model() {
     }
 }
