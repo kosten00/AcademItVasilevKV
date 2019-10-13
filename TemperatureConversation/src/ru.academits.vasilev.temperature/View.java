@@ -2,8 +2,7 @@ package ru.academits.vasilev.temperature;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.util.Enumeration;
 
 /**
  * Задача 7. Сделать программу на Swing  / Windows Forms для перевода температуры из одной шкалы в другую.
@@ -16,27 +15,42 @@ import java.awt.event.ActionListener;
  * 5. Доступные шкалы: цельсия, фаренгейта, кельвина
  * 6. Если ввели не число, то нужно вывести ошибку
  * 7. Обязательно использовать layout manager’ы
- * Научитесь:
- * Начальное знакомство с UI
+ * Научитесь: Начальное знакомство с UI
  * MVC и отделение логики от представления
  * Принцип открытости-закрытости
  */
 
-public class TemperatureConversation extends JFrame {
+public class View extends JFrame {
     private final static int WIDTH = 400;
     private final static int HEIGHT = 250;
 
     private JButton convertButton;
-    private ButtonGroup bg1;
-    private ButtonGroup bg2;
-    private JTextField textField;
-    JLabel resultLabel;
+    private ButtonGroup radioGroupFrom;
+    private ButtonGroup radioGroupTo;
+    private JTextField inputTemperatureField;
+    private JLabel outputTemperatureField;
 
-    String result;
+    public JButton getConvertButton() {
+        return convertButton;
+    }
 
-    private ActionListener aL = new Listener();
+    public ButtonGroup getRadioGroupFrom() {
+        return radioGroupFrom;
+    }
 
-    public TemperatureConversation() {
+    public ButtonGroup getRadioGroupTo() {
+        return radioGroupTo;
+    }
+
+    public JTextField getInputTemperatureField() {
+        return inputTemperatureField;
+    }
+
+    public JLabel getOutputTemperatureField() {
+        return outputTemperatureField;
+    }
+
+    public View() {
         super("Temperature conversation");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setVisible(true);
@@ -46,7 +60,6 @@ public class TemperatureConversation extends JFrame {
         setLayout(new GridBagLayout());
 
         GridBagConstraints c = new GridBagConstraints();
-
         c.fill = GridBagConstraints.BOTH;
         c.ipadx = 10;
 
@@ -65,67 +78,67 @@ public class TemperatureConversation extends JFrame {
         c.gridy = 4;
         add(label3, c);
 
-        resultLabel = new JLabel();
+        inputTemperatureField = new JTextField(5);
+        c.gridx = 0;
+        c.gridy = 5;
+        inputTemperatureField.setToolTipText("Input field");
+        add(inputTemperatureField, c);
+
+        outputTemperatureField = new JLabel();
         c.gridx = 2;
         c.gridy = 5;
-        add(resultLabel, c);
+        outputTemperatureField.setToolTipText("Output field");
+        add(outputTemperatureField, c);
 
-        JRadioButton checkBox1 = new JRadioButton("Celsius", false);
+        JRadioButton celsiusButtonFrom = new JRadioButton("Celsius", true);
         c.gridx = 0;
         c.gridy = 1;
-        add(checkBox1, c);
+        celsiusButtonFrom.setActionCommand("CBF");
+        add(celsiusButtonFrom, c);
 
-        JRadioButton checkBox2 = new JRadioButton("Fahrenheit", false);
+        JRadioButton fahrenheitButtonFrom = new JRadioButton("Fahrenheit", false);
         c.gridx = 0;
         c.gridy = 2;
-        add(checkBox2, c);
+        fahrenheitButtonFrom.setActionCommand("FBF");
+        add(fahrenheitButtonFrom, c);
 
-        JRadioButton checkBox3 = new JRadioButton("Kelvin", false);
+        JRadioButton kelvinButtonFrom = new JRadioButton("Kelvin", false);
         c.gridx = 0;
         c.gridy = 3;
-        add(checkBox3, c);
+        kelvinButtonFrom.setActionCommand("KBF");
+        add(kelvinButtonFrom, c);
 
-        bg1 = new ButtonGroup();
-        bg1.add(checkBox1);
-        bg1.add(checkBox2);
-        bg1.add(checkBox3);
+        radioGroupFrom = new ButtonGroup();
+        radioGroupFrom.add(celsiusButtonFrom);
+        radioGroupFrom.add(fahrenheitButtonFrom);
+        radioGroupFrom.add(kelvinButtonFrom);
 
         convertButton = new JButton("Convert");
         c.gridx = 1;
         c.gridy = 4;
         add(convertButton, c);
-        convertButton.addActionListener(aL);
 
-        JRadioButton checkBox4 = new JRadioButton("Celsius", false);
+        JRadioButton celsiusButtonTo = new JRadioButton("Celsius", true);
         c.gridx = 2;
         c.gridy = 1;
-        add(checkBox4, c);
+        celsiusButtonTo.setActionCommand("CBT");
+        add(celsiusButtonTo, c);
 
-        JRadioButton checkBox5 = new JRadioButton("Fahrenheit", false);
+        JRadioButton fahrenheitButtonTo = new JRadioButton("Fahrenheit", false);
         c.gridx = 2;
         c.gridy = 2;
-        add(checkBox5, c);
+        fahrenheitButtonTo.setActionCommand("FBT");
+        add(fahrenheitButtonTo, c);
 
-        JRadioButton checkBox6 = new JRadioButton("Kelvin", false);
+        JRadioButton kelvinButtonTo = new JRadioButton("Kelvin", false);
         c.gridx = 2;
         c.gridy = 3;
-        add(checkBox6, c);
+        kelvinButtonTo.setActionCommand("KBT");
+        add(kelvinButtonTo, c);
 
-        bg2 = new ButtonGroup();
-        bg2.add(checkBox4);
-        bg2.add(checkBox5);
-        bg2.add(checkBox6);
-
-        textField = new JTextField(5);
-        c.gridx = 0;
-        c.gridy = 5;
-        add(textField, c);
-    }
-
-    class Listener implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            resultLabel.setText("Hello!");
-        }
+        radioGroupTo = new ButtonGroup();
+        radioGroupTo.add(celsiusButtonTo);
+        radioGroupTo.add(fahrenheitButtonTo);
+        radioGroupTo.add(kelvinButtonTo);
     }
 }
