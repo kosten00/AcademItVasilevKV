@@ -8,8 +8,6 @@ import javax.swing.*;
 
 public class Launcher {
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            new Controller(new View(), new Model());
-        });
+        SwingUtilities.invokeLater(() -> new Controller(new View(), new Model()));
     }
 }

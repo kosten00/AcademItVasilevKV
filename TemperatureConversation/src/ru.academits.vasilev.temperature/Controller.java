@@ -6,20 +6,31 @@ import java.awt.event.KeyListener;
 public class Controller {
     private View view;
     private Model model;
-
-    private String fromScale;
-    private String toScale;
-
     private StringBuilder stringBuilder;
 
     public Controller(View view, Model model) {
         this.view = view;
         this.model = model;
         initController();
-        stringBuilder = new StringBuilder();
     }
 
     private void initController() {
+        stringBuilder = new StringBuilder();
+        initConvertButton();
+        initTextField();
+    }
+
+    private void initConvertButton() {
+        view.getConvertButton().addActionListener(e -> {
+            if (stringBuilder.length() == 0) {
+                return;
+            }
+            sendToModel();
+            modifyView(model.convert());
+        });
+    }
+
+    private void initTextField() {
         view.getInputTemperatureField().addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {
@@ -31,35 +42,34 @@ public class Controller {
 
             @Override
             public void keyReleased(KeyEvent e) {
+                //если е не равно систем лайн сепаратор, то чар с = и так далее..
+
                 char c = e.getKeyChar();
 
-                if (!Character.isDigit(c)) {
-                    view.getInputTemperatureField().setText("");
-                    stringBuilder.replace(0, stringBuilder.length(), "");
+                if (!Character.isDigit(c) && !Character.toString(c).equals("-")) {
+                    modifyView("Please input digits!");
                 }
 
-                if (Character.isDigit(c)) {
-                    stringBuilder.append(c);
-                    System.out.println(stringBuilder);
+                stringBuilder.append(c);
+
+                if (stringBuilder.lastIndexOf("-") >= 1) {
+                    modifyView("Please input digits!");
                 }
             }
         });
+    }
 
-        view.getConvertButton().addActionListener(e -> {
-            if (stringBuilder.length() == 0) {
-                return;
-            }
+    private void sendToModel() {
+        double temperature = Double.parseDouble(stringBuilder.toString());
 
-            double someDouble = Double.parseDouble(stringBuilder.toString());
+        model.setInputTemperature(temperature);
+        model.setFromScale(view.getRadioGroupFrom().getSelection().getActionCommand());
+        model.setToScale(view.getRadioGroupTo().getSelection().getActionCommand());
+    }
 
-            model.setInputTemperature(someDouble);
-            model.setFromScale(view.getRadioGroupFrom().getSelection().getActionCommand());
-            model.setToScale(view.getRadioGroupTo().getSelection().getActionCommand());
-            stringBuilder.replace(0, stringBuilder.length(), "");
-            view.getInputTemperatureField().setText("");
-            view.getOutputTemperatureField().setText(model.convert());
-        });
-
-
+    private void modifyView(String text) {
+        stringBuilder.replace(0, stringBuilder.length(), "");
+        view.getInputTemperatureField().setText("");
+        view.getOutputTemperatureField().setText(text);
     }
 }
