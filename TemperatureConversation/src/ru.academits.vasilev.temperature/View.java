@@ -1,27 +1,11 @@
 package ru.academits.vasilev.temperature;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
-import java.util.Enumeration;
-
-/**
- * Задача 7. Сделать программу на Swing  / Windows Forms для перевода температуры из одной шкалы в другую.
- * Лекции, нужные для решения задачи: 1-15, 21-22.
- * Необходимая функциональность:
- * 1. Ввод температуры в поле ввода
- * 2. Должна быть кнопка, которая переводит температуру из одной шкалы в другую
- * 3. Результат перевода должен выводиться на форму, при этом быть не редактируемым
- * 4. Можно задать из какой шкалы и в какую переводить
- * 5. Доступные шкалы: цельсия, фаренгейта, кельвина
- * 6. Если ввели не число, то нужно вывести ошибку
- * 7. Обязательно использовать layout manager’ы
- * Научитесь: Начальное знакомство с UI
- * MVC и отделение логики от представления
- * Принцип открытости-закрытости
- */
 
 public class View extends JFrame {
-    private final static int WIDTH = 400;
+    private final static int WIDTH = 450;
     private final static int HEIGHT = 250;
 
     private JButton convertButton;
@@ -78,10 +62,13 @@ public class View extends JFrame {
         c.gridy = 4;
         add(label3, c);
 
+        Border border = BorderFactory.createLineBorder(Color.BLACK, 1);
+
         inputTemperatureField = new JTextField(5);
         c.gridx = 0;
         c.gridy = 5;
         inputTemperatureField.setToolTipText("Input field");
+        inputTemperatureField.setBorder(border);
         add(inputTemperatureField, c);
 
         outputTemperatureField = new JLabel();
@@ -89,6 +76,9 @@ public class View extends JFrame {
         c.gridy = 5;
         c.ipadx = 2;
         outputTemperatureField.setToolTipText("Output field");
+        outputTemperatureField.setBackground(Color.white);
+        outputTemperatureField.setOpaque(true);
+        outputTemperatureField.setBorder(border);
         add(outputTemperatureField, c);
 
         JRadioButton celsiusButtonFrom = new JRadioButton("Celsius", true);
