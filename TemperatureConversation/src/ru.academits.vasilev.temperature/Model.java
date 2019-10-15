@@ -18,18 +18,30 @@ public class Model {
     }
 
     public String convert() {
-        if (fromScale.equals("celsiusButtonFrom")) {
-            if (toScale.equals("fahrenheitButtonTo")) {
-                return Double.toString((inputTemperature * (9. / 5)) + 32);
+        if (fromScale.equals(toScale)) {
+            return Double.toString(inputTemperature);
+        }
+
+        if (fromScale.equals("celsius")) {
+            if (toScale.equals("fahrenheit")) {
+                return Double.toString((double) Math.round(((inputTemperature * (9. / 5)) + 32) * 100d) / 100d);
+            } else {
+                return Double.toString((double) Math.round(((inputTemperature + 273.15)) * 100d) / 100d);
             }
         }
 
-        if (fromScale.equals("fahrenheitButtonFrom")) {
-            if (toScale.equals("celsiusButtonTo")) {
-                return Double.toString((inputTemperature - 32) * (5. / 9));
+        if (fromScale.equals("fahrenheit")) {
+            if (toScale.equals("celsius")) {
+                return Double.toString((double) Math.round(((inputTemperature - 32) * (5. / 9)) * 100d) / 100d);
+            } else {
+                return Double.toString((double) Math.round(((inputTemperature - 32) * (5. / 9) + 273.15) * 100d) / 100d);
             }
         }
 
-        return "missed";
+        if (toScale.equals("celsius")) {
+            return Double.toString((double) Math.round((inputTemperature - 273.15) * 100d) / 100d);
+        }
+
+        return Double.toString((double) Math.round(((inputTemperature - 273.15) * (9. / 5) + 32) * 100d) / 100d);
     }
 }

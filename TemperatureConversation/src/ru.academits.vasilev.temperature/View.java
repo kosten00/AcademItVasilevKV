@@ -87,25 +87,26 @@ public class View extends JFrame {
         outputTemperatureField = new JLabel();
         c.gridx = 2;
         c.gridy = 5;
+        c.ipadx = 2;
         outputTemperatureField.setToolTipText("Output field");
         add(outputTemperatureField, c);
 
         JRadioButton celsiusButtonFrom = new JRadioButton("Celsius", true);
         c.gridx = 0;
         c.gridy = 1;
-        celsiusButtonFrom.setActionCommand("celsiusButtonFrom");
+        celsiusButtonFrom.setActionCommand("celsius");
         add(celsiusButtonFrom, c);
 
         JRadioButton fahrenheitButtonFrom = new JRadioButton("Fahrenheit", false);
         c.gridx = 0;
         c.gridy = 2;
-        fahrenheitButtonFrom.setActionCommand("fahrenheitButtonFrom");
+        fahrenheitButtonFrom.setActionCommand("fahrenheit");
         add(fahrenheitButtonFrom, c);
 
         JRadioButton kelvinButtonFrom = new JRadioButton("Kelvin", false);
         c.gridx = 0;
         c.gridy = 3;
-        kelvinButtonFrom.setActionCommand("kelvinButtonFrom");
+        kelvinButtonFrom.setActionCommand("kelvin");
         add(kelvinButtonFrom, c);
 
         radioGroupFrom = new ButtonGroup();
@@ -121,19 +122,19 @@ public class View extends JFrame {
         JRadioButton celsiusButtonTo = new JRadioButton("Celsius", true);
         c.gridx = 2;
         c.gridy = 1;
-        celsiusButtonTo.setActionCommand("celsiusButtonTo");
+        celsiusButtonTo.setActionCommand("celsius");
         add(celsiusButtonTo, c);
 
         JRadioButton fahrenheitButtonTo = new JRadioButton("Fahrenheit", false);
         c.gridx = 2;
         c.gridy = 2;
-        fahrenheitButtonTo.setActionCommand("fahrenheitButtonTo");
+        fahrenheitButtonTo.setActionCommand("fahrenheit");
         add(fahrenheitButtonTo, c);
 
         JRadioButton kelvinButtonTo = new JRadioButton("Kelvin", false);
         c.gridx = 2;
         c.gridy = 3;
-        kelvinButtonTo.setActionCommand("kelvinButtonTo");
+        kelvinButtonTo.setActionCommand("kelvin");
         add(kelvinButtonTo, c);
 
         radioGroupTo = new ButtonGroup();

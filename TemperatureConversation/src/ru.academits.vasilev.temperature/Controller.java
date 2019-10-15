@@ -1,12 +1,9 @@
 package ru.academits.vasilev.temperature;
 
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-
 public class Controller {
     private View view;
     private Model model;
-    private StringBuilder stringBuilder;
+    private String typedText;
 
     public Controller(View view, Model model) {
         this.view = view;
@@ -15,14 +12,14 @@ public class Controller {
     }
 
     private void initController() {
-        stringBuilder = new StringBuilder();
-        initConvertButton();
-        initTextField();
+        listenConvertButton();
     }
 
-    private void initConvertButton() {
+    private void listenConvertButton() {
         view.getConvertButton().addActionListener(e -> {
-            if (stringBuilder.length() == 0) {
+            typedText = view.getInputTemperatureField().getText();
+
+            if (hasErrors()) {
                 return;
             }
             sendToModel();
@@ -30,37 +27,48 @@ public class Controller {
         });
     }
 
-    private void initTextField() {
-        view.getInputTemperatureField().addKeyListener(new KeyListener() {
-            @Override
-            public void keyTyped(KeyEvent e) {
+    private boolean hasErrors() {
+        if (typedText.equals("")) {
+            return true;
+        }
+
+        int commaSignIndex = typedText.indexOf(",");
+
+        if (typedText.lastIndexOf(",") != commaSignIndex) {
+            modifyView("Only one \",\" allowed");
+            return true;
+        }
+
+        int dotSignIndex = typedText.indexOf(".");
+
+        if (typedText.lastIndexOf(".") != dotSignIndex) {
+            modifyView("Only one \".\" allowed");
+            return true;
+        }
+
+        int minusSignIndex = typedText.indexOf("-");
+
+        if (typedText.lastIndexOf("-") != minusSignIndex) {
+            modifyView("Only one \"-\" allowed");
+            return true;
+        }
+
+        for (int i = 0; i < typedText.length(); i++) {
+            if (i == commaSignIndex || i == minusSignIndex || i == dotSignIndex) {
+                continue;
             }
 
-            @Override
-            public void keyPressed(KeyEvent e) {
+            if (!Character.isDigit(typedText.charAt(i))) {
+                modifyView("Only digits allowed");
+                return true;
             }
+        }
 
-            @Override
-            public void keyReleased(KeyEvent e) {
-                //если е не равно систем лайн сепаратор, то чар с = и так далее..
-
-                char c = e.getKeyChar();
-
-                if (!Character.isDigit(c) && !Character.toString(c).equals("-")) {
-                    modifyView("Please input digits!");
-                }
-
-                stringBuilder.append(c);
-
-                if (stringBuilder.lastIndexOf("-") >= 1) {
-                    modifyView("Please input digits!");
-                }
-            }
-        });
+        return false;
     }
 
     private void sendToModel() {
-        double temperature = Double.parseDouble(stringBuilder.toString());
+        double temperature = Double.parseDouble(typedText.replaceAll(",", "."));
 
         model.setInputTemperature(temperature);
         model.setFromScale(view.getRadioGroupFrom().getSelection().getActionCommand());
@@ -68,7 +76,6 @@ public class Controller {
     }
 
     private void modifyView(String text) {
-        stringBuilder.replace(0, stringBuilder.length(), "");
         view.getInputTemperatureField().setText("");
         view.getOutputTemperatureField().setText(text);
     }
