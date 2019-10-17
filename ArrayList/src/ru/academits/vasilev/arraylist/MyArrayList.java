@@ -136,30 +136,18 @@ public class MyArrayList<T> implements List<T> {
 
     @Override
     public boolean remove(Object object) {
-        int objectIndex = indexOf(object);
-
-        if (objectIndex == -1) {
-            return false;
-        }
-
-        int sizeBeforeChange = size;
-        System.arraycopy(items, objectIndex + 1, items, objectIndex, (size - 1) - objectIndex);
-
-        modCount++;
-        size--;
-        removeExcessItems(sizeBeforeChange);
+        remove(indexOf(object));
         return true;
     }
 
     @Override
     public boolean containsAll(Collection<?> collection) {
-        if (collection.size() > 0) {
-            for (Object object : collection) {
-                if (!contains(object)) {
-                    return false;
-                }
+        for (Object object : collection) {
+            if (!contains(object)) {
+                return false;
             }
         }
+
         return true;
     }
 
@@ -195,10 +183,6 @@ public class MyArrayList<T> implements List<T> {
 
     @Override
     public boolean removeAll(Collection<?> collection) {
-        if (collection.size() == 0) {
-            return true;
-        }
-
         boolean isRemoved = false;
         for (Object object : collection) {
             int index;
@@ -213,11 +197,6 @@ public class MyArrayList<T> implements List<T> {
 
     @Override
     public boolean retainAll(Collection<?> collection) {
-        if (collection.size() == 0) {
-            clear();
-            return true;
-        }
-
         boolean isRemoved = false;
         for (int i = 0; i < size; i++) {
             if (!collection.contains(items[i])) {
@@ -228,12 +207,6 @@ public class MyArrayList<T> implements List<T> {
         }
 
         return isRemoved;
-    }
-
-    private void removeExcessItems(int sizeBeforeChange) {
-        for (int i = size; i < sizeBeforeChange; i++) {
-            items[i] = null;
-        }
     }
 
     @Override
@@ -281,12 +254,11 @@ public class MyArrayList<T> implements List<T> {
 
         T itemToRemove = items[index];
 
-        int sizeBeforeChange = size;
-
         System.arraycopy(items, index + 1, items, index, (size - 1) - index);
         modCount++;
         size--;
-        removeExcessItems(sizeBeforeChange);
+
+        items[size + 1] = null;
 
         return itemToRemove;
     }
