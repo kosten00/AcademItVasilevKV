@@ -2,27 +2,12 @@ package ru.academits.vasilev.hashtable;
 
 import java.util.*;
 
-/*
-5. Очень много warning'ов из-за приведения к T.
-Например, checkNullEquality можно сделать чтобы принимал Object, тогда приведение не понадобится и т.д.
-7. toArray(T1[] array):
-- если длины переданного массива хватает, должен использоваться он
-- нужно сделать логику про null -- удалить методы налл эквалти...
-- когда используем Arrays.copyOf, здесь еще нужно передать третий аргумент array.getClass()
-8. Коллекция должна нормально работать с null данными -- вроде поправил!
-9. containsAll - неверный результат для пустой коллекции.
-И можно просто использовать contains
-10. addAll - можно просто использовать add
-11. removeAll, retainAll - нужно упростить через методы списков
-*/
-
 public class MyHashTable<T> implements Collection<T> {
     private LinkedList[] table;
     private int elementsCount;
     private int tablesCount;
     private int modCount;
     private static final int DEFAULT_TABLE_SIZE = 10;
-    private static final int RESIZE_COEFFICIENT = 2;
 
     private int getIndex(Object object, int arrayLength) {
         if (object == null) {
@@ -30,12 +15,6 @@ public class MyHashTable<T> implements Collection<T> {
         }
 
         return Math.abs(object.hashCode() % (arrayLength - 1));
-    }
-
-    private void checkNullEquality(Collection<?> collection) {
-        if (collection == null) {
-            throw new IllegalArgumentException("Can't add null collection");
-        }
     }
 
     private LinkedList<T>[] fillTable(LinkedList<T>[] tableArray) {
@@ -144,10 +123,19 @@ public class MyHashTable<T> implements Collection<T> {
     @Override
     public <T1> T1[] toArray(T1[] array) {
         if (elementsCount > array.length) {
-            return (T1[]) Arrays.copyOf(toArray(), elementsCount);
+            return (T1[]) Arrays.copyOf(toArray(), elementsCount, array.getClass());
         }
 
-        return (T1[]) Arrays.copyOf(toArray(), array.length);
+        int i = 0;
+        for (Object element : this) {
+            array[i++] = (T1) element;
+        }
+
+        if (elementsCount < array.length) {
+            array[elementsCount] = null;
+        }
+
+        return array;
     }
 
     @Override
@@ -175,27 +163,19 @@ public class MyHashTable<T> implements Collection<T> {
 
     @Override
     public boolean containsAll(Collection<?> collection) {
-        checkNullEquality(collection);
-
-        if (collection.size() == 0) {
-            return false;
-        }
+        int count = collection.size();
 
         for (Object object : collection) {
-            int index = getIndex(object, table.length);
-
-            if (!table[index].contains(object)) {
-                return false;
+            if (contains(object)) {
+                count--;
             }
         }
 
-        return true;
+        return (count == 0) && (collection.size() != 0);
     }
 
     @Override
     public boolean addAll(Collection<? extends T> collection) {
-        checkNullEquality(collection);
-
         boolean added = false;
 
         for (Object object : collection) {
@@ -207,51 +187,28 @@ public class MyHashTable<T> implements Collection<T> {
 
     @Override
     public boolean removeAll(Collection<?> collection) {
-        if (collection.size() == 0) {
-            return false;
-        }
+        int removed = 0;
 
         for (Object object : collection) {
-            int objectIndex;
-
-            if (table[(objectIndex = getIndex(object, table.length))].contains(object)) {
-                for (int i = 0; i < table[objectIndex].size(); i++) {
-                    if (Objects.equals(object, table[objectIndex].get(i))) {
-                        table[objectIndex].remove(i);
-                        elementsCount--;
-                        i--;
-                    }
-                }
+            if (remove(object)) {
+                removed++;
             }
         }
 
-        modCount++;
-        return true;
+        return removed > 0;
     }
 
     @Override
     public boolean retainAll(Collection<?> collection) {
-        if (collection.size() == 0) {
-            return false;
-        }
+        int retained = 0;
 
-        for (Object object : collection) {
-            int objectIndex;
-
-            if (table[(objectIndex = getIndex(object, table.length))].contains(object)) {
-                for (int i = 0; i < table[objectIndex].size(); i++) {
-                    if (!Objects.equals(object, table[objectIndex].get(i))) {
-                        table[objectIndex].remove(i);
-                        elementsCount--;
-
-                        i--;
-                    }
-                }
+        for (LinkedList<T> list : table) {
+            if (list.retainAll(collection)) {
+                retained++;
             }
         }
 
-        modCount++;
-        return true;
+        return retained > 0;
     }
 
     @Override
