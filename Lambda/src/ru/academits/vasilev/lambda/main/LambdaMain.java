@@ -4,7 +4,9 @@ import ru.academits.vasilev.lambda.Person;
 
 import java.util.Comparator;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.util.Comparator.*;
@@ -12,7 +14,7 @@ import static java.util.Comparator.*;
 /*
 Создать класс Person с полями имя и возраст. Сделать конструктор,
 который принимает эти параметры. Сделать геттеры для полей
-• В ru.academits.vasilev.temperature.main создать список из нескольких людей
+• В main создать список из нескольких людей
 • При помощи лямбда-функций:
 • А) получить список уникальных имен
 • Б) вывести список уникальных имен в формате:
@@ -43,8 +45,21 @@ public class LambdaMain {
         personList.add(new Person("Витя", 5));
         personList.add(new Person("Глаша", 19));
 
-        personList.stream().filter(person -> person.getAge() < 18).forEach(System.out::println);
+        //personList.stream().filter(person -> person.getName());
 
-        //personList.stream().distinct().forEach(System.out::println);
+        //LinkedList<Person> list = personList.stream().distinct();
+
+        //System.out.println(personList.stream().distinct().collect(Collectors.toList()));
+
+
+        //Creating list of unique names from personList.
+        LinkedList<String> names = new LinkedList<>();
+        Stream<String> stream = personList.stream().map(Person::getName).distinct();
+        List<String> uniqueNames = stream.collect(Collectors.toList());
+        uniqueNames.forEach(System.out::println);
+
+
+
+
     }
 }
