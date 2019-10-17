@@ -75,5 +75,9 @@ public class MyHashTableMain {
         for (Integer i : mht1) {
             System.out.println(" " + i + " ");
         }
+
+        MyHashTable<Integer> mht2 = new MyHashTable<>();
+
+        System.out.println(mht1.addAll(mht2));
     }
 }

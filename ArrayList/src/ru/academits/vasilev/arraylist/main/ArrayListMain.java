@@ -29,7 +29,7 @@ public class ArrayListMain {
 
         ArrayList<String> Alist2 = new ArrayList<>();
 
-        System.out.println(Alist2.retainAll(Alist));
+        System.out.println(Alist.addAll(Alist2));
 
 
 //        System.out.println("List1 :");

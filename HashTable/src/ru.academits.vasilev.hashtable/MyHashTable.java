@@ -7,7 +7,7 @@ import java.util.*;
 Например, checkNullEquality можно сделать чтобы принимал Object, тогда приведение не понадобится и т.д.
 7. toArray(T1[] array):
 - если длины переданного массива хватает, должен использоваться он
-- нужно сделать логику про null
+- нужно сделать логику про null -- удалить методы налл эквалти...
 - когда используем Arrays.copyOf, здесь еще нужно передать третий аргумент array.getClass()
 8. Коллекция должна нормально работать с null данными -- вроде поправил!
 9. containsAll - неверный результат для пустой коллекции.
@@ -196,18 +196,13 @@ public class MyHashTable<T> implements Collection<T> {
     public boolean addAll(Collection<? extends T> collection) {
         checkNullEquality(collection);
 
-        if (collection.size() == 0) {
-            return false;
-        }
+        boolean added = false;
 
         for (Object object : collection) {
-            int index = getIndex(object, table.length);
-            table[index].add(object);
-            elementsCount++;
+            added = add(object);
         }
 
-        modCount++;
-        return true;
+        return added;
     }
 
     @Override
