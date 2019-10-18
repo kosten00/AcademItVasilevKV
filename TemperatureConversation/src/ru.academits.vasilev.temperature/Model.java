@@ -24,24 +24,24 @@ public class Model {
 
         if (fromScale.equals("celsius")) {
             if (toScale.equals("fahrenheit")) {
-                return Double.toString((double) Math.round(((inputTemperature * (9. / 5)) + 32) * 100d) / 100d);
+                return Double.toString(Math.round(((inputTemperature * (9. / 5)) + 32) * 100d) / 100d);
             } else {
-                return Double.toString((double) Math.round(((inputTemperature + 273.15)) * 100d) / 100d);
+                return Double.toString(Math.round(((inputTemperature + 273.15)) * 100d) / 100d);
             }
         }
 
         if (fromScale.equals("fahrenheit")) {
             if (toScale.equals("celsius")) {
-                return Double.toString((double) Math.round(((inputTemperature - 32) * (5. / 9)) * 100d) / 100d);
+                return Double.toString(Math.round(((inputTemperature - 32) * (5. / 9)) * 100d) / 100d);
             } else {
-                return Double.toString((double) Math.round(((inputTemperature - 32) * (5. / 9) + 273.15) * 100d) / 100d);
+                return Double.toString(Math.round(((inputTemperature - 32) * (5. / 9) + 273.15) * 100d) / 100d);
             }
         }
 
         if (toScale.equals("celsius")) {
-            return Double.toString((double) Math.round((inputTemperature - 273.15) * 100d) / 100d);
+            return Double.toString(Math.round((inputTemperature - 273.15) * 100d) / 100d);
         }
 
-        return Double.toString((double) Math.round(((inputTemperature - 273.15) * (9. / 5) + 32) * 100d) / 100d);
+        return Double.toString(Math.round(((inputTemperature - 273.15) * (9. / 5) + 32) * 100d) / 100d);
     }
 }
