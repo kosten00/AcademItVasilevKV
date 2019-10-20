@@ -3,9 +3,11 @@ package ru.academits.vasilev.temperature;
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class NewView {
-    NewModel model;
+    private NewModel model;
 
     private final static int WIDTH = 450;
     private final static int HEIGHT = 250;
@@ -17,9 +19,25 @@ public class NewView {
     private JComboBox fromScales;
     private JComboBox toScales;
 
+    private String from = "";
+    private String to = "";
+    private String temperature = "";
+
     public NewView(NewModel model) {
         this.model = model;
         SwingUtilities.invokeLater(this::initMainFrame);
+    }
+
+    public String getFrom() {
+        return from;
+    }
+
+    public String getTo() {
+        return to;
+    }
+
+    public double getTemperature() {
+        return Double.parseDouble(temperature.replaceAll(",", "."));
     }
 
     private void initMainFrame() {
@@ -93,7 +111,61 @@ public class NewView {
         initListeners();
     }
 
-    private void initListeners() {
-        convertButton.addActionListener(e -> inputTemperatureField.getText());
+    public void initListeners() {
+        convertButton.addActionListener(e -> {
+            from = (String) fromScales.getSelectedItem();
+            to = (String) toScales.getSelectedItem();
+            temperature = inputTemperatureField.getText();
+
+            if (hasErrors()) {
+                return;
+            }
+
+            double temperatureToDouble = Double.parseDouble(temperature);
+
+            String result = Double.toString(model.convert(from, to, temperatureToDouble));
+
+            outputTemperatureField.setText(result);
+        });
+    }
+
+    private boolean hasErrors() {
+        if (temperature.equals("")) {
+            return true;
+        }
+
+        int commaSignIndex = temperature.indexOf(",");
+
+        if (temperature.lastIndexOf(",") != commaSignIndex) {
+            outputTemperatureField.setText("Only one \",\" allowed");
+            return true;
+        }
+
+        int dotSignIndex = temperature.indexOf(".");
+
+        if (temperature.lastIndexOf(".") != dotSignIndex) {
+            outputTemperatureField.setText("Only one \".\" allowed");
+            return true;
+        }
+
+        int minusSignIndex = temperature.indexOf("-");
+
+        if (temperature.lastIndexOf("-") != minusSignIndex) {
+            outputTemperatureField.setText("Only one \"-\" allowed");
+            return true;
+        }
+
+        for (int i = 0; i < temperature.length(); i++) {
+            if (i == commaSignIndex || i == minusSignIndex || i == dotSignIndex) {
+                continue;
+            }
+
+            if (!Character.isDigit(temperature.charAt(i))) {
+                outputTemperatureField.setText("Only digits allowed");
+                return true;
+            }
+        }
+
+        return false;
     }
 }

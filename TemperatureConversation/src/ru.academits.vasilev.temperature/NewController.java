@@ -7,18 +7,14 @@ import Scales.Scale;
 
 public class NewController {
     private Scale[] scales;
+    private NewModel model;
+    private NewView view;
 
     public NewController(Scale[] scales) {
         this.scales = scales;
-    }
+        this.model = new NewModel(this.scales);
+        this.view = new NewView(this.model);
 
-    public Scale[] getScales() {
-        return scales;
-    }
-
-    public void receiveDirections(String from, String to, double temperature) {
-    }
-
-    public void sendToModel() {
+        view.initListeners();
     }
 }

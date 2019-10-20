@@ -4,17 +4,19 @@ package ru.academits.vasilev.temperature;
 import Scales.Scale;
 
 public class NewModel {
-    private NewController controller;
+    private Scale[] scales;
 
-    public NewModel(NewController controller) {
-        this.controller = controller;
+    public NewModel(Scale[] scales) {
+        this.scales = scales;
     }
 
     public String[] getScaleNames() {
-        String[] names = new String[controller.getScales().length];
+        int scalesCount = scales.length;
+
+        String[] names = new String[scalesCount];
 
         int i = 0;
-        for (Scale scale : controller.getScales()) {
+        for (Scale scale : scales) {
             names[i] = scale.getName();
 
             i++;
@@ -26,7 +28,7 @@ public class NewModel {
     public double convert(String from, String to, double temperature) {
         double conversionResult = 0;
 
-        for (Scale scale : controller.getScales()) {
+        for (Scale scale : scales) {
             if (scale.getName().equals(from)) {
                 conversionResult = scale.convertToCelsius(temperature);
 
@@ -34,7 +36,7 @@ public class NewModel {
             }
         }
 
-        for (Scale scale : controller.getScales()) {
+        for (Scale scale : scales) {
             if (scale.getName().equals(to)) {
                 conversionResult = scale.convertFromCelsius(conversionResult);
 

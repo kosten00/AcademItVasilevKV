@@ -61,10 +61,6 @@ public class Launcher {
 
         Scale[] scales = new Scale[]{celsius, fahrenheit, kelvin};
 
-        NewController controller = new NewController(scales);
-
-        NewModel model = new NewModel(controller);
-
-        new NewView(model);
+        new NewController(scales);
     }
 }
