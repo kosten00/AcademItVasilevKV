@@ -3,10 +3,10 @@ package ru.academits.vasilev.temperature;
 
 import Scales.Scale;
 
-public class NewModel {
+public class Model {
     private Scale[] scales;
 
-    public NewModel(Scale[] scales) {
+    public Model(Scale[] scales) {
         this.scales = scales;
     }
 

@@ -3,11 +3,9 @@ package ru.academits.vasilev.temperature;
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
-public class NewView {
-    private NewModel model;
+public class View {
+    private Model model;
 
     private final static int WIDTH = 450;
     private final static int HEIGHT = 250;
@@ -23,7 +21,7 @@ public class NewView {
     private String to = "";
     private String temperature = "";
 
-    public NewView(NewModel model) {
+    public View(Model model) {
         this.model = model;
         SwingUtilities.invokeLater(new Runnable() {
             @Override
@@ -34,17 +32,17 @@ public class NewView {
         });
     }
 
-    public String getFrom() {
-        return from;
-    }
+    //public String getFrom() {
+    //return from;
+    // }
 
-    public String getTo() {
-        return to;
-    }
+    // public String getTo() {
+    // return to;
+    // }
 
-    public double getTemperature() {
-        return Double.parseDouble(temperature.replaceAll(",", "."));
-    }
+    //public double getTemperature() {
+    //    return Double.parseDouble(temperature.replaceAll(",", "."));
+    // }
 
     private void initMainFrame() {
         JFrame mainFrame = new JFrame(NAME);
@@ -115,7 +113,7 @@ public class NewView {
         mainFrame.add(convertButton, c);
     }
 
-    public void initListeners() {
+    private void initListeners() {
         convertButton.addActionListener(e -> {
             from = (String) fromScales.getSelectedItem();
             to = (String) toScales.getSelectedItem();

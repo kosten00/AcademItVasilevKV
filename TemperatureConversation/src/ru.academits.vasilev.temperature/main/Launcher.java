@@ -18,6 +18,8 @@ import ru.academits.vasilev.temperature.*;
 8. Модель по смыслу должна выдавать число, а не строку.
 При этом не стоит округлять результат.
 Результат лучше чтобы округлялся во view
+
+Вроде все поправил. Надо разообраться с элементами ЮИ, немного криво выглядит (айпадх/у??). Надо перенести округление в модель.
  */
 
 public class Launcher {
@@ -61,6 +63,6 @@ public class Launcher {
 
         Scale[] scales = new Scale[]{celsius, fahrenheit, kelvin};
 
-        new NewController(scales);
+        new Controller(scales);
     }
 }
