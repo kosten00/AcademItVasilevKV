@@ -1,4 +1,4 @@
-package ru.academits.vasilev.temperature;
+package OldVersion;
 
 public class Model {
     private double inputTemperature;

@@ -1,4 +1,4 @@
-package ru.academits.vasilev.temperature;
+package OldVersion;
 
 import javax.swing.*;
 import javax.swing.border.Border;

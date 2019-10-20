@@ -25,7 +25,13 @@ public class NewView {
 
     public NewView(NewModel model) {
         this.model = model;
-        SwingUtilities.invokeLater(this::initMainFrame);
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                initMainFrame();
+                initListeners();
+            }
+        });
     }
 
     public String getFrom() {
@@ -107,8 +113,6 @@ public class NewView {
         c.gridx = 1;
         c.gridy = 4;
         mainFrame.add(convertButton, c);
-
-        initListeners();
     }
 
     public void initListeners() {
