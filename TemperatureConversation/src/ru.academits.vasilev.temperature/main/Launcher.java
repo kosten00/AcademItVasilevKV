@@ -1,10 +1,7 @@
 package ru.academits.vasilev.temperature.main;
 
-import ru.academits.vasilev.temperature.Controller;
-import ru.academits.vasilev.temperature.Model;
-import ru.academits.vasilev.temperature.View;
-
-import javax.swing.*;
+import Scales.Scale;
+import ru.academits.vasilev.temperature.*;
 
 /*
 1. Литералы такого вида лучше не использовать 9.
@@ -25,6 +22,49 @@ import javax.swing.*;
 
 public class Launcher {
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new Controller(new View(), new Model()));
+        Scale celsius = new Scale("Celsius") {
+            @Override
+            public double convertFromCelsius(double temperature) {
+                return temperature;
+            }
+
+            @Override
+            public double convertToCelsius(double temperature) {
+                return temperature;
+            }
+        };
+
+        Scale fahrenheit = new Scale("Fahrenheit") {
+
+            @Override
+            public double convertFromCelsius(double temperature) {
+                return Math.round(((temperature * (9. / 5)) + 32) * 100d) / 100d;
+            }
+
+            @Override
+            public double convertToCelsius(double temperature) {
+                return Math.round(((temperature - 32) * (5. / 9)) * 100d) / 100d;
+            }
+        };
+
+        Scale kelvin = new Scale("Kelvin") {
+            @Override
+            public double convertFromCelsius(double temperature) {
+                return Math.round(((temperature + 273.15)) * 100d) / 100d;
+            }
+
+            @Override
+            public double convertToCelsius(double temperature) {
+                return Math.round((temperature - 273.15) * 100d) / 100d;
+            }
+        };
+
+        Scale[] scales = new Scale[]{celsius, fahrenheit, kelvin};
+
+        NewController controller = new NewController(scales);
+
+        NewModel model = new NewModel(controller);
+
+        new NewView(model);
     }
 }
