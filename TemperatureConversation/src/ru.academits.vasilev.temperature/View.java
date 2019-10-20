@@ -23,12 +23,9 @@ public class View {
 
     public View(Model model) {
         this.model = model;
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                initMainFrame();
-                initListeners();
-            }
+        SwingUtilities.invokeLater(() -> {
+            initMainFrame();
+            initListeners();
         });
     }
 
@@ -40,9 +37,9 @@ public class View {
     // return to;
     // }
 
-    //public double getTemperature() {
-    //    return Double.parseDouble(temperature.replaceAll(",", "."));
-    // }
+    public String getTemperature() {
+       return temperature.replaceAll(",", ".");
+    }
 
     private void initMainFrame() {
         JFrame mainFrame = new JFrame(NAME);
@@ -123,7 +120,7 @@ public class View {
                 return;
             }
 
-            double temperatureToDouble = Double.parseDouble(temperature);
+            double temperatureToDouble = Double.parseDouble(getTemperature());
 
             String result = Double.toString(model.convert(from, to, temperatureToDouble));
 
