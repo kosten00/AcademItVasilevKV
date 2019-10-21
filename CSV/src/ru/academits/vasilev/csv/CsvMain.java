@@ -81,10 +81,50 @@ public class CsvMain {
             writer.print("<!DOCTYPE html><head><meta charset=\"UTF-8\"><body><table><tr><td>");
             //с боди начинается само содержимое файла
 
+            int commaCounter = 0;
+            int quotesCounter = 0;
+            int lineCounter = 0;
+
             int ch;
             while ((ch = reader.read()) != -1) { // посимвольно читает из файла
+                if (Character.toString(ch).equals(",")) {
+                    commaCounter++;
+                }
 
+                if (Character.toString(ch).equals("\"")) {
+                    quotesCounter++;
+                }
 
+                if (Character.toString(ch).equals("\n")) {
+                    lineCounter++;
+                }
+                //replacing comma with html cell separator
+                if (commaCounter == 1 && quotesCounter == 0) {
+                    writer.print("</td><td>");
+                    commaCounter = 0;
+                    continue;
+                }
+                //removing line separator
+                if (quotesCounter == 1 && lineCounter == 1) {
+                    writer.print("");
+                    lineCounter = 0;
+                    continue;
+                }
+
+                if (lineCounter == 1) {
+                    writer.print("</tr><tr>");
+                    lineCounter = 0;
+                    continue;
+                }
+
+//                if (quotesCounter == 1) {
+//                    writer.print("");
+//                    continue;
+//                }
+
+                if (quotesCounter == 2) {
+                    quotesCounter = 0;
+                }
 
                 writer.print((char) ch); //печатет в файл
             }
