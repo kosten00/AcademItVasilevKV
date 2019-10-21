@@ -29,16 +29,8 @@ public class View {
         });
     }
 
-    //public String getFrom() {
-    //return from;
-    // }
-
-    // public String getTo() {
-    // return to;
-    // }
-
-    public String getTemperature() {
-       return temperature.replaceAll(",", ".");
+    private String getTemperature() {
+        return temperature.replaceAll(",", ".");
     }
 
     private void initMainFrame() {
@@ -50,14 +42,12 @@ public class View {
         mainFrame.setVisible(true);
 
         mainFrame.setLayout(new GridBagLayout());
-
-        Insets insets = new Insets(7, 7, 7, 7);
-
         GridBagConstraints c = new GridBagConstraints();
 
         c.fill = GridBagConstraints.BOTH;
         c.ipadx = 10;
-        c.insets = insets;
+        c.insets = new Insets(7, 7, 7, 7);
+        ;
 
         JLabel label1 = new JLabel("Select input scale:");
         c.gridx = 0;
@@ -122,9 +112,9 @@ public class View {
 
             double temperatureToDouble = Double.parseDouble(getTemperature());
 
-            String result = Double.toString(model.convert(from, to, temperatureToDouble));
+            double convertedTemperature = model.convert(from, to, temperatureToDouble);
 
-            outputTemperatureField.setText(result);
+            outputTemperatureField.setText(Double.toString(convertedTemperature));
         });
     }
 
@@ -149,8 +139,8 @@ public class View {
 
         int minusSignIndex = temperature.indexOf("-");
 
-        if (temperature.lastIndexOf("-") != minusSignIndex) {
-            outputTemperatureField.setText("Only one \"-\" allowed");
+        if (temperature.lastIndexOf("-") > 0) {
+            outputTemperatureField.setText("Incorrect use for \"-\"");
             return true;
         }
 
@@ -160,7 +150,7 @@ public class View {
             }
 
             if (!Character.isDigit(temperature.charAt(i))) {
-                outputTemperatureField.setText("Only digits allowed");
+                outputTemperatureField.setText("Incorrect input");
                 return true;
             }
         }
