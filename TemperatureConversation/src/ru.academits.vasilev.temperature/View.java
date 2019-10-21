@@ -145,7 +145,7 @@ public class View {
         }
 
         for (int i = 0; i < temperature.length(); i++) {
-            if (i == commaSignIndex || i == minusSignIndex || i == dotSignIndex) {
+            if ((i == commaSignIndex || i == minusSignIndex || i == dotSignIndex) && (i != (temperature.length() - 1))) {
                 continue;
             }
 

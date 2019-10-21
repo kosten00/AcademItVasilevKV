@@ -1,8 +1,6 @@
 package ru.academits.vasilev.temperature;
 
 
-import Scales.Scale;
-
 public class Model {
     private Scale[] scales;
 

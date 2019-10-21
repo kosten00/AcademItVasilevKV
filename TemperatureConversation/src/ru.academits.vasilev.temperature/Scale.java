@@ -1,4 +1,4 @@
-package Scales;
+package ru.academits.vasilev.temperature;
 
 
 public abstract class Scale {

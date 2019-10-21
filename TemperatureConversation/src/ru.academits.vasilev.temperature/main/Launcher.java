@@ -1,6 +1,6 @@
 package ru.academits.vasilev.temperature.main;
 
-import Scales.Scale;
+import ru.academits.vasilev.temperature.Scale;
 import ru.academits.vasilev.temperature.*;
 
 public class Launcher {
