@@ -2,17 +2,6 @@ package ru.academits.vasilev.tree.main;
 
 import ru.academits.vasilev.tree.BinaryTree;
 
-/**
- * Реализовать бинарное дерево поиска
- * Нужны операции:
- * Вставка
- * Поиск узла
- * Удаление первого вхождения узла по значению
- * Получение числа элементов
- * Обходы в ширину и глубину
- * Обход в глубину двумя вариантами – с рекурсией и без
- */
-
 public class TreeMain {
     public static void main(String[] args) {
         BinaryTree<Integer> tree = new BinaryTree<>();
@@ -25,20 +14,12 @@ public class TreeMain {
         tree.insert(13);
         tree.insert(7);
 
-//        tree.breadthTraverse();
-//
-//        System.out.println("root = " + tree.getRoot());
-//
-//        System.out.println(tree.searchInDepth(3));
-
-        tree.visitInDepthRecursive(tree.getRoot());
+        System.out.println(tree.searchInDepth(1));
 
         System.out.println();
 
+        System.out.println(tree.remove(7));
+
         System.out.println("nodes count = " + tree.getNodeCountBreadthTraverse());
-
-        System.out.println(tree.remove(12));
-
-        tree.visitInDepthRecursive(tree.getRoot());
     }
 }

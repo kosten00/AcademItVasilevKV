@@ -1,6 +1,5 @@
 package ru.academits.vasilev.tree;
 
-
 import java.util.LinkedList;
 import java.util.Stack;
 
@@ -94,8 +93,6 @@ public class BinaryTree<T extends Comparable<? super T>> {
     public void visitInDepthRecursive(TreeNode<T> root) {
         checkRoot();
 
-        System.out.println(root);
-
         if (root.left != null) {
             visitInDepthRecursive(root.left);
         }
@@ -116,7 +113,7 @@ public class BinaryTree<T extends Comparable<? super T>> {
         while (current.data.compareTo(data) != 0) {
             parent = current;
 
-            if (current.data.compareTo(data) < 0) {
+            if (current.data.compareTo(data) > 0) {
                 isLeftChild = true;
                 current = current.left;
             } else {
