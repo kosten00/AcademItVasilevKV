@@ -136,7 +136,13 @@ public class MyArrayList<T> implements List<T> {
 
     @Override
     public boolean remove(Object object) {
-        remove(indexOf(object));
+        int objectIndex = indexOf(object);
+
+        if (objectIndex == -1) {
+            return false;
+        }
+        remove(objectIndex);
+
         return true;
     }
 
