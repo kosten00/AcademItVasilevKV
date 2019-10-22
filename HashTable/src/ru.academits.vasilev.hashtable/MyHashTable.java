@@ -2,14 +2,6 @@ package ru.academits.vasilev.hashtable;
 
 import java.util.*;
 
-/*
-Также нужно заглушить warning в первой ветке toArray(T1[]) // заглушил весь метод
-4. warning в fillTable // непонятно
-10. addAll - в текущем варианте будет работать, но если рассматривать в общем виде, то функция выдает неверный boolean
-11. removeAll должен удалять все вхождения.
-И вместо removed можно использовать булеву переменную
- */
-
 public class MyHashTable<T> implements Collection<T> {
     private LinkedList<T>[] table;
     private int elementsCount;
@@ -26,9 +18,7 @@ public class MyHashTable<T> implements Collection<T> {
     }
 
     private LinkedList<T>[] fillTable(LinkedList<T>[] tableArray) {
-        for (int i = 0; i < tableArray.length; i++) {
-            tableArray[i] = new LinkedList<>();
-        }
+        Arrays.fill(tableArray, new LinkedList<T>());
 
         return tableArray;
     }
@@ -42,7 +32,7 @@ public class MyHashTable<T> implements Collection<T> {
     @SuppressWarnings("unchecked")
     public MyHashTable(int tablesCount) {
         if (tablesCount <= 0) {
-            throw new IllegalArgumentException("Can't create table with size = 0!");
+            throw new IllegalArgumentException("Can't create table with size 0 or less!");
         }
 
         this.tablesCount = tablesCount;
@@ -71,8 +61,8 @@ public class MyHashTable<T> implements Collection<T> {
     }
 
     private class MyIterator implements Iterator<T> {
-        private int currentIndexThisTable = -1;
         private int currentElementIndex = -1;
+        private int currentIndexInTable = -1;
         private int currentTableIndex = 0;
         private int expectedModCount = modCount;
 
@@ -86,7 +76,7 @@ public class MyHashTable<T> implements Collection<T> {
         }
 
         private boolean isLastInTable() {
-            return currentIndexThisTable + 1 == table[currentTableIndex].size();
+            return currentIndexInTable + 1 == table[currentTableIndex].size();
         }
 
         @Override
@@ -101,16 +91,15 @@ public class MyHashTable<T> implements Collection<T> {
 
             if (isLastInTable() && hasNextTable()) {
                 currentTableIndex++;
-                currentIndexThisTable = -1;
+                currentIndexInTable = -1;
 
                 return next();
             }
 
-            currentIndexThisTable++;
-
+            currentIndexInTable++;
             currentElementIndex++;
 
-            return table[currentTableIndex].get(currentIndexThisTable);
+            return table[currentTableIndex].get(currentIndexInTable);
         }
     }
 
@@ -189,26 +178,36 @@ public class MyHashTable<T> implements Collection<T> {
 
     @Override
     public boolean addAll(Collection<? extends T> collection) {
-        boolean added = false;
+        if (collection.size() == 0) {
+            return false;
+        }
+        int addedCounter = 0;
 
         for (Object object : collection) {
-            added = add(object);
+            if (add(object)) {
+                addedCounter++;
+            }
         }
 
-        return added;
+        return addedCounter == collection.size();
     }
 
     @Override
     public boolean removeAll(Collection<?> collection) {
-        int removed = 0;
+        boolean removed = false;
+        int listSizeAfterRemove = 0;
 
-        for (Object object : collection) {
-            if (remove(object)) {
-                removed++;
+        for (LinkedList<T> list : table) {
+            if (list.removeAll(collection)) {
+                removed = true;
             }
-        }
 
-        return removed > 0;
+            listSizeAfterRemove += list.size();
+        }
+        elementsCount = listSizeAfterRemove;
+        modCount++;
+
+        return removed;
     }
 
     @Override
