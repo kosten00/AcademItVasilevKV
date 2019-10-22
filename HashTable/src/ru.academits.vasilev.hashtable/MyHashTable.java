@@ -2,8 +2,23 @@ package ru.academits.vasilev.hashtable;
 
 import java.util.*;
 
+/*
+Также нужно заглушить warning в первой ветке toArray(T1[]) // заглушил весь метод
+4. warning в fillTable // непонятно
+5. Поле table - нужно, чтобы список был generic'ом // добавился ворнинг
+9. containsAll - можно выдать результат раньше
+10. addAll - в текущем варианте будет работать, но если рассматривать в общем виде, то функция выдает неверный boolean
+11. removeAll должен удалять все вхождения.
+И вместо removed можно использовать булеву переменную
+12. retainAll - есть ошибки.
+И вместо retained можно использовать булеву переменную
+13. clear - есть ошибка
+14. hasNext лучше сделать максимально простым, и чтобы он не менял поля.
+Логика по переходу к следующему элементу должна быть в next
+ */
+
 public class MyHashTable<T> implements Collection<T> {
-    private LinkedList[] table;
+    private LinkedList<T>[] table;
     private int elementsCount;
     private int tablesCount;
     private int modCount;
@@ -11,35 +26,38 @@ public class MyHashTable<T> implements Collection<T> {
 
     private int getIndex(Object object, int arrayLength) {
         if (object == null) {
-            return arrayLength - 1;
+            return 0;
         }
 
-        return Math.abs(object.hashCode() % (arrayLength - 1));
+        return (Math.abs(object.hashCode() % (arrayLength))) + 1;
     }
 
     private LinkedList<T>[] fillTable(LinkedList<T>[] tableArray) {
+        //Arrays.fill(tableArray, new LinkedList<>());
+
         for (int i = 0; i < tableArray.length; i++) {
             tableArray[i] = new LinkedList<>();
         }
 
+        System.out.println(Arrays.toString(tableArray));
+
         return tableArray;
     }
 
+    @SuppressWarnings("unchecked")
     public MyHashTable() {
         tablesCount = DEFAULT_TABLE_SIZE;
         table = fillTable(new LinkedList[tablesCount]);
-
     }
 
+    @SuppressWarnings("unchecked")
     public MyHashTable(int tablesCount) {
+        if (tablesCount <= 0) {
+            throw new IllegalArgumentException("Can't create table with size = 0!");
+        }
+
         this.tablesCount = tablesCount;
         table = fillTable(new LinkedList[this.tablesCount]);
-    }
-
-    public void getElementsPerTable() {
-        for (LinkedList list : table) {
-            System.out.println(list.size());
-        }
     }
 
     @Override
@@ -70,18 +88,7 @@ public class MyHashTable<T> implements Collection<T> {
 
         @Override
         public boolean hasNext() {
-            if (!isLastInTable()) {
-                return true;
-            }
-
-            if (hasNextTable()) {
-                currentTableIndex++;
-                currentElementIndex = -1;
-
-                return hasNext();
-            }
-
-            return false;
+            return currentElementIndex + 1 < elementsCount;
         }
 
         private boolean hasNextTable() {
@@ -92,6 +99,10 @@ public class MyHashTable<T> implements Collection<T> {
             return currentElementIndex + 1 == table[currentTableIndex].size();
         }
 
+        //14. hasNext лучше сделать максимально простым, и чтобы он не менял поля.
+        //Логика по переходу к следующему элементу должна быть в next
+
+        //TODO сейчас печатает все элементы, и падает на последнем
         @Override
         public T next() {
             if (modCount != expectedModCount) {
@@ -101,9 +112,17 @@ public class MyHashTable<T> implements Collection<T> {
             if (!hasNext()) {
                 throw new NoSuchElementException("Index is out of the hashtable size");
             }
+
+            if (isLastInTable() && hasNextTable()) {
+                currentTableIndex++;
+                currentElementIndex = -1;
+
+                return next();
+            }
+
             currentElementIndex++;
 
-            return (T) table[currentTableIndex].get(currentElementIndex);
+            return table[currentTableIndex].get(currentElementIndex);
         }
     }
 
@@ -120,6 +139,7 @@ public class MyHashTable<T> implements Collection<T> {
         return array;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public <T1> T1[] toArray(T1[] array) {
         if (elementsCount > array.length) {
@@ -128,7 +148,9 @@ public class MyHashTable<T> implements Collection<T> {
 
         int i = 0;
         for (Object element : this) {
-            array[i++] = (T1) element;
+            array[i] = (T1) element;
+
+            i++;
         }
 
         if (elementsCount < array.length) {
@@ -141,7 +163,7 @@ public class MyHashTable<T> implements Collection<T> {
     @Override
     public boolean add(Object object) {
         int index = getIndex(object, table.length);
-        table[index].add(object);
+        table[index].add((T) object);
 
         modCount++;
         elementsCount++;
