@@ -85,6 +85,8 @@ public class CsvMain {
             int quotesCounter = 0;
             int lineCounter = 0;
 
+            //Как вариант вложенные ИФы сделать, чтоб понятней было
+
             int ch;
             while ((ch = reader.read()) != -1) { // посимвольно читает из файла
                 if (Character.toString(ch).equals(",")) {

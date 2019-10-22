@@ -5,16 +5,9 @@ import java.util.*;
 /*
 Также нужно заглушить warning в первой ветке toArray(T1[]) // заглушил весь метод
 4. warning в fillTable // непонятно
-5. Поле table - нужно, чтобы список был generic'ом // добавился ворнинг
-9. containsAll - можно выдать результат раньше
 10. addAll - в текущем варианте будет работать, но если рассматривать в общем виде, то функция выдает неверный boolean
 11. removeAll должен удалять все вхождения.
 И вместо removed можно использовать булеву переменную
-12. retainAll - есть ошибки.
-И вместо retained можно использовать булеву переменную
-13. clear - есть ошибка
-14. hasNext лучше сделать максимально простым, и чтобы он не менял поля.
-Логика по переходу к следующему элементу должна быть в next
  */
 
 public class MyHashTable<T> implements Collection<T> {
@@ -29,17 +22,13 @@ public class MyHashTable<T> implements Collection<T> {
             return 0;
         }
 
-        return (Math.abs(object.hashCode() % (arrayLength))) + 1;
+        return (Math.abs(object.hashCode() % (arrayLength - 1))) + 1;
     }
 
     private LinkedList<T>[] fillTable(LinkedList<T>[] tableArray) {
-        //Arrays.fill(tableArray, new LinkedList<>());
-
         for (int i = 0; i < tableArray.length; i++) {
             tableArray[i] = new LinkedList<>();
         }
-
-        System.out.println(Arrays.toString(tableArray));
 
         return tableArray;
     }
@@ -82,6 +71,7 @@ public class MyHashTable<T> implements Collection<T> {
     }
 
     private class MyIterator implements Iterator<T> {
+        private int currentIndexThisTable = -1;
         private int currentElementIndex = -1;
         private int currentTableIndex = 0;
         private int expectedModCount = modCount;
@@ -96,13 +86,9 @@ public class MyHashTable<T> implements Collection<T> {
         }
 
         private boolean isLastInTable() {
-            return currentElementIndex + 1 == table[currentTableIndex].size();
+            return currentIndexThisTable + 1 == table[currentTableIndex].size();
         }
 
-        //14. hasNext лучше сделать максимально простым, и чтобы он не менял поля.
-        //Логика по переходу к следующему элементу должна быть в next
-
-        //TODO сейчас печатает все элементы, и падает на последнем
         @Override
         public T next() {
             if (modCount != expectedModCount) {
@@ -115,14 +101,16 @@ public class MyHashTable<T> implements Collection<T> {
 
             if (isLastInTable() && hasNextTable()) {
                 currentTableIndex++;
-                currentElementIndex = -1;
+                currentIndexThisTable = -1;
 
                 return next();
             }
 
+            currentIndexThisTable++;
+
             currentElementIndex++;
 
-            return table[currentTableIndex].get(currentElementIndex);
+            return table[currentTableIndex].get(currentIndexThisTable);
         }
     }
 
@@ -185,6 +173,9 @@ public class MyHashTable<T> implements Collection<T> {
 
     @Override
     public boolean containsAll(Collection<?> collection) {
+        if (collection.size() == 0) {
+            return false;
+        }
         int count = collection.size();
 
         for (Object object : collection) {
@@ -193,7 +184,7 @@ public class MyHashTable<T> implements Collection<T> {
             }
         }
 
-        return (count == 0) && (collection.size() != 0);
+        return count == 0;
     }
 
     @Override
@@ -222,15 +213,20 @@ public class MyHashTable<T> implements Collection<T> {
 
     @Override
     public boolean retainAll(Collection<?> collection) {
-        int retained = 0;
+        boolean retained = false;
+        int listSizeAfterRetain = 0;
 
         for (LinkedList<T> list : table) {
             if (list.retainAll(collection)) {
-                retained++;
+                retained = true;
             }
-        }
 
-        return retained > 0;
+            listSizeAfterRetain += list.size();
+        }
+        elementsCount = listSizeAfterRetain;
+        modCount++;
+
+        return retained;
     }
 
     @Override
@@ -239,6 +235,7 @@ public class MyHashTable<T> implements Collection<T> {
             list.clear();
         }
 
+        modCount++;
         elementsCount = 0;
     }
 }
