@@ -7,59 +7,60 @@ public class CsvMain {
         try (PrintWriter writer = new PrintWriter(outputHtmlFile);
              FileReader reader = new FileReader(inputCsvFile)) {
 
-            boolean commaLastSign = false;
-            boolean newLineLastSign = false;
-            boolean quotesLastSign = false;
-            boolean quotesOpened = false;
-
             writer.print("<!DOCTYPE html><head><meta charset=\"UTF-8\"><body><table><tr><td>");
 
             int c;
 
+            boolean commaLastCharacter = false;
+            boolean lineSeparatorLastCharacter = false;
+            boolean quotesInOpenQuotes = false;
+            boolean quotesOpened = false;
+
             while ((c = reader.read()) != -1) {
                 switch (c) {
                     case (34): //QUOTES
-                        if ((commaLastSign || newLineLastSign) && !quotesOpened) {
+                        if ((commaLastCharacter || lineSeparatorLastCharacter) && !quotesOpened) {
                             quotesOpened = true;
                             break;
                         }
 
-                        if (!quotesLastSign) {
-                            quotesLastSign = true;
+                        if (!quotesInOpenQuotes) {
+                            quotesInOpenQuotes = true;
                             break;
                         }
                         writer.print((char) c);
 
-                        quotesLastSign = false;
+                        quotesInOpenQuotes = false;
 
                         break;
                     case (44)://COMMA
-                        if (quotesOpened && !quotesLastSign) {
+                        if (!quotesInOpenQuotes & quotesOpened) {
                             writer.print((char) c);
 
                             break;
                         }
                         writer.print("</td><td>");
 
-                        if (quotesLastSign) {
+                        if (quotesInOpenQuotes) {
                             quotesOpened = false;
-                            quotesLastSign = false;
+                            quotesInOpenQuotes = false;
                         }
-                        commaLastSign = true;
+                        commaLastCharacter = true;
 
                         break;
                     case (10): //NEW-LINE
-                        if (!quotesLastSign & quotesOpened) {
+                        if (!quotesInOpenQuotes & quotesOpened) {
                             writer.print("</br>");
 
                             break;
                         }
                         writer.print("</td></tr><tr><td>");
-                        if (quotesLastSign) {
+
+                        if (quotesInOpenQuotes) {
                             quotesOpened = false;
-                            quotesLastSign = false;
+                            quotesInOpenQuotes = false;
                         }
-                        newLineLastSign = true;
+                        lineSeparatorLastCharacter = true;
 
                         break;
                     case (60):
@@ -78,9 +79,9 @@ public class CsvMain {
 
                         break;
                     default:
-                        commaLastSign = false;
-                        newLineLastSign = false;
-                        quotesLastSign = false;
+                        commaLastCharacter = false;
+                        lineSeparatorLastCharacter = false;
+                        quotesInOpenQuotes = false;
 
                         writer.print((char) c);
                 }
