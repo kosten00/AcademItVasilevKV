@@ -13,7 +13,7 @@ public class CsvMain {
 
             boolean commaLastCharacter = false;
             boolean lineSeparatorLastCharacter = false;
-            boolean quotesInOpenQuotes = false;
+            boolean quotesInOpenedQuotes = false;
             boolean quotesOpened = false;
 
             while ((c = reader.read()) != -1) {
@@ -24,41 +24,41 @@ public class CsvMain {
                             break;
                         }
 
-                        if (!quotesInOpenQuotes) {
-                            quotesInOpenQuotes = true;
+                        if (!quotesInOpenedQuotes) {
+                            quotesInOpenedQuotes = true;
                             break;
                         }
                         writer.print((char) c);
 
-                        quotesInOpenQuotes = false;
+                        quotesInOpenedQuotes = false;
 
                         break;
                     case (44)://COMMA
-                        if (!quotesInOpenQuotes & quotesOpened) {
+                        if (!quotesInOpenedQuotes & quotesOpened) {
                             writer.print((char) c);
 
                             break;
                         }
                         writer.print("</td><td>");
 
-                        if (quotesInOpenQuotes) {
+                        if (quotesInOpenedQuotes) {
                             quotesOpened = false;
-                            quotesInOpenQuotes = false;
+                            quotesInOpenedQuotes = false;
                         }
                         commaLastCharacter = true;
 
                         break;
                     case (10): //NEW-LINE
-                        if (!quotesInOpenQuotes & quotesOpened) {
+                        if (!quotesInOpenedQuotes & quotesOpened) {
                             writer.print("</br>");
 
                             break;
                         }
                         writer.print("</td></tr><tr><td>");
 
-                        if (quotesInOpenQuotes) {
+                        if (quotesInOpenedQuotes) {
                             quotesOpened = false;
-                            quotesInOpenQuotes = false;
+                            quotesInOpenedQuotes = false;
                         }
                         lineSeparatorLastCharacter = true;
 
@@ -81,7 +81,7 @@ public class CsvMain {
                     default:
                         commaLastCharacter = false;
                         lineSeparatorLastCharacter = false;
-                        quotesInOpenQuotes = false;
+                        quotesInOpenedQuotes = false;
 
                         writer.print((char) c);
                 }
