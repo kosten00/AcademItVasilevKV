@@ -15,13 +15,5 @@ public class ArrayListMain {
         list1.add("three");
 
         System.out.println(list2.retainAll(list1));
-
-        ArrayList<String> alist = new ArrayList<>();
-        alist.add("one");
-        alist.add("two");
-
-        ArrayList<String> alist2 = new ArrayList<>();
-
-        System.out.println(alist.addAll(alist2));
     }
 }
