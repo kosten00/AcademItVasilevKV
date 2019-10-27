@@ -2,12 +2,21 @@ package ru.academits.vasilev.csv.Main;
 
 import java.io.*;
 
-public class CsvMain {
-    private static void convertToCsv(String inputCsvFile, String outputHtmlFile) throws IOException {
+class CSV {
+    private static final char QUOTES = 34;
+    private static final char COMMA = 44;
+    private static final char NEXT_LINE = 10;
+    private static final char CARRIAGE_RETURN = 13;
+    private static final char LESS_SIGN = 60;
+    private static final char GREATER_SIGN = 62;
+    private static final char AMP_SIGN = 38;
+    private static final char EMPTY_LINE = 0;
+
+    static void convertToCsv(String inputCsvFile, String outputHtmlFile) throws IOException {
         try (PrintWriter writer = new PrintWriter(outputHtmlFile);
              FileReader reader = new FileReader(inputCsvFile)) {
 
-            writer.print("<!DOCTYPE html><head><meta charset=\"UTF-8\"><body><table><tr><td>");
+            writer.print("<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><body><table><tr><td>");
 
             int c;
 
@@ -17,8 +26,8 @@ public class CsvMain {
             boolean quotesOpened = false;
 
             while ((c = reader.read()) != -1) {
-                switch (c) {
-                    case (34): //QUOTES
+                switch ((char) c) {
+                    case QUOTES:
                         if ((commaLastCharacter || lineSeparatorLastCharacter) && !quotesOpened) {
                             quotesOpened = true;
                             break;
@@ -33,7 +42,7 @@ public class CsvMain {
                         quotesInOpenedQuotesLastCharacter = false;
 
                         break;
-                    case (44)://COMMA
+                    case COMMA:
                         if (!quotesInOpenedQuotesLastCharacter & quotesOpened) {
                             writer.print((char) c);
 
@@ -48,7 +57,7 @@ public class CsvMain {
                         commaLastCharacter = true;
 
                         break;
-                    case (10): //NEW-LINE
+                    case NEXT_LINE:
                         if (!quotesInOpenedQuotesLastCharacter & quotesOpened) {
                             writer.print("</br>");
 
@@ -63,19 +72,20 @@ public class CsvMain {
                         lineSeparatorLastCharacter = true;
 
                         break;
-                    case (60):
+                    case LESS_SIGN:
                         writer.print("&lt;");
 
                         break;
-                    case (62):
+                    case GREATER_SIGN:
                         writer.print("&gt;");
 
                         break;
-                    case (38):
+                    case AMP_SIGN:
                         writer.print("&amp;");
 
                         break;
-                    case (13):
+                    case CARRIAGE_RETURN:
+                    case EMPTY_LINE:
 
                         break;
                     default:
@@ -86,16 +96,23 @@ public class CsvMain {
                         writer.print((char) c);
                 }
             }
-
-            writer.print("</td></tr></table></body></head>");
+            writer.print("</td></tr></table></head></body></html>");
         } catch (FileNotFoundException e) {
             System.out.println("File was not found!");
         }
     }
+}
 
-    public static void main(String[] args) throws IOException {
-        String inputCsvFile = "FileForCsvTask.csv";
-        String outputHtmlFile = "FileForCsvTask.html";
-        convertToCsv(inputCsvFile, outputHtmlFile);
+public class CsvMain {
+    public static void main(String[] args) {
+        if (args.length == 2) {
+            try {
+                CSV.convertToCsv(args[0], args[1]);
+            } catch (IOException ignored) {
+                System.out.println("Read/write error");
+            }
+        } else {
+            System.out.println("Input and output file's names must be arguments of the program.");
+        }
     }
 }
