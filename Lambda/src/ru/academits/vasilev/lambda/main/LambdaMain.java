@@ -22,8 +22,9 @@ public class LambdaMain {
         personList.add(new Person("Глаша", 19));
 
         //Creating list of unique names from personList.
-        Stream<String> stream = personList.stream().map(Person::getName).distinct();
-        System.out.println("Names: " + stream.collect(Collectors.toList()));
+        List<String> list = personList.stream().map(Person::getName).distinct().collect(Collectors.toList());
+        System.out.println("Names: " + list.toString().replace("[", "").replace("]", "") + ".");
+        System.out.println();
 
         //Creating list of persons younger than 18, count their average age:
         Stream<Person> stream1 = personList.stream().filter(p -> p.getAge() < 18);
@@ -36,7 +37,9 @@ public class LambdaMain {
 
         System.out.println();
         //Get persons aged 20-45 y.o., print to the console their names in decreasing order:
-        personList.stream().filter(person -> person.getAge() <= 45).filter(person -> person.getAge() >= 20).sorted((p1, p2) -> p2.getAge() - p1.getAge()).forEach(System.out::println);
+        personList.stream().filter(person -> person.getAge() <= 45 && person.getAge() >= 20).
+                sorted((p1, p2) -> p2.getAge() - p1.getAge()).
+                forEach((p) -> System.out.println(p.getName()));
 
         //Create infinite stream of square roots of numbers:
         System.out.println("Input number: ");
