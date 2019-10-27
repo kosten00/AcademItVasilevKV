@@ -60,7 +60,6 @@ public class MyHashTable<T> implements Collection<T> {
         return new MyIterator();
     }
 
-    //5. Итератор работает неэффективно, т.к. в связном списке медленный доступ по индексу
     private class MyIterator implements Iterator<T> {
         private int currentElementIndex = -1;
         private int currentIndexInTable = -1;
