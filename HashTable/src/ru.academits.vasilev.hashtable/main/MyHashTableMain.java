@@ -3,6 +3,7 @@ package ru.academits.vasilev.hashtable.main;
 import ru.academits.vasilev.hashtable.MyHashTable;
 
 import java.util.Arrays;
+import java.util.HashMap;
 
 public class MyHashTableMain {
 
@@ -18,6 +19,8 @@ public class MyHashTableMain {
         mht1.add(null);
         mht1.add("a");
         mht1.add("b");
+
+        HashMap coreHt = new HashMap();
 
         String[] arr = new String[]{"a", "b", "c", "d", "e", "f", "g"};
 

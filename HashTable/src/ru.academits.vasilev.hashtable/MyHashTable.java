@@ -14,7 +14,7 @@ public class MyHashTable<T> implements Collection<T> {
             return 0;
         }
 
-        return (Math.abs(object.hashCode() % (arrayLength - 1))) + 1;
+        return Math.abs(object.hashCode() % (arrayLength));
     }
 
     private LinkedList<T>[] fillTable(LinkedList<T>[] tableArray) {
@@ -60,6 +60,7 @@ public class MyHashTable<T> implements Collection<T> {
         return new MyIterator();
     }
 
+    //5. Итератор работает неэффективно, т.к. в связном списке медленный доступ по индексу
     private class MyIterator implements Iterator<T> {
         private int currentElementIndex = -1;
         private int currentIndexInTable = -1;
@@ -99,7 +100,10 @@ public class MyHashTable<T> implements Collection<T> {
             currentIndexInTable++;
             currentElementIndex++;
 
-            return table[currentTableIndex].get(currentIndexInTable);
+            T swapElement = table[currentTableIndex].pollFirst();
+            table[currentTableIndex].addLast(swapElement);
+
+            return swapElement;
         }
     }
 
@@ -163,33 +167,42 @@ public class MyHashTable<T> implements Collection<T> {
     @Override
     public boolean containsAll(Collection<?> collection) {
         if (collection.size() == 0) {
-            return false;
+            return true;
         }
-        int count = collection.size();
+        int count = 0;
 
         for (Object object : collection) {
-            if (contains(object)) {
-                count--;
+            if (table[count].contains(object)) {
+                count++;
+            }
+
+            if (count == collection.size()) {
+                return true;
             }
         }
 
-        return count == 0;
+        return false;
     }
 
     @Override
     public boolean addAll(Collection<? extends T> collection) {
+        boolean added = false;
         if (collection.size() == 0) {
             return false;
         }
-        int addedCounter = 0;
 
         for (Object object : collection) {
             if (add(object)) {
-                addedCounter++;
+                elementsCount++;
+                added = true;
             }
         }
 
-        return addedCounter == collection.size();
+        if (added) {
+            modCount++;
+        }
+
+        return added;
     }
 
     @Override
@@ -204,8 +217,11 @@ public class MyHashTable<T> implements Collection<T> {
 
             listSizeAfterRemove += list.size();
         }
+
+        if (removed) {
+            modCount++;
+        }
         elementsCount = listSizeAfterRemove;
-        modCount++;
 
         return removed;
     }
@@ -222,8 +238,11 @@ public class MyHashTable<T> implements Collection<T> {
 
             listSizeAfterRetain += list.size();
         }
+
+        if (retained) {
+            modCount++;
+        }
         elementsCount = listSizeAfterRetain;
-        modCount++;
 
         return retained;
     }
