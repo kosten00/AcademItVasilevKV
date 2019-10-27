@@ -3,8 +3,35 @@ package ru.academits.vasilev.tree;
 import java.util.LinkedList;
 import java.util.Stack;
 
-public class BinaryTree<T extends Comparable<? super T>> {
+/*
+1. T должен быть без ограничений на extends.
+У класса дерева должно быть 2 конструктора - с компаратором и без.
+Если его передали, то для сравнения используется он.
+Если нет, то для сравнения пытаемся приводить данные к Comparable<T> и вызывать метод оттуда
+2. TreeNode:
+- нужно сделать геттеры и сеттеры для полей.
+Не должно быть прямого доступа к полям
+- toString может упасть с null
+3. Из публичных методов дерева не должен быть доступен класс узла, т.к. это деталь реализации
+4. Должен быть метод для получения размера дерева.
+Он должен быть сделан без обхода, лучше всего хранить размер в поле
+5. Обходы должны выполнять полезную работу.
+Для этого они должны принимать Consumer<T> и вызывать его метод для данных узлов
+6. Публичные методы обходов не должны принимать узлы.
+Они должны сами начинать с корня
+7. Должны быть 3 отдельных метода для обходов
+8. remove и обходы не должны падать для пустого дерева
+9. remove - одинаковый compareTo делается дважды за итерацию цикла
+ */
+
+public class BinaryTree<T> {
     private TreeNode<T> root;
+
+    public int getElementsCount() {
+        return elementsCount;
+    }
+
+    private int elementsCount;
 
     public TreeNode<T> getRoot() {
         return root;
@@ -46,23 +73,25 @@ public class BinaryTree<T extends Comparable<? super T>> {
             while (true) {
                 TreeNode<T> parent = current;
 
-                if (insertionNode.data.compareTo(current.data) < 0) {
-                    current = current.left;
-
-                    if (current == null) {
-                        parent.left = insertionNode;
-                        return;
-                    }
-                } else {
-                    current = current.right;
-
-                    if (current == null) {
-                        parent.right = insertionNode;
-                        return;
-                    }
-                }
+//                if (insertionNode.data.compareTo(current.data) < 0) {
+//                    current = current.left;
+//
+//                    if (current == null) {
+//                        parent.left = insertionNode;
+//                        return;
+//                    }
+//                } else {
+//                    current = current.right;
+//
+//                    if (current == null) {
+//                        parent.right = insertionNode;
+//                        return;
+//                    }
+//                }
             }
         }
+
+        elementsCount++;
     }
 
     public boolean searchInDepth(T data) {
@@ -74,9 +103,9 @@ public class BinaryTree<T extends Comparable<? super T>> {
         while (!stack.empty()) {
             TreeNode<T> current = stack.pop();
 
-            if (current.data.compareTo(data) == 0) {
-                return true;
-            }
+//            if (current.data.compareTo(data) == 0) {
+//                return true;
+//            }
 
             if (current.right != null) {
                 stack.push(current.right);
@@ -110,21 +139,21 @@ public class BinaryTree<T extends Comparable<? super T>> {
 
         boolean isLeftChild = true;
 
-        while (current.data.compareTo(data) != 0) {
-            parent = current;
-
-            if (current.data.compareTo(data) > 0) {
-                isLeftChild = true;
-                current = current.left;
-            } else {
-                isLeftChild = false;
-                current = current.right;
-            }
-
-            if (current == null) {
-                return false;
-            }
-        }
+//        while (current.data.compareTo(data) != 0) {
+//            parent = current;
+//
+//            if (current.data.compareTo(data) > 0) {
+//                isLeftChild = true;
+//                current = current.left;
+//            } else {
+//                isLeftChild = false;
+//                current = current.right;
+//            }
+//
+//            if (current == null) {
+//                return false;
+//            }
+//        }
 
         if (current.left == null && current.right == null) {
             if (current == root) {
