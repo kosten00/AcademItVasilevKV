@@ -1,6 +1,11 @@
 package ru.academits.vasilev.temperature;
 
 
+import ru.academits.vasilev.temperature.scales.Scale;
+
+import java.util.*;
+import java.util.stream.Collectors;
+
 public class Model {
     private Scale[] scales;
 
@@ -24,24 +29,14 @@ public class Model {
     }
 
     public double convert(String from, String to, double temperature) {
-        double conversionResult = 0;
-
-        for (Scale scale : scales) {
-            if (scale.getName().equals(from)) {
-                conversionResult = scale.convertToCelsius(temperature);
-
-                break;
-            }
+        if (from.equals(to)) {
+            return temperature;
         }
 
-        for (Scale scale : scales) {
-            if (scale.getName().equals(to)) {
-                conversionResult = scale.convertFromCelsius(conversionResult);
+        List<Scale> list = Arrays.stream(scales).
+                filter(scale -> scale.getName().equals(from) || scale.getName().equals(to)).
+                collect(Collectors.toList());
 
-                break;
-            }
-        }
-
-        return conversionResult;
+        return list.get(1).convertFromCelsius(list.get(0).convertToCelsius(temperature));
     }
 }

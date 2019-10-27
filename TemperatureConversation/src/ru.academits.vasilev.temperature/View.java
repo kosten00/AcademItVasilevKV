@@ -14,8 +14,8 @@ public class View {
     private JButton convertButton;
     private JTextField inputTemperatureField;
     private JLabel outputTemperatureField;
-    private JComboBox fromScales;
-    private JComboBox toScales;
+    private JComboBox<String> fromScales;
+    private JComboBox<String> toScales;
 
     private String from = "";
     private String to = "";
@@ -47,7 +47,6 @@ public class View {
         c.fill = GridBagConstraints.BOTH;
         c.ipadx = 10;
         c.insets = new Insets(7, 7, 7, 7);
-        ;
 
         JLabel label1 = new JLabel("Select input scale:");
         c.gridx = 0;
@@ -55,7 +54,7 @@ public class View {
 
         mainFrame.add(label1, c);
 
-        fromScales = new JComboBox(model.getScaleNames());
+        fromScales = new JComboBox<>(model.getScaleNames());
         c.gridx = 0;
         c.gridy = 1;
         mainFrame.add(fromScales, c);
@@ -65,7 +64,7 @@ public class View {
         c.gridy = 0;
         mainFrame.add(label2, c);
 
-        toScales = new JComboBox(model.getScaleNames());
+        toScales = new JComboBox<>(model.getScaleNames());
         c.gridx = 2;
         c.gridy = 1;
         mainFrame.add(toScales, c);
