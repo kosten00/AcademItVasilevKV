@@ -1,6 +1,6 @@
 package ru.academits.vasilev.tree;
 
-class TreeNode<T> {
+class TreeNode<T> implements Comparable<T>{
     private T data;
 
     public T getData() {
@@ -37,5 +37,10 @@ class TreeNode<T> {
     @Override
     public String toString() {
         return data.toString();
+    }
+
+    @Override
+    public int compareTo(T o) {
+        return 0;
     }
 }

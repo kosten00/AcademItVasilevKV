@@ -1,5 +1,6 @@
 package ru.academits.vasilev.tree;
 
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.Stack;
 
@@ -26,12 +27,20 @@ import java.util.Stack;
 
 public class BinaryTree<T> {
     private TreeNode<T> root;
+    private int elementsCount;
+
 
     public int getElementsCount() {
         return elementsCount;
     }
 
-    private int elementsCount;
+    public BinaryTree(Comparator<T> comparator) {
+
+    }
+
+    public BinaryTree() {
+
+    }
 
     public TreeNode<T> getRoot() {
         return root;
