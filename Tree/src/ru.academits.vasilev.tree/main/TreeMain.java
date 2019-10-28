@@ -4,7 +4,7 @@ import ru.academits.vasilev.tree.BinaryTree;
 
 public class TreeMain {
     public static void main(String[] args) {
-        BinaryTree<Integer> tree = new BinaryTree<>();
+        BinaryTree<Integer> tree = new BinaryTree<>(new TreeElementsComparator<Integer>());
 
         tree.insert(10);
         tree.insert(11);
@@ -20,6 +20,6 @@ public class TreeMain {
 
         System.out.println(tree.remove(7));
 
-        System.out.println("nodes count = " + tree.getNodeCountBreadthTraverse());
+        tree.forEach(p -> System.out.println(p.toString()));
     }
 }

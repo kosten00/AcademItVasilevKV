@@ -3,15 +3,14 @@ package ru.academits.vasilev.tree;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.Stack;
+import java.util.function.Consumer;
 
 /*
 1. T должен быть без ограничений на extends.
-У класса дерева должно быть 2 конструктора - с компаратором и без.
-Если его передали, то для сравнения используется он.
-Если нет, то для сравнения пытаемся приводить данные к Comparable<T> и вызывать метод оттуда
+
+
+Если нет, то для сравнения пытаемся приводить данные к Comparable<T> и вызывать метод оттуда <- непонятно
 2. TreeNode:
-- нужно сделать геттеры и сеттеры для полей.
-Не должно быть прямого доступа к полям
 - toString может упасть с null
 3. Из публичных методов дерева не должен быть доступен класс узла, т.к. это деталь реализации
 4. Должен быть метод для получения размера дерева.
@@ -28,47 +27,64 @@ import java.util.Stack;
 public class BinaryTree<T> {
     private TreeNode<T> root;
     private int elementsCount;
-
-
-    public int getElementsCount() {
-        return elementsCount;
-    }
+    private Comparator<T> comparator;
 
     public BinaryTree(Comparator<T> comparator) {
-
+        this.comparator = comparator;
     }
 
     public BinaryTree() {
-
     }
 
-    public TreeNode<T> getRoot() {
-        return root;
+    private boolean isLess(T data1, T data2) {
+        //CAST TO COMPARABLE T! Comparable <T> temp = (Comparable<T>) data
+
+        Comparable <T> temp = (Comparable<T>) data1;
+
+        return comparator.compare(data1, data2) < 0;
     }
 
-    private void checkRoot() {
-        if (root == null) {
-            throw new NullPointerException("tree has no elements");
+    private boolean isGreater(T data1, T data2) {
+        return comparator.compare(data1, data2) > 0;
+    }
+
+    private void visitNodeRecursively(TreeNode<T> node, Consumer<? super T> action) {
+        action.accept(node.getData());
+
+        if (node.getLeft() != null) {
+            visitNodeRecursively(node.getLeft(), action);
+        }
+
+        if (node.getRight() != null) {
+            visitNodeRecursively(node.getRight(), action);
         }
     }
 
     private TreeNode<T> getSuccessor(TreeNode<T> nodeToRemove) {
         TreeNode<T> successorParent = nodeToRemove;
         TreeNode<T> successor = nodeToRemove;
-        TreeNode<T> current = nodeToRemove.right;
+        TreeNode<T> current = nodeToRemove.getRight();
 
         while (current != null) {
             successorParent = successor;
             successor = current;
-            current = current.left;
+            current = current.getLeft();
         }
 
-        if (nodeToRemove.right != successor) {
-            successorParent.left = successor.right;
-            successor.right = nodeToRemove.right;
+        if (nodeToRemove.getRight() != successor) {
+            successorParent.setLeft(successor.getRight());
+            successor.setRight(nodeToRemove.getRight());
         }
 
         return successor;
+    }
+
+    public TreeNode<T> getRoot() {
+        return root;
+    }
+
+    public int getElementsCount() {
+        return elementsCount;
     }
 
     public void insert(T data) {
@@ -82,21 +98,21 @@ public class BinaryTree<T> {
             while (true) {
                 TreeNode<T> parent = current;
 
-//                if (insertionNode.data.compareTo(current.data) < 0) {
-//                    current = current.left;
-//
-//                    if (current == null) {
-//                        parent.left = insertionNode;
-//                        return;
-//                    }
-//                } else {
-//                    current = current.right;
-//
-//                    if (current == null) {
-//                        parent.right = insertionNode;
-//                        return;
-//                    }
-//                }
+                if (isLess(insertionNode.getData(), current.getData())) {
+                    current = current.getLeft();
+
+                    if (current == null) {
+                        parent.setLeft(insertionNode);
+                        return;
+                    }
+                } else {
+                    current = current.getRight();
+
+                    if (current == null) {
+                        parent.setRight(insertionNode);
+                        return;
+                    }
+                }
             }
         }
 
@@ -104,7 +120,9 @@ public class BinaryTree<T> {
     }
 
     public boolean searchInDepth(T data) {
-        checkRoot();
+        if (elementsCount == 0) {
+            return false;
+        }
 
         Stack<TreeNode<T>> stack = new Stack<>();
 
@@ -112,81 +130,83 @@ public class BinaryTree<T> {
         while (!stack.empty()) {
             TreeNode<T> current = stack.pop();
 
-//            if (current.data.compareTo(data) == 0) {
-//                return true;
-//            }
-
-            if (current.right != null) {
-                stack.push(current.right);
+            if (current.getData().equals(data)) {
+                return true;
             }
 
-            if (current.left != null) {
-                stack.push(current.left);
+            if (current.getRight() != null) {
+                stack.push(current.getRight());
+            }
+
+            if (current.getLeft() != null) {
+                stack.push(current.getLeft());
             }
         }
 
         return false;
     }
 
-    public void visitInDepthRecursive(TreeNode<T> root) {
-        checkRoot();
-
-        if (root.left != null) {
-            visitInDepthRecursive(root.left);
+    public void visitInDepth(Consumer<? super T> action) {
+        if (action == null) {
+            throw new NullPointerException();
         }
 
-        if (root.right != null) {
-            visitInDepthRecursive(root.right);
+        if (elementsCount == 0) {
+            return;
         }
+
+        visitNodeRecursively(root, action);
     }
 
     public boolean remove(T data) {
-        checkRoot();
+        if (elementsCount == 0) {
+            return false;
+        }
 
         TreeNode<T> current = root;
         TreeNode<T> parent = root;
 
         boolean isLeftChild = true;
 
-//        while (current.data.compareTo(data) != 0) {
-//            parent = current;
-//
-//            if (current.data.compareTo(data) > 0) {
-//                isLeftChild = true;
-//                current = current.left;
-//            } else {
-//                isLeftChild = false;
-//                current = current.right;
-//            }
-//
-//            if (current == null) {
-//                return false;
-//            }
-//        }
+        while (!current.getData().equals(data)) {
+            parent = current;
 
-        if (current.left == null && current.right == null) {
+            if (isGreater(current.getData(), data)) {
+                isLeftChild = true;
+                current = current.getLeft();
+            } else {
+                isLeftChild = false;
+                current = current.getRight();
+            }
+
+            if (current == null) {
+                return false;
+            }
+        }
+
+        if (current.getLeft() == null && current.getRight() == null) {
             if (current == root) {
                 root = null;
             } else if (isLeftChild) {
-                parent.left = null;
+                parent.setLeft(null);
             } else {
-                parent.right = null;
+                parent.setRight(null);
             }
-        } else if (current.right == null) {
+        } else if (current.getRight() == null) {
             if (current == root) {
-                root = current.left;
+                root = current.getLeft();
             } else if (isLeftChild) {
-                parent.left = current.left;
+                parent.setLeft(current.getLeft());
             } else {
-                parent.right = current.left;
+                parent.setRight(current.getLeft());
             }
-        } else if (current.left == null) {
+        } else if (current.getLeft() == null) {
             if (current == root) {
-                root = current.right;
+                root = current.getRight();
             } else if (isLeftChild) {
-                parent.left = current.right;
+                parent.setLeft(current.getRight());
             } else {
-                parent.right = current.right;
+                parent.setRight(current.getRight());
             }
         } else {
             TreeNode<T> successor = getSuccessor(current);
@@ -194,38 +214,40 @@ public class BinaryTree<T> {
             if (current == root) {
                 root = successor;
             } else if (isLeftChild) {
-                parent.left = successor;
+                parent.setLeft(successor);
             } else {
-                parent.right = successor;
+                parent.setRight(successor);
             }
 
-            successor.left = current.left;
+            successor.setLeft(current.getLeft());
         }
 
+        elementsCount--;
         return true;
     }
 
-    public int getNodeCountBreadthTraverse() {
+    public void forEach(Consumer<? super T> action) {
+        if (action == null) {
+            throw new NullPointerException();
+        }
+
         LinkedList<TreeNode<T>> queue = new LinkedList<>();
 
         queue.add(root);
 
-        int nodesCount = 1;
-
         while (!queue.isEmpty()) {
             TreeNode<T> node = queue.pop();
 
-            if (node.left != null) {
-                queue.add(node.left);
-                nodesCount++;
+            T t = node.getData();
+            action.accept(t);
+
+            if (node.getLeft() != null) {
+                queue.add(node.getLeft());
             }
 
-            if (node.right != null) {
-                queue.add(node.right);
-                nodesCount++;
+            if (node.getRight() != null) {
+                queue.add(node.getRight());
             }
         }
-
-        return nodesCount;
     }
 }
