@@ -9,6 +9,10 @@ class Vertex<T> {
         visited = false;
     }
 
+    Vertex() {
+        visited = false;
+    }
+
     public T getData() {
         return data;
     }
@@ -25,4 +29,8 @@ class Vertex<T> {
         this.visited = visited;
     }
 
+    @Override
+    public String toString() {
+        return data.toString();
+    }
 }
