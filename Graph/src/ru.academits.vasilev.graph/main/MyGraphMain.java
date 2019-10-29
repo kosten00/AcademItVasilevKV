@@ -10,5 +10,10 @@ package ru.academits.vasilev.graph.main;
 Понимание как работать с графами
  */
 
+import ru.academits.vasilev.graph.MyGraph;
+
 public class MyGraphMain {
+    MyGraph graph = new MyGraph(10);
+
+
 }
