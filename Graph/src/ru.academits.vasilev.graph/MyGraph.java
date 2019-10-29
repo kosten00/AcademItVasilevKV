@@ -18,12 +18,12 @@ public class MyGraph<T> {
         return -1;
     }
 
-    public MyGraph(int graphSize) {
-        this.maxVertexes = graphSize;
+    public MyGraph(int maxVertexes) {
+        this.maxVertexes = maxVertexes;
 
-        graphMatrix = new int[graphSize][graphSize];
-        for (int i = 0; i < graphSize; i++) {
-            for (int j = 0; j < graphSize; j++) {
+        graphMatrix = new int[maxVertexes][maxVertexes];
+        for (int i = 0; i < maxVertexes; i++) {
+            for (int j = 0; j < maxVertexes; j++) {
                 graphMatrix[i][j] = 0;
             }
         }
