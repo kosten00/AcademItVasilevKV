@@ -9,35 +9,35 @@ class TreeNode<T> {
         this.data = data;
     }
 
-    public T getData() {
+    T getData() {
         return data;
     }
 
-    public void setData(T data) {
+    void setData(T data) {
         this.data = data;
     }
 
-    public TreeNode<T> getLeft() {
+    TreeNode<T> getLeft() {
         return left;
     }
 
-    public void setLeft(TreeNode<T> left) {
+    void setLeft(TreeNode<T> left) {
         this.left = left;
     }
 
-    public TreeNode<T> getRight() {
+    TreeNode<T> getRight() {
         return right;
     }
 
-    public void setRight(TreeNode<T> right) {
+    void setRight(TreeNode<T> right) {
         this.right = right;
     }
 
     @Override
     public String toString() {
-//        if (data.equals(null)) {
-//            return "null";
-//        }
+        if (data == null) {
+            return "null";
+        }
 
         return data.toString();
     }
