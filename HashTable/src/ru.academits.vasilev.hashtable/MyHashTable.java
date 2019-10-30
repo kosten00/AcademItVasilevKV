@@ -3,7 +3,7 @@ package ru.academits.vasilev.hashtable;
 import java.util.*;
 
 public class MyHashTable<T> implements Collection<T> {
-    private LinkedList<T>[] table;
+    private ArrayList<T>[] table;
     private int elementsCount;
     private int tablesCount;
     private int modCount;
@@ -14,11 +14,11 @@ public class MyHashTable<T> implements Collection<T> {
             return 0;
         }
 
-        return Math.abs(object.hashCode() % (arrayLength));
+        return Math.abs(object.hashCode() % arrayLength);
     }
 
-    private LinkedList<T>[] fillTable(LinkedList<T>[] tableArray) {
-        Arrays.fill(tableArray, new LinkedList<T>());
+    private ArrayList<T>[] fillTable(ArrayList<T>[] tableArray) {
+        Arrays.fill(tableArray, new ArrayList<T>());
 
         return tableArray;
     }
@@ -26,7 +26,7 @@ public class MyHashTable<T> implements Collection<T> {
     @SuppressWarnings("unchecked")
     public MyHashTable() {
         tablesCount = DEFAULT_TABLE_SIZE;
-        table = fillTable(new LinkedList[tablesCount]);
+        table = fillTable(new ArrayList[tablesCount]);
     }
 
     @SuppressWarnings("unchecked")
@@ -36,7 +36,7 @@ public class MyHashTable<T> implements Collection<T> {
         }
 
         this.tablesCount = tablesCount;
-        table = fillTable(new LinkedList[this.tablesCount]);
+        table = fillTable(new ArrayList[this.tablesCount]);
     }
 
     @Override
@@ -99,10 +99,7 @@ public class MyHashTable<T> implements Collection<T> {
             currentIndexInTable++;
             currentElementIndex++;
 
-            T swapElement = table[currentTableIndex].pollFirst();
-            table[currentTableIndex].addLast(swapElement);
-
-            return swapElement;
+            return table[currentTableIndex].get(currentIndexInTable);
         }
     }
 
@@ -141,7 +138,7 @@ public class MyHashTable<T> implements Collection<T> {
     }
 
     @Override
-    public boolean add(Object object) {
+    public boolean add(T object) {
         int index = getIndex(object, table.length);
         table[index].add((T) object);
 
@@ -165,34 +162,24 @@ public class MyHashTable<T> implements Collection<T> {
 
     @Override
     public boolean containsAll(Collection<?> collection) {
-        if (collection.size() == 0) {
-            return true;
-        }
-        int count = 0;
-
         for (Object object : collection) {
-            if (table[count].contains(object)) {
-                count++;
-            }
-
-            if (count == collection.size()) {
-                return true;
+            if (!contains(object)) {
+                return false;
             }
         }
 
-        return false;
+        return true;
     }
 
     @Override
     public boolean addAll(Collection<? extends T> collection) {
-        boolean added = false;
         if (collection.size() == 0) {
             return false;
         }
+        boolean added = false;
 
-        for (Object object : collection) {
+        for (T object : collection) {
             if (add(object)) {
-                elementsCount++;
                 added = true;
             }
         }
@@ -209,7 +196,7 @@ public class MyHashTable<T> implements Collection<T> {
         boolean removed = false;
         int listSizeAfterRemove = 0;
 
-        for (LinkedList<T> list : table) {
+        for (ArrayList<T> list : table) {
             if (list.removeAll(collection)) {
                 removed = true;
             }
@@ -230,7 +217,7 @@ public class MyHashTable<T> implements Collection<T> {
         boolean retained = false;
         int listSizeAfterRetain = 0;
 
-        for (LinkedList<T> list : table) {
+        for (ArrayList<T> list : table) {
             if (list.retainAll(collection)) {
                 retained = true;
             }
@@ -248,7 +235,7 @@ public class MyHashTable<T> implements Collection<T> {
 
     @Override
     public void clear() {
-        for (LinkedList<T> list : table) {
+        for (ArrayList<T> list : table) {
             list.clear();
         }
 
