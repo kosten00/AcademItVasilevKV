@@ -20,8 +20,12 @@ public abstract class Scale {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Scale scale = (Scale) o;
         return name.equals(scale.name);
     }

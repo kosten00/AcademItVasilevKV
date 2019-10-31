@@ -29,14 +29,10 @@ public class Model {
     }
 
     public double convert(String from, String to, double temperature) {
-        if (from.equals(to)) {
-            return temperature;
-        }
-
-        List<Scale> list = Arrays.stream(scales).
-                filter(scale -> scale.getName().equals(from) || scale.getName().equals(to)).
+        List<Scale> scalesForConversion = Arrays.stream(scales).
+                filter(scale -> scale.toString().equals(from) || scale.toString().equals(to)).
                 collect(Collectors.toList());
 
-        return list.get(1).convertFromCelsius(list.get(0).convertToCelsius(temperature));
+        return scalesForConversion.get(1).convertFromCelsius(scalesForConversion.get(0).convertToCelsius(temperature));
     }
 }
