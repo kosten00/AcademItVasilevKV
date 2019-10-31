@@ -9,7 +9,7 @@ public class View {
 
     private final static int WIDTH = 450;
     private final static int HEIGHT = 250;
-    private final static String NAME = "Temperatures Conversation";
+    private final static String NAME = "Temperatures Conversion";
 
     private JButton convertButton;
     private JTextField inputTemperatureField;
