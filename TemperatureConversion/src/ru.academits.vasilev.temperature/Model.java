@@ -30,7 +30,7 @@ public class Model {
 
     public double convert(String from, String to, double temperature) {
         List<Scale> scalesForConversion = Arrays.stream(scales).
-                filter(scale -> scale.toString().equals(from) || scale.toString().equals(to)).
+                filter(scale -> scale.getName().equals(from) || scale.getName().equals(to)).
                 collect(Collectors.toList());
 
         return scalesForConversion.get(1).convertFromCelsius(scalesForConversion.get(0).convertToCelsius(temperature));

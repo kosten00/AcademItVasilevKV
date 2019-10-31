@@ -19,6 +19,8 @@ http://joxi.ru/V2VekyKhd6v9Em
 Если парсится, то все верно
  */
 
+
+//Разобраться с дабл парс дабл
 public class Launcher {
     public static void main(String[] args) {
         new Controller(new Scale[]{new CelsiusScale("celsius"),
