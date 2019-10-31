@@ -1,5 +1,7 @@
 package ru.academits.vasilev.temperature;
 
+import ru.academits.vasilev.temperature.scales.Scale;
+
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
@@ -15,12 +17,8 @@ public class View {
     private JButton convertButton;
     private JTextField inputTemperatureField;
     private JLabel outputTemperatureField;
-    private JComboBox<String> fromScales;
-    private JComboBox<String> toScales;
-
-    private String from = "";
-    private String to = "";
-    private String temperature = "";
+    private JComboBox<Scale> fromScales;
+    private JComboBox<Scale> toScales;
 
     public View(Model model) {
         this.model = model;
@@ -28,15 +26,6 @@ public class View {
             initMainFrame();
             initListeners();
         });
-    }
-
-    private double getTemperature() {
-        try {
-            return Double.parseDouble(temperature);
-        } catch (NumberFormatException e) {
-            outputTemperatureField.setText("Incorrect input!");
-        }
-        return Double.parseDouble(temperature);
     }
 
     private void initMainFrame() {
@@ -60,7 +49,7 @@ public class View {
 
         mainFrame.add(label1, c);
 
-        fromScales = new JComboBox<>(model.getScaleNames());
+        fromScales = new JComboBox<>(model.getScales());
         c.gridx = 0;
         c.gridy = 1;
         mainFrame.add(fromScales, c);
@@ -70,7 +59,7 @@ public class View {
         c.gridy = 0;
         mainFrame.add(label2, c);
 
-        toScales = new JComboBox<>(model.getScaleNames());
+        toScales = new JComboBox<>(model.getScales());
         c.gridx = 2;
         c.gridy = 1;
         mainFrame.add(toScales, c);
@@ -107,17 +96,21 @@ public class View {
 
     private void initListeners() {
         convertButton.addActionListener(e -> {
-            if (Objects.equals(fromScales.getSelectedItem(), toScales.getSelectedItem())) {
-                outputTemperatureField.setText(Double.toString(getTemperature()));
+            double temperature;
+
+            try {
+                temperature = Double.parseDouble(inputTemperatureField.getText());
+            } catch (NumberFormatException exception) {
+                outputTemperatureField.setText("Incorrect input!");
+                return;
+            }
+            Object from = fromScales.getSelectedItem();
+            Object to = toScales.getSelectedItem();
+
+            if (from.equals(to)) {
+                outputTemperatureField.setText(Double.toString(temperature));
             } else {
-                from = (String) fromScales.getSelectedItem();
-                to = (String) toScales.getSelectedItem();
-
-                temperature = inputTemperatureField.getText();
-
-                double temperatureToDouble = getTemperature();
-                double convertedTemperature = model.convert(from, to, temperatureToDouble);
-                outputTemperatureField.setText(Double.toString(convertedTemperature));
+                outputTemperatureField.setText(Double.toString(model.convert((Scale) fromScales.getSelectedItem(), (Scale) toScales.getSelectedItem(), temperature)));
             }
         });
     }

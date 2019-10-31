@@ -13,26 +13,15 @@ public class Model {
         this.scales = scales;
     }
 
-    public String[] getScaleNames() {
-        int scalesCount = scales.length;
-
-        String[] names = new String[scalesCount];
-
-        int i = 0;
-        for (Scale scale : scales) {
-            names[i] = scale.getName();
-
-            i++;
-        }
-
-        return names;
+    public Scale[] getScales() {
+        return scales;
     }
 
-    public double convert(String from, String to, double temperature) {
-        List<Scale> scalesForConversion = Arrays.stream(scales).
-                filter(scale -> scale.getName().equals(from) || scale.getName().equals(to)).
-                collect(Collectors.toList());
+    public double convert(Scale from, Scale to, double temperature) {
+        if (from.equals(to)) {
+            return temperature;
+        }
 
-        return scalesForConversion.get(1).convertFromCelsius(scalesForConversion.get(0).convertToCelsius(temperature));
+        return from.convertFromCelsius(to.convertToCelsius(temperature));
     }
 }
