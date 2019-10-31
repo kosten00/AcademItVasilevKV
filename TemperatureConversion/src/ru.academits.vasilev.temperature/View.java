@@ -9,10 +9,10 @@ import java.util.Objects;
 
 public class View {
     private Model model;
+    private String name;
 
     private final static int WIDTH = 450;
     private final static int HEIGHT = 250;
-    private final static String NAME = "Temperatures Conversion";
 
     private JButton convertButton;
     private JTextField inputTemperatureField;
@@ -20,8 +20,10 @@ public class View {
     private JComboBox<Scale> fromScales;
     private JComboBox<Scale> toScales;
 
-    public View(Model model) {
+    public View(Model model, String name) {
         this.model = model;
+        this.name = name;
+
         SwingUtilities.invokeLater(() -> {
             initMainFrame();
             initListeners();
@@ -29,7 +31,7 @@ public class View {
     }
 
     private void initMainFrame() {
-        JFrame mainFrame = new JFrame(NAME);
+        JFrame mainFrame = new JFrame(name);
         mainFrame.setSize(WIDTH, HEIGHT);
         mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         mainFrame.setLocationRelativeTo(null);
@@ -104,13 +106,13 @@ public class View {
                 outputTemperatureField.setText("Incorrect input!");
                 return;
             }
-            Object from = fromScales.getSelectedItem();
-            Object to = toScales.getSelectedItem();
 
-            if (from.equals(to)) {
+            if (Objects.equals(fromScales.getSelectedItem(), toScales.getSelectedItem())) {
                 outputTemperatureField.setText(Double.toString(temperature));
             } else {
-                outputTemperatureField.setText(Double.toString(model.convert((Scale) fromScales.getSelectedItem(), (Scale) toScales.getSelectedItem(), temperature)));
+                double round = (double) Math.round(model.convert(fromScales.getSelectedItem(), toScales.getSelectedItem(), temperature) * 100) / 100;
+
+                outputTemperatureField.setText(Double.toString(round));
             }
         });
     }

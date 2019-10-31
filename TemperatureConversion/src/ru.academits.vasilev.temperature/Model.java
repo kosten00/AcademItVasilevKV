@@ -3,9 +3,6 @@ package ru.academits.vasilev.temperature;
 
 import ru.academits.vasilev.temperature.scales.Scale;
 
-import java.util.*;
-import java.util.stream.Collectors;
-
 public class Model {
     private Scale[] scales;
 
@@ -17,11 +14,10 @@ public class Model {
         return scales;
     }
 
-    public double convert(Scale from, Scale to, double temperature) {
-        if (from.equals(to)) {
-            return temperature;
-        }
+    public double convert(Object from, Object to, double temperature) {
+        Scale scaleFrom = (Scale) from;
+        Scale toScale = (Scale) to;
 
-        return from.convertFromCelsius(to.convertToCelsius(temperature));
+        return toScale.convertFromCelsius(scaleFrom.convertToCelsius(temperature));
     }
 }
