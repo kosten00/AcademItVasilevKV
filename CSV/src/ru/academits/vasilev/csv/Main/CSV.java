@@ -31,7 +31,6 @@ class CSV {
             boolean quotesOpened = false;
 
 
-
             while ((c = reader.read()) != -1) {
                 switch (c) {
                     case QUOTES:
@@ -44,14 +43,14 @@ class CSV {
                             quotesInOpenedQuotesLastCharacter = true;
                             break;
                         }
-                        writer.print((char) c);
+                        writer.print(QUOTES);
 
                         quotesInOpenedQuotesLastCharacter = false;
 
                         break;
                     case COMMA:
                         if (!quotesInOpenedQuotesLastCharacter & quotesOpened) {
-                            writer.print((char) c);
+                            writer.print(COMMA);
 
                             break;
                         }
@@ -65,6 +64,8 @@ class CSV {
 
                         break;
                     case NEXT_LINE:
+                        System.out.println();
+
                         if (!quotesInOpenedQuotesLastCharacter & quotesOpened) {
                             writer.print("</br>");
 
@@ -92,9 +93,14 @@ class CSV {
 
                         break;
                     case CARRIAGE_RETURN:
-                    case EMPTY_LINE:
 
                         break;
+//                    case EMPTY_LINE:
+//                        if (lineSeparatorLastCharacter){
+//                            System.out.println("line sep last char, from case empty line");
+//                        }
+//
+//                        break;
                     default:
                         commaLastCharacter = false;
                         lineSeparatorLastCharacter = false;
