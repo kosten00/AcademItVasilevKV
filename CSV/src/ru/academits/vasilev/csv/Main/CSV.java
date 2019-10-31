@@ -1,5 +1,7 @@
 package ru.academits.vasilev.csv.Main;
 
+import org.w3c.dom.ls.LSOutput;
+
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -29,7 +31,6 @@ class CSV {
             boolean lineSeparatorLastCharacter = false;
             boolean quotesInOpenedQuotesLastCharacter = false;
             boolean quotesOpened = false;
-
 
             while ((c = reader.read()) != -1) {
                 switch (c) {
@@ -64,7 +65,7 @@ class CSV {
 
                         break;
                     case NEXT_LINE:
-                        System.out.println();
+
 
                         if (!quotesInOpenedQuotesLastCharacter & quotesOpened) {
                             writer.print("</br>");
@@ -95,12 +96,6 @@ class CSV {
                     case CARRIAGE_RETURN:
 
                         break;
-//                    case EMPTY_LINE:
-//                        if (lineSeparatorLastCharacter){
-//                            System.out.println("line sep last char, from case empty line");
-//                        }
-//
-//                        break;
                     default:
                         commaLastCharacter = false;
                         lineSeparatorLastCharacter = false;
@@ -109,6 +104,7 @@ class CSV {
                         writer.print((char) c);
                 }
             }
+
             writer.print("</td></tr></table></head></body></html>");
         } catch (FileNotFoundException e) {
             System.out.println("File was not found!");
