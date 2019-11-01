@@ -1,7 +1,7 @@
 package ru.academits.vasilev.graph;
 
-import java.util.Arrays;
-import java.util.Stack;
+import java.util.*;
+import java.util.function.Consumer;
 
 public class MyGraph<T> {
     private int maxVertexes;
@@ -9,10 +9,26 @@ public class MyGraph<T> {
     private Vertex<T>[] vertexes;
     private int[][] graphMatrix;
 
-    private int getVertexToVisit(int i) {
+    private int getEdgedUnvisitedVertex(int i) {
         for (int j = 0; j < vertexesCount; j++) {
             if (graphMatrix[i][j] == 1 && !vertexes[j].isVisited()) {
                 return j;
+            }
+        }
+
+        return -1;
+    }
+
+    private void setAllUnvisited() {
+        for (int i = 0; i < vertexesCount; i++) {
+            vertexes[i].setVisited(false);
+        }
+    }
+
+    private int checkUnvisitedVertex() {
+        for (int i = 0; i < vertexesCount; i++) {
+            if (!vertexes[i].isVisited()) {
+                return i;
             }
         }
 
@@ -30,13 +46,10 @@ public class MyGraph<T> {
         }
 
         vertexes = (Vertex<T>[]) new Vertex[maxVertexes];
-        for (int i = 0; i < maxVertexes; i++) {
-            vertexes[i] = new Vertex<>();
-        }
     }
 
     public void addVertex(T data) {
-        vertexes[vertexesCount].setData(data);
+        vertexes[vertexesCount] = new Vertex<>(data);
         vertexesCount++;
 
         if (vertexesCount >= maxVertexes) {
@@ -52,29 +65,74 @@ public class MyGraph<T> {
         graphMatrix[end][start] = 1;
     }
 
-    public void visitInDepth() {
-        vertexes[0].setVisited(true);
+    public void visitInDepth(Consumer<? super T> action) {
+        if (action == null) {
+            throw new NullPointerException("Consumer == null");
+        }
+        int start = checkUnvisitedVertex();
 
-        System.out.println(vertexes[0]);
+        if (start >= 0) {
+            Vertex<T> vertex = vertexes[start];
+            vertex.setVisited(true);
 
-        Stack<Integer> stack = new Stack<>();
-        stack.push(0);
+            action.accept(vertexes[start].getData());
 
-        while (!stack.isEmpty()) {
-            int v = getVertexToVisit(stack.peek());
+            Stack<Integer> stack = new Stack<>();
+            stack.push(start);
 
-            if (v == -1) {
-                stack.pop();
-            } else {
-                vertexes[v].setVisited(true);
-                System.out.println(vertexes[v]);
-                stack.push(v);
+            while (!stack.isEmpty()) {
+                int v = getEdgedUnvisitedVertex(stack.peek());
+
+                if (v == -1) {
+                    stack.pop();
+                } else {
+                    vertex = vertexes[v];
+                    vertex.setVisited(true);
+
+                    action.accept(vertexes[v].getData());
+
+                    stack.push(v);
+                }
             }
+            visitInDepth(action);
         }
 
-        for (int i = 0; i < vertexesCount; i++) {
-            vertexes[i].setVisited(false);
+        setAllUnvisited();
+    }
+
+
+    public void visitInBreadth(Consumer<? super T> action) {
+        if (action == null) {
+            throw new NullPointerException("Consumer == null");
         }
+        int start = checkUnvisitedVertex();
+
+        if (start >= 0) {
+            Vertex<T> vertex = vertexes[start];
+            vertex.setVisited(true);
+
+            action.accept(vertex.getData());
+
+            Queue<Integer> queue = new ArrayDeque<>();
+            queue.add(start);
+
+            int v2;
+            while (!queue.isEmpty()) {
+                int v1 = queue.remove();
+
+                while ((v2 = getEdgedUnvisitedVertex(v1)) != -1) {
+                    vertex = vertexes[v2];
+                    vertex.setVisited(true);
+
+                    action.accept(vertex.getData());
+
+                    queue.add(v2);
+                }
+            }
+            visitInBreadth(action);
+        }
+
+        setAllUnvisited();
     }
 
     @Override
