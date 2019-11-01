@@ -31,7 +31,7 @@ public class CSV {
             while ((c = reader.read()) != -1) {
                 switch (c) {
                     case START_OF_FILE_STREAM:
-                        writer.print(START_OF_FILE_STREAM + "<!DOCTYPE html><html><meta charset=\"UTF-8\"><body><head><table><tr><td>");
+                        writer.print(START_OF_FILE_STREAM + "<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><title>CsvInHtml</title></head><body><table><tr><td>");
 
                         break;
                     case COMMA:
@@ -124,7 +124,7 @@ public class CSV {
                         writer.print((char) c);
                 }
             }
-            writer.print("</td></tr></table></head></body></html>");
+            writer.print("</td></tr></table></body></html>");
         } catch (FileNotFoundException e) {
             System.out.println("File was not found!");
         }
