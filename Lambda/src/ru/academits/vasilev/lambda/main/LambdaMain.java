@@ -35,10 +35,10 @@ public class LambdaMain {
 
         System.out.println();
         //Get persons aged 20-45 y.o., print to the console their names in decreasing order:
-        personList.stream().
-                filter(person -> person.getAge() >= 20 && person.getAge() <= 45).
-                sorted((p1, p2) -> p2.getAge() - p1.getAge()).
-                forEach(p -> System.out.println(p.getName()));
+        personList.stream()
+                .filter(person -> person.getAge() >= 20 && person.getAge() <= 45)
+                .sorted((p1, p2) -> p2.getAge() - p1.getAge())
+                .forEach(p -> System.out.println(p.getName()));
 
         //Create infinite stream of square roots of numbers:
         System.out.println("Input number: ");
