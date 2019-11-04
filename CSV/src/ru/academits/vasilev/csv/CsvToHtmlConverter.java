@@ -25,7 +25,6 @@ public class CsvToHtmlConverter {
         try (PrintWriter writer = new PrintWriter(outputHtmlFile);
              FileReader reader = new FileReader(inputCsvFile)) {
 
-            //writer.print("<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><title>CsvInHtml</title></head><body><table><tr><td>");
             writer.println("<!DOCTYPE html>");
             writer.println("<html>");
             writer.println("\t<head>");
