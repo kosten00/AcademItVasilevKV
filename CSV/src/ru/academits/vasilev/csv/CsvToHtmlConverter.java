@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 public class CsvToHtmlConverter {
-    private static final char START_OF_FILE_STREAM = 65279;
     private static final char COMMA = 44;
     private static final char QUOTES = 34;
     private static final char NEXT_LINE = 10;
@@ -26,14 +25,12 @@ public class CsvToHtmlConverter {
         try (PrintWriter writer = new PrintWriter(outputHtmlFile);
              FileReader reader = new FileReader(inputCsvFile)) {
 
+            writer.print("<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><title>CsvInHtml</title></head><body><table><tr><td>");
+
             int c;
 
             while ((c = reader.read()) != -1) {
                 switch (c) {
-                    case START_OF_FILE_STREAM:
-                        writer.print(START_OF_FILE_STREAM + "<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><title>CsvInHtml</title></head><body><table><tr><td>");
-
-                        break;
                     case COMMA:
                         if (lineSeparatorAfterCarriageReturnLastCharacter) {
                             writer.print("</td></tr><tr><td>");
@@ -85,6 +82,8 @@ public class CsvToHtmlConverter {
 
                         if (!quotesInOpenedQuotesLastCharacter & quotesOpened) {
                             writer.print("</br>");
+                            lineSeparatorAfterCarriageReturnLastCharacter = false;
+
                             break;
                         }
 
