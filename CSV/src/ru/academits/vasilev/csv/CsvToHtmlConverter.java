@@ -25,7 +25,17 @@ public class CsvToHtmlConverter {
         try (PrintWriter writer = new PrintWriter(outputHtmlFile);
              FileReader reader = new FileReader(inputCsvFile)) {
 
-            writer.print("<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><title>CsvInHtml</title></head><body><table><tr><td>");
+            //writer.print("<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><title>CsvInHtml</title></head><body><table><tr><td>");
+            writer.println("<!DOCTYPE html>");
+            writer.println("<html>");
+            writer.println("\t<head>");
+            writer.println("\t\t<meta charset=\\\"UTF-8\\\">");
+            writer.println("\t\t<title>CsvInHtml</title>");
+            writer.println("\t</head>");
+            writer.println("\t<body>");
+            writer.println("\t\t<table>");
+            writer.println("\t\t\t<tr>");
+            writer.print("\t\t\t\t<td>");
 
             int c;
 
@@ -33,7 +43,10 @@ public class CsvToHtmlConverter {
                 switch (c) {
                     case COMMA:
                         if (lineSeparatorAfterCarriageReturnLastCharacter) {
-                            writer.print("</td></tr><tr><td>");
+                            writer.println("</td>");
+                            writer.println("\t\t\t</tr>");
+                            writer.println("\t\t\t<tr>");
+                            writer.print("\t\t\t\t<td>");
                             lineSeparatorAfterCarriageReturnLastCharacter = false;
                         }
 
@@ -53,7 +66,10 @@ public class CsvToHtmlConverter {
                         break;
                     case QUOTES:
                         if (lineSeparatorAfterCarriageReturnLastCharacter) {
-                            writer.print("</td></tr><tr><td>");
+                            writer.println("</td>");
+                            writer.println("\t\t\t</tr>");
+                            writer.println("\t\t\t<tr>");
+                            writer.print("\t\t\t\t<td>");
                             lineSeparatorAfterCarriageReturnLastCharacter = false;
                         }
 
@@ -112,7 +128,10 @@ public class CsvToHtmlConverter {
                         break;
                     default:
                         if (lineSeparatorAfterCarriageReturnLastCharacter) {
-                            writer.print("</td></tr><tr><td>");
+                            writer.println("</td>");
+                            writer.println("\t\t\t</tr>");
+                            writer.println("\t\t\t<tr>");
+                            writer.print("\t\t\t\t<td>");
                             lineSeparatorAfterCarriageReturnLastCharacter = false;
                         }
                         commaLastCharacter = false;
@@ -123,7 +142,11 @@ public class CsvToHtmlConverter {
                         writer.print((char) c);
                 }
             }
-            writer.print("</td></tr></table></body></html>");
+            writer.println("</td>");
+            writer.println("\t\t\t</tr>");
+            writer.println("\t\t</table>");
+            writer.println("\t</body>");
+            writer.println("</html>");
         } catch (FileNotFoundException e) {
             System.out.println("File was not found!");
         }
