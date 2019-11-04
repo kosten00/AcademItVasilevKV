@@ -13,10 +13,7 @@ class Model {
         return scales;
     }
 
-    double convert(Object from, Object to, double temperature) {
-        Scale scaleFrom = (Scale) from;
-        Scale toScale = (Scale) to;
-
-        return toScale.convertFromCelsius(scaleFrom.convertToCelsius(temperature));
+    double convert(Scale from, Scale to, double temperature) {
+        return to.convertFromCelsius(from.convertToCelsius(temperature));
     }
 }

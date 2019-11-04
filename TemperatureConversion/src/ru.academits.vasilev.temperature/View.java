@@ -5,7 +5,6 @@ import ru.academits.vasilev.temperature.scales.Scale;
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
-import java.util.Objects;
 
 class View {
     private Model model;
@@ -107,10 +106,10 @@ class View {
                 return;
             }
 
-            if (Objects.equals(fromScales.getSelectedItem(), toScales.getSelectedItem())) {
+            if (fromScales.getSelectedItem() == toScales.getSelectedItem()) {
                 outputTemperatureField.setText(Double.toString(temperature));
             } else {
-                double round = (double) Math.round(model.convert(fromScales.getSelectedItem(), toScales.getSelectedItem(), temperature) * 100) / 100;
+                double round = (double) Math.round(model.convert((Scale) fromScales.getSelectedItem(), (Scale) toScales.getSelectedItem(), temperature) * 100) / 100;
 
                 outputTemperatureField.setText(Double.toString(round));
             }
