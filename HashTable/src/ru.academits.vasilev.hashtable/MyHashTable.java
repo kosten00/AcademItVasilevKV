@@ -9,24 +9,22 @@ public class MyHashTable<T> implements Collection<T> {
     private int modCount;
     private static final int DEFAULT_TABLE_SIZE = 10;
 
-    private int getIndex(Object object, int arrayLength) {
+    private int getIndex(Object object) {
         if (object == null) {
             return 0;
         }
 
-        return Math.abs(object.hashCode() % arrayLength);
-    }
-
-    private ArrayList<T>[] fillTable(ArrayList<T>[] tableArray) {
-        Arrays.fill(tableArray, new ArrayList<T>());
-
-        return tableArray;
+        return Math.abs(object.hashCode() % table.length);
     }
 
     @SuppressWarnings("unchecked")
     public MyHashTable() {
         tablesCount = DEFAULT_TABLE_SIZE;
-        table = fillTable(new ArrayList[tablesCount]);
+
+        table = new ArrayList[this.tablesCount];
+        for (int i = 0; i < tablesCount; i++) {
+            table[i] = new ArrayList<>();
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -36,7 +34,11 @@ public class MyHashTable<T> implements Collection<T> {
         }
 
         this.tablesCount = tablesCount;
-        table = fillTable(new ArrayList[this.tablesCount]);
+
+        table = new ArrayList[this.tablesCount];
+        for (int i = 0; i < tablesCount; i++) {
+            table[i] = new ArrayList<>();
+        }
     }
 
     @Override
@@ -51,7 +53,7 @@ public class MyHashTable<T> implements Collection<T> {
 
     @Override
     public boolean contains(Object object) {
-        int index = getIndex(object, table.length);
+        int index = getIndex(object);
         return table[index].contains(object);
     }
 
@@ -139,8 +141,8 @@ public class MyHashTable<T> implements Collection<T> {
 
     @Override
     public boolean add(T object) {
-        int index = getIndex(object, table.length);
-        table[index].add((T) object);
+        int index = getIndex(object);
+        table[index].add(object);
 
         modCount++;
         elementsCount++;
@@ -150,7 +152,7 @@ public class MyHashTable<T> implements Collection<T> {
 
     @Override
     public boolean remove(Object object) {
-        int index = getIndex(object, table.length);
+        int index = getIndex(object);
         if (table[index].remove(object)) {
             modCount++;
             elementsCount--;
@@ -176,16 +178,13 @@ public class MyHashTable<T> implements Collection<T> {
         if (collection.size() == 0) {
             return false;
         }
+
         boolean added = false;
 
         for (T object : collection) {
             if (add(object)) {
                 added = true;
             }
-        }
-
-        if (added) {
-            modCount++;
         }
 
         return added;
