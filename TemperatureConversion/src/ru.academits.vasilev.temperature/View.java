@@ -7,7 +7,7 @@ import javax.swing.border.Border;
 import java.awt.*;
 import java.util.Objects;
 
-public class View {
+class View {
     private Model model;
     private String name;
 
@@ -20,7 +20,7 @@ public class View {
     private JComboBox<Scale> fromScales;
     private JComboBox<Scale> toScales;
 
-    public View(Model model, String name) {
+    View(Model model, String name) {
         this.model = model;
         this.name = name;
 
