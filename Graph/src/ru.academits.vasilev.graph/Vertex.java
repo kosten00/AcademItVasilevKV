@@ -13,19 +13,19 @@ class Vertex<T> {
         visited = false;
     }
 
-    public T getData() {
+    T getData() {
         return data;
     }
 
-    public void setData(T data) {
+    void setData(T data) {
         this.data = data;
     }
 
-    public boolean isVisited() {
+    boolean isVisited() {
         return visited;
     }
 
-    public void setVisited(boolean visited) {
+    void setVisited(boolean visited) {
         this.visited = visited;
     }
 

@@ -26,16 +26,19 @@ public class MyGraphMain {
         graph1.addVertex("h");
         graph1.addVertex("i");
 
-        graph1.addEdge(0,1);
-        graph1.addEdge(1,2);
-        graph1.addEdge(2,3);
-        graph1.addEdge(3,4);
-        graph1.addEdge(4,5);
+        graph1.addEdge(0, 1);
+        graph1.addEdge(1, 2);
+        graph1.addEdge(2, 3);
+        //graph1.addEdge(3, 4);
+        graph1.addEdge(4, 5);
         graph1.addEdge(5, 6);
-        graph1.addEdge(6,7);
-        graph1.addEdge(7,8);
-        graph1.addEdge(8,9);
+        graph1.addEdge(6, 7);
+        graph1.addEdge(7, 8);
 
-        graph1.visitInDepth();
+        System.out.println("now in depth");
+        graph1.visitInDepth(System.out::println);
+        System.out.println("now in breadth");
+
+        graph1.visitInBreadth(System.out::println);
     }
 }

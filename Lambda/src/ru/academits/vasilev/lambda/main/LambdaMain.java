@@ -7,8 +7,6 @@ import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
 import java.util.stream.Stream;
 
-import static java.util.stream.Collectors.averagingInt;
-
 public class LambdaMain {
     public static void main(String[] args) {
         LinkedList<Person> personList = new LinkedList<>();
@@ -22,8 +20,8 @@ public class LambdaMain {
         personList.add(new Person("Глаша", 19));
 
         //Creating list of unique names from personList.
-        List<String> list = personList.stream().map(Person::getName).distinct().collect(Collectors.toList());
-        System.out.println("Names: " + list.toString().replace("[", "").replace("]", "") + ".");
+        String list = personList.stream().map(Person::getName).distinct().collect(Collectors.joining(", ", "Names: ", "."));
+        System.out.println(list);
         System.out.println();
 
         //Creating list of persons younger than 18, count their average age:
@@ -32,14 +30,15 @@ public class LambdaMain {
         System.out.println(youngerEighteen.stream().mapToInt(Person::getAge).average());
 
         //Get Map with names as keys and average age as value.)
-        Map<String, Double> map = personList.stream().collect(Collectors.groupingBy(Person::getName, averagingInt(Person::getAge)));
+        Map<String, Double> map = personList.stream().collect(Collectors.groupingBy(Person::getName, Collectors.averagingInt(Person::getAge)));
         map.forEach((name, age) -> System.out.printf("name: %s; average age: %s; ", name, age));
 
         System.out.println();
         //Get persons aged 20-45 y.o., print to the console their names in decreasing order:
-        personList.stream().filter(person -> person.getAge() <= 45 && person.getAge() >= 20).
+        personList.stream().
+                filter(person -> person.getAge() >= 20 && person.getAge() <= 45).
                 sorted((p1, p2) -> p2.getAge() - p1.getAge()).
-                forEach((p) -> System.out.println(p.getName()));
+                forEach(p -> System.out.println(p.getName()));
 
         //Create infinite stream of square roots of numbers:
         System.out.println("Input number: ");
