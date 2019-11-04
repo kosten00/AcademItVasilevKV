@@ -5,7 +5,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-public class CSV {
+public class CsvToHtmlConverter {
     private static final char START_OF_FILE_STREAM = 65279;
     private static final char COMMA = 44;
     private static final char QUOTES = 34;
@@ -15,14 +15,14 @@ public class CSV {
     private static final char GREATER_SIGN = 62;
     private static final char AMP_SIGN = 38;
 
-    private static boolean commaLastCharacter = false;
-    private static boolean quotesOpened = false;
-    private static boolean quotesInOpenedQuotesLastCharacter = false;
-    private static boolean lineSeparatorLastCharacter = false;
-    private static boolean carriageReturnLastCharacter = false;
-    private static boolean lineSeparatorAfterCarriageReturnLastCharacter = false;
+    private boolean commaLastCharacter = false;
+    private boolean quotesOpened = false;
+    private boolean quotesInOpenedQuotesLastCharacter = false;
+    private boolean lineSeparatorLastCharacter = false;
+    private boolean carriageReturnLastCharacter = false;
+    private boolean lineSeparatorAfterCarriageReturnLastCharacter = false;
 
-    public static void convertToCsv(String inputCsvFile, String outputHtmlFile) throws IOException {
+    public void convertToCsv(String inputCsvFile, String outputHtmlFile) throws IOException {
         try (PrintWriter writer = new PrintWriter(outputHtmlFile);
              FileReader reader = new FileReader(inputCsvFile)) {
 
