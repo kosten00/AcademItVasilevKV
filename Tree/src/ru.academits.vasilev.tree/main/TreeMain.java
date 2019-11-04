@@ -2,16 +2,6 @@ package ru.academits.vasilev.tree.main;
 
 import ru.academits.vasilev.tree.BinaryTree;
 
-/*
-4. п.3 остался.
-Например, getRoot
-
-5. Метод поиска элемента - нужно сделать без алгоритма обхода, это неэффективно.
-Обход - это по сути проход по всем элементам дерева.
-А для поиска нужного элемента должен быть более эффективный алгоритм
-6. Дерево должно нормально работать с null данными
- */
-
 public class TreeMain {
     public static void main(String[] args) {
         BinaryTree<Integer> tree1 = new BinaryTree<>();

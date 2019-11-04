@@ -1,7 +1,5 @@
 package ru.academits.vasilev.tree;
 
-import com.sun.source.tree.Tree;
-
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.Stack;
