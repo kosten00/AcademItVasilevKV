@@ -100,7 +100,6 @@ public class MyGraph<T> {
         setAllUnvisited();
     }
 
-
     public void visitInBreadth(Consumer<? super T> action) {
         if (action == null) {
             throw new NullPointerException("Consumer == null");
