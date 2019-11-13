@@ -1,6 +1,4 @@
-package ru.academints.vasilev.minesweeper;
-
-import java.awt.*;
+package ru.academints.vasilev.minesweeper.model;
 
 public class Cell {
     private boolean isOpened;

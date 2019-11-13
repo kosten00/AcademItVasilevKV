@@ -1,17 +1,16 @@
-package ru.academints.vasilev.minesweeper;
+package ru.academints.vasilev.minesweeper.model;
 
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.stream.Stream;
 
-public class Board {
+public class MinesweeperBoardModel {
     private int boardSize;
-    private int minesCount;
+    private int bombsCount;
     private Cell[][] cells;
 
-    public Board(int boardSize, int minesCount) {
+    public MinesweeperBoardModel(int boardSize, int minesCount) {
         this.boardSize = boardSize;
-        this.minesCount = minesCount;
+        this.bombsCount = minesCount;
         cells = new Cell[boardSize][boardSize];
 
         for (int i = 0; i < cells.length; i++) {
@@ -31,7 +30,7 @@ public class Board {
     private void putMines(Integer[] random) {
         Collections.shuffle(Arrays.asList(random));
 
-        for (int i = minesCount - 1; i >= 0; i--) {
+        for (int i = bombsCount - 1; i >= 0; i--) {
             int cellToPutMine = random[i];
 
             int row = cellToPutMine / boardSize;
