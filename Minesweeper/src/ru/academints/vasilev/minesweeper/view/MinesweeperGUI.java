@@ -9,8 +9,11 @@ public class MinesweeperGUI {
     private int frameWidth;
     private int frameHeight;
 
-    private int boardSize;
-    private int bombsCount;
+    //private int boardSize;
+    //private int bombsCount;
+
+    private JTextField bombsCount;
+    private JTextField boardSize;
 
     private JFrame boardFrame;
 
@@ -57,11 +60,26 @@ public class MinesweeperGUI {
 
         about = new JButton("About");
         mainFrame.add(about);
+
+        //add grid constraints to look nice
+        boardSize = new JTextField("10");
+        mainFrame.add(boardSize);
+
+        bombsCount = new JTextField("9");
+        mainFrame.add(bombsCount);
     }
 
     private void initGamingBoard() {
         boardFrame = new JFrame("Gaming board");
-        boardFrame.setSize(200, 300);
+        boardFrame.setSize(500, 500);
+
+        boardFrame.setLayout(new GridLayout(10, 10));
+
+        for (int i = 0; i < Integer.parseInt(boardSize.getText()); i++) {
+            for (int j = 0; j < Integer.parseInt(boardSize.getText()); j++) {
+                boardFrame.add(new JButton());
+            }
+        }
     }
 
     private void initListeners() {
