@@ -1,8 +1,9 @@
 package ru.academints.vasilev.minesweeper.view;
 
-import ru.academints.vasilev.minesweeper.model.MinesweeperBoardModel;
-
 import javax.swing.*;
+import java.awt.*;
+
+//greet frame with buttons, hides after start game button pressed. vise-a-versa
 
 public class MinesweeperGUI {
     private int frameWidth;
@@ -11,30 +12,65 @@ public class MinesweeperGUI {
     private int boardSize;
     private int bombsCount;
 
-//    int frameWidth = 555;
-//    int frameHeight = 570;
+    private JFrame boardFrame;
+
+    private JFrame mainFrame;
+
+    private JButton startNewGame;
+    private JButton exit;
+    private JButton highScores;
+    private JButton about;
 
     public MinesweeperGUI(int frameWidth, int frameHeight) {
         this.frameWidth = frameWidth;
         this.frameHeight = frameHeight;
 
-        initVisibleBoard();
+        initFrames();
     }
 
-    public void initVisibleBoard() {
+    public void initFrames() {
         SwingUtilities.invokeLater(() -> {
             initMainFrame();
+
+            initListeners();
         });
     }
 
     public void initMainFrame() {
-        JFrame mainFrame = new JFrame("Minesweeper");
+        mainFrame = new JFrame("Minesweeper");
         mainFrame.setSize(frameWidth, frameHeight);
         mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         mainFrame.setLocationRelativeTo(null);
-        mainFrame.setResizable(false);
+        mainFrame.setResizable(true);
         mainFrame.setVisible(true);
 
-        mainFrame.add(new MinesweeperVisibleBoard(frameWidth, frameHeight));
+        mainFrame.setLayout(new GridBagLayout());
+
+        startNewGame = new JButton("New Game");
+        mainFrame.add(startNewGame);
+
+        exit = new JButton("Exit");
+        mainFrame.add(exit);
+
+        highScores = new JButton("High scores");
+        mainFrame.add(highScores);
+
+        about = new JButton("About");
+        mainFrame.add(about);
+    }
+
+    private void initGamingBoard() {
+        boardFrame = new JFrame("Gaming board");
+        boardFrame.setSize(200, 300);
+    }
+
+    private void initListeners() {
+        startNewGame.addActionListener(e -> {
+            //looks like it still runs from invoke later stream
+            initGamingBoard();
+
+            boardFrame.setVisible(true);
+            mainFrame.setVisible(false);
+        });
     }
 }
