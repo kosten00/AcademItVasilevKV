@@ -5,13 +5,19 @@ import ru.academints.vasilev.minesweeper.model.MinesweeperBoardModel;
 import javax.swing.*;
 
 public class MinesweeperGUI {
+    private int frameWidth;
+    private int frameHeight;
+
     private int boardSize;
     private int bombsCount;
 
-    int frameWidth = 555;
-    int frameHeight = 570;
+//    int frameWidth = 555;
+//    int frameHeight = 570;
 
-    public MinesweeperGUI() {
+    public MinesweeperGUI(int frameWidth, int frameHeight) {
+        this.frameWidth = frameWidth;
+        this.frameHeight = frameHeight;
+
         initVisibleBoard();
     }
 

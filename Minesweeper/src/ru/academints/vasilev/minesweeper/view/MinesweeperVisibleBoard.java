@@ -11,21 +11,28 @@ public class MinesweeperVisibleBoard extends JPanel {
     private int width;
     private int height;
 
-    private int spaceBetweenCells = 5;
-
-    private int cellSize = 50;
+    private int spaceBetweenCells;
+    private int cellSize;
 
     public MinesweeperVisibleBoard(int width, int height) {
         this.width = width;
         this.height = height;
+
+        spaceBetweenCells = (width + height) / 200;
+
+        cellSize = ((width + height) / 20);
     }
 
     @Override
     public void paintComponent(Graphics g) {
+
+        System.out.println(spaceBetweenCells);
+        System.out.println(cellSize);
+
         super.paintComponent(g);
 
         g.setColor(Color.black);
-        g.fillRect(0,0, width, height);
+        g.fillRect(0, 0, width, height);
         g.setColor(Color.white);
 
         for (int i = 0; i < 10; i++) {
