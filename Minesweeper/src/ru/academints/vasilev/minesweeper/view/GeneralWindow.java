@@ -1,11 +1,15 @@
 package ru.academints.vasilev.minesweeper.view;
 
+import ru.academints.vasilev.minesweeper.model.MinesweeperModel;
+
 import javax.swing.*;
 import java.awt.*;
 
 public class GeneralWindow {
-    private String title;
-    private JFrame frame;
+    private MinesweeperModel minesweeperModel;
+
+    private String mainFrameTitle;
+    private JFrame mainframe;
     private int width;
     private int height;
     private GridBagConstraints constraints;
@@ -21,8 +25,10 @@ public class GeneralWindow {
     private static final String[] LABELS_TEXT = {"Board size", "Bombs count"};
     private JLabel[] textFieldsLabels;
 
+    private static final String ABOUT_TEXT = "Created by\nVasilev K.V.";
+
     public GeneralWindow(String title, int size) {
-        this.title = title;
+        this.mainFrameTitle = title;
         width = size;
         height = size / WIDTH_TO_HEIGHT_RATIO;
 
@@ -30,15 +36,15 @@ public class GeneralWindow {
     }
 
     private void initFrame() {
-        frame = new JFrame(title);
-        frame.setSize(width, height);
-        frame.setResizable(false);
-        frame.setVisible(true);
-        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        frame.setLayout(new GridBagLayout());
-        frame.setLocationRelativeTo(null);
+        mainframe = new JFrame(mainFrameTitle);
+        mainframe.setSize(width, height);
+        mainframe.setResizable(false);
+        mainframe.setVisible(true);
+        mainframe.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        mainframe.setLayout(new GridBagLayout());
+        mainframe.setLocationRelativeTo(null);
         constraints = new GridBagConstraints();
-        constraints.insets = new Insets(10, 10, 10, 10);
+        constraints.insets = new Insets(8, 8, 8, 8);
 
         initComponents();
     }
@@ -61,7 +67,7 @@ public class GeneralWindow {
         for (int i = 0; i < buttons.length; i++) {
             buttons[i] = new JButton(BUTTONS_TEXT[i]);
 
-            frame.add(buttons[i]);
+            mainframe.add(buttons[i]);
 
             addButtonListener(buttons[i]);
         }
@@ -71,14 +77,14 @@ public class GeneralWindow {
         for (int i = 0; i < textFieldsLabels.length; i++) {
             textFieldsLabels[i] = new JLabel(LABELS_TEXT[i]);
 
-            frame.add(textFieldsLabels[i], constraints);
+            mainframe.add(textFieldsLabels[i], constraints);
         }
     }
 
     private void addTextFields() {
         for (int i = 0; i < textFields.length; i++) {
             textFields[i] = new JTextField(5);
-            frame.add(textFields[i], constraints);
+            mainframe.add(textFields[i], constraints);
         }
     }
 
@@ -89,7 +95,13 @@ public class GeneralWindow {
                     System.out.println("new game pressed");
                     break;
                 case "Exit":
-                    System.out.println("exit pressed");
+                    System.exit(0);
+                    break;
+                case "About":
+                    JOptionPane.showMessageDialog(mainframe, ABOUT_TEXT);
+                    break;
+                case "High scores":
+                    System.out.println("Hi scores");
                     break;
             }
         });
