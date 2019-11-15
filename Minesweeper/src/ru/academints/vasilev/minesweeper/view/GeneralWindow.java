@@ -2,8 +2,6 @@ package ru.academints.vasilev.minesweeper.view;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class GeneralWindow {
     private String title;
@@ -65,7 +63,7 @@ public class GeneralWindow {
 
             frame.add(buttons[i]);
 
-            addButtonListeners(buttons[i]);
+            addButtonListener(buttons[i]);
         }
     }
 
@@ -84,7 +82,7 @@ public class GeneralWindow {
         }
     }
 
-    private void addButtonListeners(JButton button) {
+    private void addButtonListener(JButton button) {
         button.addActionListener(e -> {
             switch (button.getText()) {
                 case "New Game":
