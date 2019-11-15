@@ -2,6 +2,8 @@ package ru.academints.vasilev.minesweeper.view;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class GeneralWindow {
     private String title;
@@ -36,7 +38,9 @@ public class GeneralWindow {
         frame.setVisible(true);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setLayout(new GridBagLayout());
+        frame.setLocationRelativeTo(null);
         constraints = new GridBagConstraints();
+        constraints.insets = new Insets(10, 10, 10, 10);
 
         initComponents();
     }
@@ -60,6 +64,8 @@ public class GeneralWindow {
             buttons[i] = new JButton(BUTTONS_TEXT[i]);
 
             frame.add(buttons[i]);
+
+            addButtonListeners(buttons[i]);
         }
     }
 
@@ -76,6 +82,19 @@ public class GeneralWindow {
             textFields[i] = new JTextField(5);
             frame.add(textFields[i], constraints);
         }
+    }
+
+    private void addButtonListeners(JButton button) {
+        button.addActionListener(e -> {
+            switch (button.getText()) {
+                case "New Game":
+                    System.out.println("new game pressed");
+                    break;
+                case "Exit":
+                    System.out.println("exit pressed");
+                    break;
+            }
+        });
     }
 
     private void switchLayoutRow(int componentWidth) {
