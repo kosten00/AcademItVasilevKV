@@ -3,18 +3,18 @@ package ru.academints.vasilev.minesweeper.model;
 import java.util.Arrays;
 import java.util.Collections;
 
-public class MinesweeperBoardModel {
+public class MinesweeperModel {
     private int boardSize;
     private int bombsCount;
-    private Cell[][] cells;
+    public Cell[][] cells;
 
-    public MinesweeperBoardModel(int boardSize, int minesCount) {
+    public MinesweeperModel(int boardSize, int minesCount) {
         this.boardSize = boardSize;
         this.bombsCount = minesCount;
         cells = new Cell[boardSize][boardSize];
 
-        for (int i = 0; i < cells.length; i++) {
-            for (int j = 0; j < cells[i].length; j++) {
+        for (int i = 0; i < boardSize; i++) {
+            for (int j = 0; j < boardSize; j++) {
                 cells[i][j] = new Cell();
             }
         }
@@ -27,6 +27,10 @@ public class MinesweeperBoardModel {
         putMines(random);
     }
 
+    public void getCell(int i, int j) {
+
+    }
+
     private void putMines(Integer[] random) {
         Collections.shuffle(Arrays.asList(random));
 
@@ -36,7 +40,7 @@ public class MinesweeperBoardModel {
             int row = cellToPutMine / boardSize;
             int column = cellToPutMine % boardSize;
 
-            cells[row][column].putMine();
+            cells[row][column].putBomb();
 
             countNearbyMines(row, column);
         }
@@ -87,26 +91,29 @@ public class MinesweeperBoardModel {
             for (int j = getStartColumn(column); j <= getEndColumn(column); j++) {
                 if (!cells[i][j].isMined()) {
 
-                    cells[i][j].increaseMinesNearby();
+                    cells[i][j].increaseBombsNearby();
                 }
             }
         }
     }
 
-    private void revealConnectedEmptyCells(int row, int column) {
-        //проверка на то, что по этим координатам нет бимбы
+    public void revealConnectedEmptyCells(int row, int column) {
+        int startRow = getStartRow(row);
+        int startColumn = getStartColumn(column);
 
-        for (int i = getStartRow(row); i <= getEndRow(row); i++) {
-            for (int j = getStartColumn(column); j <= getEndColumn(column); j++) {
+        int endRow = getEndRow(row);
+        int endColumn = getEndColumn(column);
+
+        for (int i = startRow; i <= endRow; i++) {
+            for (int j = startColumn; j <= endColumn; j++) {
                 if (!cells[i][j].isMined() && !cells[i][j].isMarked() && !cells[i][j].isOpened()) {
-
                     cells[i][j].open();
                 }
 
-                if (cells[i][j].getMinesNearbyCount() == 0) {
-
-                    revealConnectedEmptyCells(i, j);
-                }
+//                if (cells[i][j].getBombsNearbyCount() == 0) {
+//
+//                    revealConnectedEmptyCells(i, j);
+//                }
             }
         }
     }

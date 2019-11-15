@@ -4,20 +4,20 @@ public class Cell {
     private boolean isOpened;
     private boolean isMined;
     private boolean isMarked;
-    private int minesNearbyCount;
+    private int bombsNearbyCount;
 
     public Cell() {
         isOpened = false;
         isMined = false;
         isMarked = false;
-        minesNearbyCount = 0;
+        bombsNearbyCount = 0;
     }
 
     public void open() {
         isOpened = true;
     }
 
-    public void putMine() {
+    public void putBomb() {
         isMined = true;
     }
 
@@ -29,12 +29,12 @@ public class Cell {
         isMarked = false;
     }
 
-    public void increaseMinesNearby() {
-        minesNearbyCount++;
+    public void increaseBombsNearby() {
+        bombsNearbyCount++;
     }
 
-    public int getMinesNearbyCount() {
-        return minesNearbyCount;
+    public int getBombsNearbyCount() {
+        return bombsNearbyCount;
     }
 
     public boolean isMined() {
@@ -55,6 +55,6 @@ public class Cell {
             return "B";
         }
 
-        return "" + getMinesNearbyCount();
+        return "" + getBombsNearbyCount();
     }
 }
