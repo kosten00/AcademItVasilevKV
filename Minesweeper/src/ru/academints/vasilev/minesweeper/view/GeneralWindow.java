@@ -15,7 +15,6 @@ public class GeneralWindow {
     private GridBagConstraints constraints;
 
     private final int WIDTH_TO_HEIGHT_RATIO = 2;
-    private final int DEFAULT_COMPONENTS_PER_ROW = 4;
 
     private JButton[] buttons;
     private static final String[] BUTTONS_TEXT = {"New Game", "Exit", "High scores", "About"};
@@ -39,27 +38,27 @@ public class GeneralWindow {
         mainframe = new JFrame(mainFrameTitle);
         mainframe.setSize(width, height);
         mainframe.setResizable(false);
-        mainframe.setVisible(true);
-        mainframe.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         mainframe.setLayout(new GridBagLayout());
         mainframe.setLocationRelativeTo(null);
         constraints = new GridBagConstraints();
         constraints.insets = new Insets(8, 8, 8, 8);
-
         initComponents();
+
+        mainframe.setVisible(true);
+        mainframe.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     }
 
     private void initComponents() {
         buttons = new JButton[BUTTONS_TEXT.length];
-        switchLayoutRow(DEFAULT_COMPONENTS_PER_ROW / BUTTONS_TEXT.length);
+        switchLayoutRow(BUTTONS_TEXT.length);
         addButtons();
 
         textFieldsLabels = new JLabel[LABELS_TEXT.length];
-        switchLayoutRow(DEFAULT_COMPONENTS_PER_ROW / textFieldsLabels.length);
+        switchLayoutRow(textFieldsLabels.length);
         addLabels();
 
         textFields = new JTextField[textFieldsLabels.length];
-        switchLayoutRow(DEFAULT_COMPONENTS_PER_ROW / textFields.length);
+        switchLayoutRow(textFields.length);
         addTextFields();
     }
 
