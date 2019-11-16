@@ -8,7 +8,7 @@ public class MinesweeperController {
     private static final int DEFAULT_GAMING_BOARD_SIZE = 10;
 
     public MinesweeperController() {
-        new GeneralWindow("Minesweeper", 600);
+        new GeneralWindow("Minesweeper", 600, 9, 10);
         //new MinesweeperGUI(DEFAULT_BOMBS_COUNT, DEFAULT_GAMING_BOARD_SIZE);
     }
 }

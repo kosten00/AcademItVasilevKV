@@ -4,7 +4,6 @@ import ru.academints.vasilev.minesweeper.model.MinesweeperModel;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Arrays;
 
 public class MinesweeperGUI {
     private MinesweeperModel minesweeperModel;

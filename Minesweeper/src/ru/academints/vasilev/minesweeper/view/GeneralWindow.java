@@ -8,15 +8,31 @@ import java.awt.*;
 public class GeneralWindow {
     private MinesweeperModel minesweeperModel;
 
-    private String mainFrameTitle;
+    private int boardSize;
+    private int bombsCount;
+
+    private String title;
     private JFrame mainframe;
     private int width;
     private int height;
     private GridBagConstraints constraints;
 
+    private JFrame gamingBoardFrame;
+    private JButton[] gamingBoardButtons;
+
+    private void initGamingBoard() {
+        this.minesweeperModel = new MinesweeperModel(boardSize, bombsCount);
+
+        gamingBoardFrame = new JFrame(title);
+        gamingBoardFrame.setLocationRelativeTo(null);
+        gamingBoardFrame.setLayout(new GridLayout(boardSize, boardSize));
+
+        gamingBoardButtons = new JButton[boardSize];
+    }
+
     private final int WIDTH_TO_HEIGHT_RATIO = 2;
 
-    private JButton[] buttons;
+    private JButton[] mainFrameButtons;
     private static final String[] BUTTONS_TEXT = {"New Game", "Exit", "High scores", "About"};
 
     private JTextField[] textFields;
@@ -26,16 +42,18 @@ public class GeneralWindow {
 
     private static final String ABOUT_TEXT = "Created by\nVasilev K.V.";
 
-    public GeneralWindow(String title, int size) {
-        this.mainFrameTitle = title;
+    public GeneralWindow(String title, int size, int boardSize, int bombsCount) {
+        this.title = title;
         width = size;
         height = size / WIDTH_TO_HEIGHT_RATIO;
+        this.boardSize = boardSize;
+        this.bombsCount = bombsCount;
 
-        SwingUtilities.invokeLater(this::initFrame);
+        SwingUtilities.invokeLater(this::initMainFrame);
     }
 
-    private void initFrame() {
-        mainframe = new JFrame(mainFrameTitle);
+    private void initMainFrame() {
+        mainframe = new JFrame(title);
         mainframe.setSize(width, height);
         mainframe.setResizable(false);
         mainframe.setLayout(new GridBagLayout());
@@ -49,7 +67,7 @@ public class GeneralWindow {
     }
 
     private void initComponents() {
-        buttons = new JButton[BUTTONS_TEXT.length];
+        mainFrameButtons = new JButton[BUTTONS_TEXT.length];
         switchLayoutRow(BUTTONS_TEXT.length);
         addButtons();
 
@@ -62,13 +80,14 @@ public class GeneralWindow {
         addTextFields();
     }
 
+//more easy to add flat 4 buttons
     private void addButtons() {
-        for (int i = 0; i < buttons.length; i++) {
-            buttons[i] = new JButton(BUTTONS_TEXT[i]);
+        for (int i = 0; i < mainFrameButtons.length; i++) {
+            mainFrameButtons[i] = new JButton(BUTTONS_TEXT[i]);
 
-            mainframe.add(buttons[i]);
+            mainframe.add(mainFrameButtons[i]);
 
-            addButtonListener(buttons[i]);
+            addButtonListener(mainFrameButtons[i]);
         }
     }
 
