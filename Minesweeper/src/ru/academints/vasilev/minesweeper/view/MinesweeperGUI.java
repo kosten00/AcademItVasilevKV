@@ -8,26 +8,18 @@ import java.awt.*;
 public class MinesweeperGUI {
     private MinesweeperModel minesweeperModel;
 
-    private static final Dimension SCREEN_SIZE = Toolkit.getDefaultToolkit().getScreenSize();
-
-    private int width = ((int) SCREEN_SIZE.getWidth()) / 4;
-    private int height = ((int) SCREEN_SIZE.getHeight()) / 4;
-
     private int boardSize;
     private int bombsCount;
 
-    private JTextField inputForBombsCount;
-    private JTextField inputForBoardSize;
-
-    private JFrame boardFrame;
-
     private JFrame mainFrame;
-
     private JButton startGame;
     private JButton exit;
     private JButton highScores;
     private JButton about;
+    private JTextField inputForBombsCount;
+    private JTextField inputForBoardSize;
 
+    private JFrame boardFrame;
     private JButton[][] gamingBoardButtons;
 
     public MinesweeperGUI(int bombsCount, int boardSize) {
@@ -40,14 +32,13 @@ public class MinesweeperGUI {
     public void initFrames() {
         SwingUtilities.invokeLater(() -> {
             initMainFrame();
-
             initMainFrameListeners();
         });
     }
 
     public void initMainFrame() {
         mainFrame = new JFrame("Minesweeper");
-        mainFrame.setSize(width, height);
+        mainFrame.setSize(500, 300);
         mainFrame.setLocationRelativeTo(null);
         mainFrame.setResizable(true);
         mainFrame.setVisible(true);
@@ -86,7 +77,7 @@ public class MinesweeperGUI {
         int gamingBoardSize = Integer.parseInt(inputForBoardSize.getText());
 
         boardFrame = new JFrame("Gaming board");
-        boardFrame.setSize(width * 2, width * 2);
+        boardFrame.setSize(1000, 1000);
         boardFrame.setLocationRelativeTo(null);
 
         boardFrame.setLayout(new GridLayout(gamingBoardSize, gamingBoardSize));
