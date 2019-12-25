@@ -21,14 +21,14 @@ public class CsvToHtmlConverter {
     private boolean carriageReturnLastCharacter = false;
     private boolean lineSeparatorAfterCarriageReturnLastCharacter = false;
 
-    public void convertToCsv(String inputCsvFile, String outputHtmlFile) throws IOException {
+    public void convertToHtml(String inputCsvFile, String outputHtmlFile) throws IOException {
         try (PrintWriter writer = new PrintWriter(outputHtmlFile);
              FileReader reader = new FileReader(inputCsvFile)) {
 
             writer.println("<!DOCTYPE html>");
             writer.println("<html>");
             writer.println("\t<head>");
-            writer.println("\t\t<meta charset=\\\"UTF-8\\\">");
+            writer.println("\t\t<meta charset=\"UTF-8\">");
             writer.println("\t\t<title>CsvInHtml</title>");
             writer.println("\t</head>");
             writer.println("\t<body>");
@@ -49,7 +49,7 @@ public class CsvToHtmlConverter {
                             lineSeparatorAfterCarriageReturnLastCharacter = false;
                         }
 
-                        if (!quotesInOpenedQuotesLastCharacter & quotesOpened) {
+                        if (!quotesInOpenedQuotesLastCharacter && quotesOpened) {
                             writer.print(COMMA);
 
                             break;
@@ -95,7 +95,7 @@ public class CsvToHtmlConverter {
                             lineSeparatorAfterCarriageReturnLastCharacter = true;
                         }
 
-                        if (!quotesInOpenedQuotesLastCharacter & quotesOpened) {
+                        if (!quotesInOpenedQuotesLastCharacter && quotesOpened) {
                             writer.print("</br>");
                             lineSeparatorAfterCarriageReturnLastCharacter = false;
 
